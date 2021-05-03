@@ -1,28 +1,70 @@
 import React, {useEffect, useState} from 'react';
 import './Players.css';
-import {DB_Player} from "../../types/database/models";
+import {DB_MatchPlayer, DB_Player, WinLoss} from "../../types/database/models";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {makeErrorToast} from "../Toast/Toast";
-import {Card, Header, Icon, SemanticICONS} from "semantic-ui-react";
+import {Card, Header, Icon, Loader, Transition} from "semantic-ui-react";
 
 /**
  * QuickHit Players page.
  */
 function Players() {
     const [players, setPlayers] = useState<DB_Player[]>([]);
+    const [matches, setMatches] = useState<DB_MatchPlayer[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // Runs on mount.
     useEffect(()=> {
         getPlayers();
     }, [])
 
+    const getMatches = () => {
+        const onSuccess = (matches: DB_MatchPlayer[]): void => {
+            setMatches(matches);
+            setIsLoading(false);
+        }
+
+        const onFailure = (error: string) : void => {
+            makeErrorToast("Could not get matches", error);
+            setIsLoading(false);
+        }
+
+        QuickHitAPI.getMatchPlayers(onSuccess, onFailure);
+    }
+
+    const getWinLossForPlayer = (playerId: string) : JSX.Element => {
+        const winLoss : WinLoss = {
+            wins: 0,
+            losses: 0
+        };
+
+        matches.forEach((match) => {
+            if(match.player_id === playerId)
+            {
+                if(match.won) {
+                    winLoss.wins++;
+                } else {
+                    winLoss.losses++;
+                }
+            }
+        });
+
+        return (
+            <span>
+                Wins: {winLoss.wins} Losses: {winLoss.losses}
+            </span>
+        );
+    }
+
     const getPlayers = () => {
         const onSuccess = (players: DB_Player[]): void => {
-            setPlayers(Object.values(players));
+            setPlayers(players);
+            getMatches();
         }
 
         const onFailure = (error: string) : void => {
             makeErrorToast("Could not get players", error);
+            setIsLoading(false);
         }
 
         QuickHitAPI.getPlayers(onSuccess, onFailure);
@@ -42,7 +84,7 @@ function Players() {
                             </Card.Header>
                         </Card.Content>
                         <Card.Content extra>
-                           TBA wins
+                            {getWinLossForPlayer(player.id)}
                         </Card.Content>
                     </Card>
             );
@@ -59,7 +101,14 @@ function Players() {
                 <Icon name='users' circular />
                 <Header.Content>Players</Header.Content>
             </Header>
-            {players.length > 0 ? renderPlayers() : "Loading players..."}
+            <Transition visible={isLoading}>
+                <Loader content={"Loading players..."}/>
+            </Transition>
+            <Transition visible={!isLoading}>
+                <div>
+                  {renderPlayers()}
+                </div>
+            </Transition>
         </div>
     );
 }
