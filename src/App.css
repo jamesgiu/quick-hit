@@ -7,7 +7,16 @@
 
 .app-main-content {
   width: 90%;
+  padding-top: 2%;
   margin: auto;
+}
+
+.header .content {
+  color: white;
+}
+
+.header i {
+  color: orangered;
 }
 
 .App-logo {

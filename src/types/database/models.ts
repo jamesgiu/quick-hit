@@ -1,3 +1,5 @@
+import {SemanticICONS} from "semantic-ui-react";
+
 export enum Team {
     Team_1 = "team_1",
     Team_2 = "team_2"
@@ -23,6 +25,7 @@ export interface DB_MatchPlayer {
 
 export interface DB_Player {
     house_fk: string,
+    icon: SemanticICONS,
     id: string,
     name: string
 }

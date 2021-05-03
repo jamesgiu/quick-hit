@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import Players from "./components/Players/Players";
 import {QuickHitPage} from "./util/QuickHitPage";
+import Toast from "./components/Toast/Toast";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               </Switch>
             </div>
         <Footer/>
+        <Toast/>
         </div>
       </BrowserRouter>
   );

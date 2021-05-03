@@ -1,0 +1,8 @@
+.quick-hit-toasts {
+    width: 300px;
+    margin: auto;
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+}

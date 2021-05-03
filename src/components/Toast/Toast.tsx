@@ -1,16 +1,18 @@
 import React from 'react';
-import { SemanticToastContainer, toast } from 'react-semantic-toasts';
+import "./Toast.css";
+import {SemanticToastContainer, toast, ToastOptions} from 'react-semantic-toasts';
 
 const TOAST_DEFAULT_OPTS = {
-    duration: 30000,
-}
+    animation: "bounce",
+    time: 30000
+} as ToastOptions;
 
 /**
  * QuickHit Toast
  */
 function Toaster() {
     return (
-        <SemanticToastContainer position="bottom-center" />
+        <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"}/>
     );
 }
 

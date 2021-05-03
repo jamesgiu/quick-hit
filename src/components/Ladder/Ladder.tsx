@@ -1,5 +1,6 @@
 import React from 'react';
 import './Ladder.css';
+import {Header, Icon} from "semantic-ui-react";
 
 /**
  * Ladder page for QuickHit.
@@ -7,7 +8,10 @@ import './Ladder.css';
 function Ladder() {
     return (
         <div className="ladder">
-            Ladder page
+            <Header as={"h2"} icon>
+                <Icon name='numbered list' circular />
+                <Header.Content>Ladder</Header.Content>
+            </Header>
         </div>
     );
 }
