@@ -1,0 +1,12 @@
+.tt-navbar .item {
+    height: 100%;
+}
+
+.tt-navbar i {
+    color: orangered;
+}
+
+.header-hit {
+    color: orangered;
+    letter-spacing: -0.8px;
+}

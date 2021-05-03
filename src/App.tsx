@@ -5,19 +5,25 @@ import Home from "./components/Home/Home";
 import NotFound from "./components/NotFound/NotFound";
 import Ladder from "./components/Ladder/Ladder";
 import Footer from "./components/Footer/Footer";
-import {TTPage} from "./util/TTPage";
+import Navbar from "./components/Navbar/Navbar";
+import Players from "./components/Players/Players";
+import {QuickHitPage} from "./util/QuickHitPage";
 
 function App() {
   return (
       <BrowserRouter>
         <div className="App">
-          <Switch>
-            <Route exact path={TTPage.HOME} component={Home}/>
-            <Route exact path={TTPage.LADDER} component={Ladder}/>
-            <Route exact path={TTPage.NOT_FOUND} component={NotFound}/>
-            <Redirect to={TTPage.NOT_FOUND}/>
-          </Switch>
-          <Footer/>
+        <Navbar/>
+            <div className={"app-main-content"}>
+              <Switch>
+                <Route exact path={QuickHitPage.HOME} component={Home}/>
+                <Route exact path={QuickHitPage.LADDER} component={Ladder}/>
+                <Route exact path={QuickHitPage.PLAYERS} component={Players}/>
+                <Route exact path={QuickHitPage.NOT_FOUND} component={NotFound}/>
+                <Redirect to={QuickHitPage.NOT_FOUND}/>
+              </Switch>
+            </div>
+        <Footer/>
         </div>
       </BrowserRouter>
   );

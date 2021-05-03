@@ -1,5 +1,13 @@
 .App {
   text-align: center;
+  background-color: rgba(53, 54, 58, 1);
+  height: 100vh;
+  color: white;
+}
+
+.app-main-content {
+  width: 90%;
+  margin: auto;
 }
 
 .App-logo {

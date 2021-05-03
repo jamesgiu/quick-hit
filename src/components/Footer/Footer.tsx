@@ -1,12 +1,15 @@
 import React from 'react';
 import './Footer.css';
 
-function Home() {
+/**
+ * Footer component in QuickHit.
+ */
+function Footer() {
     return (
         <div className="footer">
-           Footer
+           Made with React and Semantic-UI
         </div>
     );
 }
 
-export default Home;
+export default Footer;
