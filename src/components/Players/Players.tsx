@@ -4,7 +4,9 @@ import {DB_MatchPlayer, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {makeErrorToast} from "../Toast/Toast";
-import {Card, Header, Icon, Loader, Transition} from "semantic-ui-react";
+import {Card, Grid, Header, Icon, Loader, Transition} from "semantic-ui-react";
+import PlayerCard from "./PlayerCard/PlayerCard";
+import NewPlayer from './NewPlayer/NewPlayer';
 
 /**
  * QuickHit Players page.
@@ -28,7 +30,7 @@ function Players() {
         QuickHitAPI.getMatchPlayers(onSuccess, onFailure);
     }
 
-    const getWinLossForPlayer = (playerId: string): JSX.Element => {
+    const getWinLossForPlayer = (playerId: string): WinLoss => {
         const winLoss: WinLoss = {
             wins: 0,
             losses: 0
@@ -44,30 +46,14 @@ function Players() {
             }
         });
 
-        return (
-            <span>
-                Wins: {winLoss.wins} Losses: {winLoss.losses}
-            </span>
-        );
+        return winLoss;
     }
 
     const renderPlayers = (): JSX.Element[] => {
         const playerItems: JSX.Element[] = [];
         players.forEach((player) => {
             const playerCard = (
-                <Card>
-                    <Card.Content>
-                        <Card.Header>
-                            <div>
-                                <Icon name={player.icon} size={"big"}/>
-                            </div>
-                            {player.name}
-                        </Card.Header>
-                    </Card.Content>
-                    <Card.Content extra>
-                        {getWinLossForPlayer(player.id)}
-                    </Card.Content>
-                </Card>
+                <PlayerCard player={player} winLoss={getWinLossForPlayer(player.id)}/>
             );
 
             playerItems.push(playerCard);
@@ -105,10 +91,13 @@ function Players() {
                 <Loader content={"Loading players..."}/>
             </Transition>
             <Transition visible={!isLoading}>
-                <div>
-                    {renderPlayers()}
-                </div>
+                <span className={"players-area"}>
+                       {renderPlayers()}
+                </span>
             </Transition>
+            <span className={"new-player-button"}>
+                <NewPlayer/>
+            </span>
         </div>
     );
 }

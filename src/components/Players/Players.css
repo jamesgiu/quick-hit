@@ -1,3 +1,16 @@
 .players .header .content {
     color: white;
 }
+
+.players-area .card {
+    display: inline-flex;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.new-player-button {
+    position: absolute;
+    bottom: 5%;
+    left: 1px;
+    right: 1px;
+}

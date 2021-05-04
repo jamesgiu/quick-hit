@@ -6,7 +6,7 @@ const FB_URL = process.env.REACT_APP_FB_URL;
 
 export class QuickHitAPI {
     public static getPlayers(onSuccess: (players: DB_Player[]) => void, onFailure: (errorString: string) => void): void {
-        QuickHitAPI.makeGetRequest(ApiActions.GET_PLAYERS)
+        QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data))
             }).catch((error: AxiosError) => {
@@ -15,7 +15,7 @@ export class QuickHitAPI {
     }
 
     public static getMatchPlayers(onSuccess: (matches: DB_MatchPlayer[]) => void, onFailure: (errorString: string) => void): void {
-        QuickHitAPI.makeGetRequest(ApiActions.GET_MATCH_PLAYERS)
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_PLAYERS, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
             }).catch((error: AxiosError) => {
@@ -23,11 +23,22 @@ export class QuickHitAPI {
         });
     }
 
-    private static makeGetRequest(uri: string): AxiosPromise {
+    public static addNewPlayer(playerToAdd: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.PATCH, `{"${playerToAdd.id}" : ${JSON.stringify(playerToAdd)}}`)
+            .then((response: AxiosResponse) => {
+                onSuccess()
+            }).catch((error: AxiosError) => {
+                onFailure(error.message)
+        });
+    }
+
+    private static makeAxiosRequest(uri: string, method: HttpMethod, data?: any): AxiosPromise {
         return axios({
-            method: HttpMethod.GET,
+            method: method,
             baseURL: FB_URL,
             url: uri,
+            data: data,
+            headers: {'Content-Type': 'application/json'}
         });
     }
 }

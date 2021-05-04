@@ -1,11 +1,13 @@
 export enum HttpMethod {
     GET = "get",
-    POST = "post"
+    POST = "post",
+    PUT = "put",
+    PATCH = "patch"
 }
 
 export enum ApiActions {
-    GET_PLAYERS = "player.json",
-    GET_HOUSES = "house.json",
-    GET_MATCHES = "match.json",
-    GET_MATCH_PLAYERS = "match_player.json"
+    PLAYERS = "player.json",
+    HOUSES = "house.json",
+    MATCHES = "match.json",
+    MATCH_PLAYERS = "match_player.json"
 }

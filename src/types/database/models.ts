@@ -19,7 +19,6 @@ export interface DB_MatchPlayer {
 }
 
 export interface DB_Player {
-    house_fk: string,
     icon: SemanticICONS,
     id: string,
     name: string
