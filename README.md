@@ -1,5 +1,5 @@
-# table-tennis-elo
-Table tennis ELO application using React and Firebase
+# Quick Hit
+Table tennis tracking application using React and Firebase
 ### `npm start`
 
 Runs the app in the development mode.\
