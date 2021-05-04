@@ -5,11 +5,11 @@ import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
 const FB_URL = process.env.REACT_APP_FB_URL;
 
 export class QuickHitAPI {
-    public static getPlayers(onSuccess: (players: DB_Player[]) => void, onFailure: (errorString: string) => void) : void {
+    public static getPlayers(onSuccess: (players: DB_Player[]) => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeGetRequest(ApiActions.GET_PLAYERS)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data))
-        }).catch((error: AxiosError) => {
+            }).catch((error: AxiosError) => {
             onFailure(error.message)
         })
     }
@@ -23,8 +23,8 @@ export class QuickHitAPI {
         });
     }
 
-    private static makeGetRequest(uri: string) : AxiosPromise {
-       return axios({
+    private static makeGetRequest(uri: string): AxiosPromise {
+        return axios({
             method: HttpMethod.GET,
             baseURL: FB_URL,
             url: uri,

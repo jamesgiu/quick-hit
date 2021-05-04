@@ -9,7 +9,7 @@ function Ladder() {
     return (
         <div className="ladder">
             <Header as={"h2"} icon>
-                <Icon name='numbered list' circular />
+                <Icon name='trophy' circular/>
                 <Header.Content>Ladder</Header.Content>
             </Header>
         </div>

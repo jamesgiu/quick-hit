@@ -1,8 +1,7 @@
 import React from 'react';
 import './Navbar.css';
-import {Menu} from "semantic-ui-react";
-import { Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import {Icon, Menu} from "semantic-ui-react";
+import {Link} from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 
 /**
@@ -25,7 +24,7 @@ function Navbar() {
                 </Link>
                 <Link to={QuickHitPage.LADDER}>
                     <Menu.Item as={"a"}>
-                        <Icon name={"numbered list"}/>Ladder
+                        <Icon name={"trophy"}/>Ladder
                     </Menu.Item>
                 </Link>
                 <Menu.Menu position={"right"}>

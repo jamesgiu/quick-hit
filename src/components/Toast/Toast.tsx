@@ -16,7 +16,7 @@ function Toaster() {
     );
 }
 
-export const makeSuccessToast = (title: string, message: string) : void => {
+export const makeSuccessToast = (title: string, message: string): void => {
     toast({
         ...TOAST_DEFAULT_OPTS,
         title: title,
@@ -26,7 +26,7 @@ export const makeSuccessToast = (title: string, message: string) : void => {
     });
 }
 
-export const makeErrorToast = (title: string, message: string) : void => {
+export const makeErrorToast = (title: string, message: string): void => {
     toast({
         ...TOAST_DEFAULT_OPTS,
         title: title,

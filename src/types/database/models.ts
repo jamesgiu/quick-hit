@@ -24,8 +24,3 @@ export interface DB_Player {
     id: string,
     name: string
 }
-
-export interface WinLoss {
-    wins: number,
-    losses: number
-}
