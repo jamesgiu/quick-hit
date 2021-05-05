@@ -1,4 +1,4 @@
-import {Form, Modal, Icon, Segment, Card, Button} from "semantic-ui-react";
+import {Form, Modal, Icon, Card, Button} from "semantic-ui-react";
 import React, {useState} from "react";
 import "./NewPlayer.css";
 import {QuickHitAPI} from "../../../api/QuickHitAPI";
@@ -6,11 +6,14 @@ import {DB_Player} from "../../../types/database/models";
 import {v4 as uuidv4} from 'uuid';
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 
+interface NewPlayerProps {
+    customModalOpenElement?: JSX.Element
+}
 
 /**
  * QuickHit NewPlayer component.
  */
-function NewPlayer() {
+function NewPlayer(props: NewPlayerProps) {
     const [icon, setIcon] = useState<string | any>("");
     const [name, setName] = useState<string>("");
     const [open, setOpen] = React.useState(false)
@@ -22,7 +25,7 @@ function NewPlayer() {
             // FIXME Replace this with firing an event to the parent to force a new request without refreshing
             // the application.
             setTimeout( () => {
-                window.location.reload()
+                window.location.href = "/players";
             }, 1000);
         }
 
@@ -44,7 +47,7 @@ function NewPlayer() {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button inverted><Icon name={'plus'}/>New player</Button>}
+            trigger={props.customModalOpenElement ?? <Button inverted><Icon name={'user plus'}/>New player</Button>}
         >
             <Modal.Header>
                 <Icon name='plus'/>

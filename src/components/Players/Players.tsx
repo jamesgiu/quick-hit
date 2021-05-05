@@ -4,9 +4,10 @@ import {DB_MatchPlayer, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {makeErrorToast} from "../Toast/Toast";
-import {Card, Grid, Header, Icon, Loader, Transition} from "semantic-ui-react";
+import {Header, Icon, Loader, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
+import NewGame from "./NewGame/NewGame";
 
 /**
  * QuickHit Players page.
@@ -84,8 +85,8 @@ function Players() {
     return (
         <div className="players">
             <Header as={"h2"} icon>
-                <Icon name='users' circular/>
-                <Header.Content>Players</Header.Content>
+                <Icon name='trophy' circular/>
+                <Header.Content>Ladder</Header.Content>
             </Header>
             <Transition visible={isLoading}>
                 <Loader content={"Loading players..."}/>
@@ -95,8 +96,9 @@ function Players() {
                        {renderPlayers()}
                 </span>
             </Transition>
-            <span className={"new-player-button"}>
+            <span className={"new-buttons"}>
                 <NewPlayer/>
+                <NewGame players={players}/>
             </span>
         </div>
     );

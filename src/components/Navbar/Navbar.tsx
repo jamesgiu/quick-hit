@@ -3,6 +3,7 @@ import './Navbar.css';
 import {Icon, Menu} from "semantic-ui-react";
 import {Link} from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
+import NewPlayer from "../Players/NewPlayer/NewPlayer";
 
 /**
  * QuickHit's navbar.
@@ -22,15 +23,13 @@ function Navbar() {
                         <Icon name={"home"}/>Home
                     </Menu.Item>
                 </Link>
-                <Link to={QuickHitPage.LADDER}>
+                <Link to={QuickHitPage.PLAYERS}>
                     <Menu.Item as={"a"}>
                         <Icon name={"trophy"}/>Ladder
                     </Menu.Item>
                 </Link>
                 <Menu.Menu position={"right"}>
-                    <Link to={QuickHitPage.PLAYERS}>
-                        <Menu.Item as={"a"} icon={"user"}/>
-                    </Link>
+                    <NewPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"}/>}/>
                 </Menu.Menu>
             </Menu>
         </div>
