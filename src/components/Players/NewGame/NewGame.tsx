@@ -43,7 +43,7 @@ function NewGame(props: NewGameProps) {
 
         const matchToAdd : DB_Match = {
             id: uuidv4(),
-            date: new Date().toDateString(),
+            date: new Date().toISOString(),
             winning_player_id: winningPlayerId,
             winning_player_score: winningPlayerScore,
             losing_player_id: losingPlayerId,

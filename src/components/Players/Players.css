@@ -6,6 +6,27 @@
     display: inline-flex;
     margin-left: 5px;
     margin-right: 5px;
+    width: 10%;
+}
+
+.players-area .card:first-child {
+    background-color: goldenrod;
+    width: 20%;
+}
+
+.players-area .card:nth-child(2) {
+    background-color: silver;
+    width: 15%;
+}
+
+.players-area .card:nth-child(3) {
+    background-color: sandybrown;
+    width: 12%;
+}
+
+.players-area .card:last-child {
+    background-color: #282c34;
+    width: 8%;
 }
 
 .new-buttons {
