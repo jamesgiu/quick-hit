@@ -1,4 +1,4 @@
-import {DB_MatchPlayer, DB_Player} from "../types/database/models";
+import {DB_Match, DB_Player} from "../types/database/models";
 import {ApiActions, HttpMethod} from "./ApiTypes";
 import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
 
@@ -14,8 +14,8 @@ export class QuickHitAPI {
         })
     }
 
-    public static getMatchPlayers(onSuccess: (matches: DB_MatchPlayer[]) => void, onFailure: (errorString: string) => void): void {
-        QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_PLAYERS, HttpMethod.GET)
+    public static getMatches(onSuccess: (matches: DB_Match[]) => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
             }).catch((error: AxiosError) => {
@@ -25,10 +25,19 @@ export class QuickHitAPI {
 
     public static addNewPlayer(playerToAdd: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.PATCH, `{"${playerToAdd.id}" : ${JSON.stringify(playerToAdd)}}`)
-            .then((response: AxiosResponse) => {
+            .then(() => {
                 onSuccess()
             }).catch((error: AxiosError) => {
                 onFailure(error.message)
+        });
+    }
+
+    public static addNewMatch(matchToAdd: DB_Match, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.PATCH, `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`)
+            .then(() => {
+                onSuccess()
+            }).catch((error: AxiosError) => {
+            onFailure(error.message)
         });
     }
 

@@ -1,21 +1,12 @@
 import {SemanticICONS} from "semantic-ui-react";
 
-export interface DB_House {
-    id: string,
-    name: string
-}
-
 export interface DB_Match {
     id: string,
     date: string,
-    team1_score: 11,
-    team2_score: 9
-}
-
-export interface DB_MatchPlayer {
-    match_id: string,
-    player_id: string,
-    won: boolean,
+    winning_player_id: string,
+    losing_player_id: string,
+    winning_player_score: number,
+    losing_player_score: number,
 }
 
 export interface DB_Player {

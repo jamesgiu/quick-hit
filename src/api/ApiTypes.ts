@@ -7,7 +7,5 @@ export enum HttpMethod {
 
 export enum ApiActions {
     PLAYERS = "player.json",
-    HOUSES = "house.json",
     MATCHES = "match.json",
-    MATCH_PLAYERS = "match_player.json"
 }

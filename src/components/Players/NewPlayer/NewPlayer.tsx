@@ -1,26 +1,35 @@
 import {Form, Modal, Icon, Card, Button} from "semantic-ui-react";
+import {SemanticICONS} from "semantic-ui-react/dist/commonjs/generic";
 import React, {useState} from "react";
 import "./NewPlayer.css";
 import {QuickHitAPI} from "../../../api/QuickHitAPI";
 import {DB_Player} from "../../../types/database/models";
 import {v4 as uuidv4} from 'uuid';
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
+import {FA_ICONS} from "../../../util/fa-icons";
 
 interface NewPlayerProps {
     customModalOpenElement?: JSX.Element
 }
 
+const renderIconOption = (icon: SemanticICONS) => {
+    return { key: icon, text: <span><Icon name={icon} size={"big"}/></span>, value: icon}
+}
+
+const iconOptions = FA_ICONS.map((icon) => renderIconOption(icon));
+
 /**
  * QuickHit NewPlayer component.
  */
 function NewPlayer(props: NewPlayerProps) {
+    const [open, setModalOpen] = React.useState(false)
     const [icon, setIcon] = useState<string | any>("");
     const [name, setName] = useState<string>("");
-    const [open, setOpen] = React.useState(false)
 
     const sendCreateRequest = () => {
         const onSuccess = () => {
             makeSuccessToast("Player added!", "Welcome to QuickHit!");
+            setModalOpen(false);
 
             // FIXME Replace this with firing an event to the parent to force a new request without refreshing
             // the application.
@@ -44,8 +53,8 @@ function NewPlayer(props: NewPlayerProps) {
 
     return (
         <Modal
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
+            onClose={() => setModalOpen(false)}
+            onOpen={() => setModalOpen(true)}
             open={open}
             trigger={props.customModalOpenElement ?? <Button inverted><Icon name={'user plus'}/>New player</Button>}
         >
@@ -56,13 +65,16 @@ function NewPlayer(props: NewPlayerProps) {
             <Modal.Content>
                 <Form onSubmit={sendCreateRequest}>
                     <Form.Group widths='equal'>
-                        <Form.Input fluid label='Name' placeholder='Name' onChange={(event, data) => setName(data.value)}/>
-                        <Form.Input fluid label='Icon' placeholder='user' onChange={(event, data) => setIcon(data.value)} />
-                        Check https://react.semantic-ui.com/elements/icon/ for icon values.
+                        <Form.Input fluid label='Name' required placeholder='Name'
+                                    onChange={(event, data) => setName(data.value)}/>
+                        <Form.Select fluid label='Icon' required placeholder='user'
+                                     options={iconOptions}
+                                     onChange={(event, data) => setIcon(data.value)} />
                     </Form.Group>
                     <Card>
                         Picture preview: {icon ? <Icon name={icon} size={"huge"} circular style={{margin: "auto", color: "orangered"}}/> : "Type an icon name."}
                     </Card>
+                    <Form.Group><a href={"https://react.semantic-ui.com/elements/icon/"} target="_blank" rel={"noreferrer"}><Icon name={"help"}>Icon search</Icon></a></Form.Group>
                     <Form.Button>Create</Form.Button>
                 </Form>
             </Modal.Content>

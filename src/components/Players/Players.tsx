@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './Players.css';
-import {DB_MatchPlayer, DB_Player} from "../../types/database/models";
+import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {makeErrorToast} from "../Toast/Toast";
@@ -14,11 +14,11 @@ import NewGame from "./NewGame/NewGame";
  */
 function Players() {
     const [players, setPlayers] = useState<DB_Player[]>([]);
-    const [matches, setMatches] = useState<DB_MatchPlayer[]>([]);
+    const [matches, setMatches] = useState<DB_Match[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getMatches = () => {
-        const onSuccess = (matches: DB_MatchPlayer[]): void => {
+        const onSuccess = (matches: DB_Match[]): void => {
             setMatches(matches);
             setIsLoading(false);
         }
@@ -28,7 +28,7 @@ function Players() {
             setIsLoading(false);
         }
 
-        QuickHitAPI.getMatchPlayers(onSuccess, onFailure);
+        QuickHitAPI.getMatches(onSuccess, onFailure);
     }
 
     const getWinLossForPlayer = (playerId: string): WinLoss => {
@@ -38,12 +38,11 @@ function Players() {
         };
 
         matches.forEach((match) => {
-            if (match.player_id === playerId) {
-                if (match.won) {
+            if (match.winning_player_id === playerId) {
                     winLoss.wins++;
-                } else {
+            }
+            else if (match.losing_player_id === playerId) {
                     winLoss.losses++;
-                }
             }
         });
 
@@ -59,6 +58,9 @@ function Players() {
 
             playerItems.push(playerCard);
         });
+
+        // Sorting the player items by wins.
+        playerItems.sort((player1, player2) => {return player1.props.winLoss.wins > player2.props.winLoss.wins ? 1 : 0})
 
         return playerItems;
     }
