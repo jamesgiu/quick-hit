@@ -4,10 +4,12 @@ import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {makeErrorToast} from "../Toast/Toast";
-import {Header, Icon, Loader, Transition} from "semantic-ui-react";
+import {Button, Header, Icon, Loader, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
+
+type LadderStyle = 'vertical' | 'horizontal';
 
 /**
  * QuickHit Players page.
@@ -15,6 +17,7 @@ import NewGame from "./NewGame/NewGame";
 function Players() {
     const [players, setPlayers] = useState<DB_Player[]>([]);
     const [matches, setMatches] = useState<DB_Match[]>([]);
+    const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('vertical');
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getMatches = () => {
@@ -93,10 +96,11 @@ function Players() {
                 <Loader content={"Loading players..."}/>
             </Transition>
             <Transition visible={!isLoading}>
-                <span className={"players-area"}>
+                <span className={`players-area ${ladderStyle}`}>
                        {renderPlayers()}
                 </span>
             </Transition>
+            <Button basic circular icon={ladderStyle === 'vertical' ? 'triangle right' : 'triangle down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
             <span className={"new-buttons"}>
                 <NewPlayer/>
                 <NewGame players={players}/>
