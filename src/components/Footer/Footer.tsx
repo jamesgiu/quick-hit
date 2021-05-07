@@ -7,7 +7,7 @@ import './Footer.css';
 function Footer() {
     return (
         <div className="footer">
-            Made with React and Semantic-UI
+            https://github.com/jamesgiu/quick-hit
         </div>
     );
 }
