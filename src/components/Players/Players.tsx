@@ -17,7 +17,7 @@ type LadderStyle = 'vertical' | 'horizontal';
 function Players() {
     const [players, setPlayers] = useState<DB_Player[]>([]);
     const [matches, setMatches] = useState<DB_Match[]>([]);
-    const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('vertical');
+    const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getMatches = () => {
@@ -96,15 +96,17 @@ function Players() {
                 <Loader content={"Loading players..."}/>
             </Transition>
             <Transition visible={!isLoading}>
-                <span className={`players-area ${ladderStyle}`}>
-                       {renderPlayers()}
-                </span>
-            </Transition>
-            <Button basic circular icon={ladderStyle === 'vertical' ? 'triangle right' : 'triangle down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
-            <span className={"new-buttons"}>
-                <NewPlayer/>
-                <NewGame players={players}/>
+                <span>
+                    <span className={`players-area ${ladderStyle}`}>
+                           {renderPlayers()}
+                    </span>
+                    <div className={"new-buttons"}>
+                        <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
+                        <NewPlayer/>
+                        <NewGame players={players}/>
+                    </div>
             </span>
+            </Transition>
         </div>
     );
 }

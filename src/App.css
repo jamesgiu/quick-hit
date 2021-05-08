@@ -1,14 +1,13 @@
 .App {
     text-align: center;
     background-color: rgba(53, 54, 58, 1);
-    height: 100vh;
     color: white;
+    height: 100vh;
 }
 
 .app-main-content {
     width: 90%;
-    padding-top: 2%;
-    margin: auto;
+    margin: 2% auto auto;
 }
 
 .header .content {

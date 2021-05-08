@@ -3,8 +3,14 @@
 }
 
 .vertical .card {
+    flex-direction: row;
     display: inline-list-item;
-    margin: auto;
+    height: 50px;
+    font-size: 0.8rem;
+}
+
+.vertical .card i {
+    font-size: 1.2rem;
 }
 
 .horizontal .card {
@@ -35,11 +41,4 @@
 .players-area .card:last-child {
     background-color: #282c34;
     width: 8%;
-}
-
-.new-buttons {
-    position: absolute;
-    bottom: 5%;
-    left: 1px;
-    right: 1px;
 }

@@ -22,8 +22,8 @@ function App() {
                         <Redirect to={QuickHitPage.NOT_FOUND}/>
                     </Switch>
                 </div>
-                <Footer/>
                 <Toast/>
+                <Footer/>
             </div>
         </BrowserRouter>
     );
