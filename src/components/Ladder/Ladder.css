@@ -9,17 +9,19 @@
     font-size: 0.8rem;
 }
 
-.vertical .card i {
-    font-size: 1.2rem;
+.vertical .card {
+    font-size: 0.8rem;
+    height: 10%;
 }
 
 .horizontal .card {
     display: inline-flex;
     margin-left: 5px;
     margin-right: 5px;
+    font-size: 1rem;
 }
 
-.players-area .card {
+.players-area .card  {
     width: 10%;
     box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
     border-radius: 15px;
