@@ -4,6 +4,8 @@ import {v4 as uuidv4} from 'uuid';
 import {DB_Match, DB_Player} from "../../../types/database/models";
 import {QuickHitAPI} from "../../../api/QuickHitAPI";
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
+import {QuickHitPage} from "../../../util/QuickHitPage";
+import "./NewGame.css";
 
 interface NewGameProps {
     players: DB_Player[],
@@ -27,7 +29,7 @@ function NewGame(props: NewGameProps) {
             // FIXME Replace this with firing an event to the parent to force a new request without refreshing
             // the application.
             setTimeout( () => {
-                window.location.href = "/players";
+                window.location.href = QuickHitPage.LADDER;
             }, 1000);
         }
 
@@ -68,7 +70,7 @@ function NewGame(props: NewGameProps) {
                 <Icon name='plus'/>
                 New game
             </Modal.Header>
-            <Modal.Content>
+            <Modal.Content className={"new-game-form"}>
                 <Form onSubmit={sendCreateRequest}>
                     <Form.Group widths='equal'>
                         <Form.Select

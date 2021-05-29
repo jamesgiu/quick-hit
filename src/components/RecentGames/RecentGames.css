@@ -1,0 +1,15 @@
+.event-content {
+    color: white;
+}
+
+.event-date {
+    color: darkorange;
+}
+
+.event-icon {
+    color: white;
+}
+
+.recent-games .label i {
+    color: orange !important;
+}

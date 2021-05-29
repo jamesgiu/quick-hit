@@ -7,6 +7,7 @@ import {DB_Player} from "../../../types/database/models";
 import {v4 as uuidv4} from 'uuid';
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 import {FA_ICONS} from "../../../util/fa-icons";
+import {QuickHitPage} from "../../../util/QuickHitPage";
 
 interface NewPlayerProps {
     customModalOpenElement?: JSX.Element
@@ -34,7 +35,7 @@ function NewPlayer(props: NewPlayerProps) {
             // FIXME Replace this with firing an event to the parent to force a new request without refreshing
             // the application.
             setTimeout( () => {
-                window.location.href = "/players";
+                window.location.href = QuickHitPage.LADDER;
             }, 1000);
         }
 

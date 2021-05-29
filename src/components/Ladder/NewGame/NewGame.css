@@ -1,0 +1,8 @@
+.new-game-form .field input {
+    height: 45px;
+}
+
+.new-game-form .field .dropdown {
+    margin-top: 2.5px;
+    height: 45px;
+}

@@ -3,6 +3,7 @@
  */
 export enum QuickHitPage {
     HOME = "/",
-    PLAYERS = "/players",
+    LADDER = "/ladder",
+    RECENT_GAMES = "/recent",
     NOT_FOUND = "/404"
 }

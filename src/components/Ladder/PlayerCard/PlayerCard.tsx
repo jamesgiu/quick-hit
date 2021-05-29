@@ -2,6 +2,7 @@ import {Card, Icon} from "semantic-ui-react";
 import React from "react";
 import {DB_Player} from "../../../types/database/models";
 import {WinLoss} from "../../../types/types";
+import "./PlayerCard.css";
 
 interface PlayerCardProps {
     player: DB_Player,
@@ -12,7 +13,7 @@ interface PlayerCardProps {
  */
 function PlayerCard(props: PlayerCardProps) {
     return (
-        <Card as={"span"}>
+        <Card as={"span"} className="player-card">
             <Card.Content>
                 <Card.Header>
                     <div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './NotFound.css';
 
-function Ladder() {
+function NotFound() {
     return (
         <div className="not-found">
             Not found page
@@ -9,4 +9,4 @@ function Ladder() {
     );
 }
 
-export default Ladder;
+export default NotFound;

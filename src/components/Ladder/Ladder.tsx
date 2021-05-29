@@ -1,38 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import './Players.css';
-import {DB_Match, DB_Player} from "../../types/database/models";
+import React, {useState} from 'react';
+import './Ladder.css';
+import {DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
-import {QuickHitAPI} from "../../api/QuickHitAPI";
-import {makeErrorToast} from "../Toast/Toast";
-import {Button, Header, Icon, Loader, Transition} from "semantic-ui-react";
+import {Button, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
+import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
 
 type LadderStyle = 'vertical' | 'horizontal';
 
 /**
- * QuickHit Players page.
+ * QuickHit Ladder page.
  */
-function Players() {
-    const [players, setPlayers] = useState<DB_Player[]>([]);
-    const [matches, setMatches] = useState<DB_Match[]>([]);
+function Ladder() {
+    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    const getMatches = () => {
-        const onSuccess = (matches: DB_Match[]): void => {
-            setMatches(matches);
-            setIsLoading(false);
-        }
-
-        const onFailure = (error: string): void => {
-            makeErrorToast("Could not get matches", error);
-            setIsLoading(false);
-        }
-
-        QuickHitAPI.getMatches(onSuccess, onFailure);
-    }
 
     const getWinLossForPlayer = (playerId: string): WinLoss => {
         const winLoss: WinLoss = {
@@ -40,7 +23,7 @@ function Players() {
             losses: 0
         };
 
-        matches.forEach((match) => {
+        loaderData.matches.forEach((match) => {
             if (match.winning_player_id === playerId) {
                     winLoss.wins++;
             }
@@ -54,7 +37,7 @@ function Players() {
 
     const renderPlayers = (): JSX.Element[] => {
         const playerItems: JSX.Element[] = [];
-        players.forEach((player) => {
+        Array.from(loaderData.playersMap.values()).forEach((player) => {
             const playerCard = (
                 <PlayerCard player={player} winLoss={getWinLossForPlayer(player.id)}/>
             );
@@ -67,24 +50,9 @@ function Players() {
         return playerItems;
     }
 
-    // Runs on mount.
-    useEffect(() => {
-        const getPlayers = () => {
-            const onSuccess = (players: DB_Player[]): void => {
-                setPlayers(players);
-                getMatches();
-            }
-
-            const onFailure = (error: string): void => {
-                makeErrorToast("Could not get players", error);
-                setIsLoading(false);
-            }
-
-            QuickHitAPI.getPlayers(onSuccess, onFailure);
-        }
-
-        getPlayers();
-    }, [])
+    const receiveDataFromLoader = (data: LoaderData) => {
+        setLoaderData(data);
+    }
 
     return (
         <div className="players">
@@ -92,10 +60,8 @@ function Players() {
                 <Icon name='trophy' circular/>
                 <Header.Content>Ladder</Header.Content>
             </Header>
-            <Transition visible={isLoading}>
-                <Loader content={"Loading players..."}/>
-            </Transition>
-            <Transition visible={!isLoading}>
+            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
+            <Transition visible={!loaderData.loading}>
                 <span>
                     <span className={`players-area ${ladderStyle}`}>
                            {renderPlayers()}
@@ -103,7 +69,7 @@ function Players() {
                     <div className={"new-buttons"}>
                         <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
                         <NewPlayer/>
-                        <NewGame players={players}/>
+                        <NewGame players={Array.from(loaderData.playersMap.values())}/>
                     </div>
             </span>
             </Transition>
@@ -111,4 +77,4 @@ function Players() {
     );
 }
 
-export default Players;
+export default Ladder;

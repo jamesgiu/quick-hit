@@ -21,6 +21,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-semantic-toasts": "^0.6.5",
+    "react-time-ago": "^6.2.2",
     "redux": "^4.1.0",
     "redux-persist": "^6.0.0",
     "semantic-ui-css": "^2.4.1",
