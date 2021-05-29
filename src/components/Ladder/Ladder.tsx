@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import './Ladder.css';
-import {DB_Player} from "../../types/database/models";
+import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {Button, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
-import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
+import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
+import { Link } from 'react-router-dom';
+import {QuickHitPage} from "../../util/QuickHitPage";
 
 type LadderStyle = 'vertical' | 'horizontal';
 
@@ -17,29 +19,11 @@ function Ladder() {
     const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
 
-    const getWinLossForPlayer = (playerId: string): WinLoss => {
-        const winLoss: WinLoss = {
-            wins: 0,
-            losses: 0
-        };
-
-        loaderData.matches.forEach((match) => {
-            if (match.winning_player_id === playerId) {
-                    winLoss.wins++;
-            }
-            else if (match.losing_player_id === playerId) {
-                    winLoss.losses++;
-            }
-        });
-
-        return winLoss;
-    }
-
     const renderPlayers = (): JSX.Element[] => {
         const playerItems: JSX.Element[] = [];
         Array.from(loaderData.playersMap.values()).forEach((player) => {
             const playerCard = (
-                <PlayerCard player={player} winLoss={getWinLossForPlayer(player.id)}/>
+                <PlayerCard player={player} winLoss={getWinLossForPlayer(player.id, loaderData.matches)}/>
             );
 
             playerItems.push(playerCard);

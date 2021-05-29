@@ -1,0 +1,10 @@
+.home-menu-buttons .ui.icon.header {
+    padding: 30px;
+    transition: font-size 1s;
+}
+
+.home-menu-buttons .ui.icon.header:hover {
+    cursor: pointer;
+    font-size: 2rem;
+    height: auto;
+}

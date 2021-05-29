@@ -5,5 +5,6 @@ export enum QuickHitPage {
     HOME = "/",
     LADDER = "/ladder",
     RECENT_GAMES = "/recent",
+    STATISTICS = "/player/:playerId",
     NOT_FOUND = "/404"
 }

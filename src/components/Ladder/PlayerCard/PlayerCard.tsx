@@ -3,6 +3,8 @@ import React from "react";
 import {DB_Player} from "../../../types/database/models";
 import {WinLoss} from "../../../types/types";
 import "./PlayerCard.css";
+import {QuickHitPage} from "../../../util/QuickHitPage";
+import { Link } from "react-router-dom";
 
 interface PlayerCardProps {
     player: DB_Player,
@@ -15,12 +17,14 @@ function PlayerCard(props: PlayerCardProps) {
     return (
         <Card as={"span"} className="player-card">
             <Card.Content>
-                <Card.Header>
-                    <div>
-                        <Icon name={props.player.icon} size={"big"}/>
-                    </div>
-                    {props.player.name}
-                </Card.Header>
+                <Link to={QuickHitPage.STATISTICS.replace(":playerId", props.player.id)}>
+                    <Card.Header>
+                        <div>
+                            <Icon name={props.player.icon} size={"big"}/>
+                        </div>
+                        {props.player.name}
+                    </Card.Header>
+                </Link>
             </Card.Content>
             <Card.Content extra>
                 <span>

@@ -1,0 +1,23 @@
+.player-statistics .recent-games .ui.icon.header {
+    float: left;
+    font-size: 1rem;
+}
+
+.player-statistics .statistics-group .ui.statistic .value {
+    color: orange;
+}
+
+.player-statistics .statistics-group .ui.statistic.losses .value {
+    color: grey;
+}
+
+.player-statistics .statistics-group .ui.statistic .label {
+    color: darkorange;
+}
+
+.player-statistics .player-stats-wrapper {
+    margin: auto;
+    font-size: 0.8rem;
+    width: 50%;
+    padding-left: 22%;
+}

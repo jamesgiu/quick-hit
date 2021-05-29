@@ -1,19 +1,60 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Home.css';
-import {Header, Icon, Transition} from "semantic-ui-react";
+import {Button, ButtonGroup, Header, Icon, SegmentGroup, Transition} from "semantic-ui-react";
+import { Link } from 'react-router-dom';
+import {QuickHitPage} from "../../util/QuickHitPage";
+import NewGame from "../Ladder/NewGame/NewGame";
+import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
+import {DB_Player} from "../../types/database/models";
+import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 
 /**
  * QuickHit Home page.
  */
 function Home() {
+    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
+
+    const receiveDataFromLoader = (data: LoaderData) => {
+        setLoaderData(data);
+    }
+
     return (
         <div className="home">
+            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
             <Transition transitionOnMount={true}>
                 <Header as={"h2"} icon inverted>
                     <Icon name='table tennis' circular/>
                     Welcome to <Icon name={"chevron right"} size={"tiny"}/>Quick
                     <span className={"header-hit"}>HIT</span>
                 </Header>
+            </Transition>
+            <Transition transitionOnMount={true}>
+                <ButtonGroup horizontal className={"home-menu-buttons"}>
+                    <Header as={"h3"} icon>
+                        <Link to={QuickHitPage.LADDER}>
+                            <Icon name='trophy' circular/>
+                            <Header.Content>Ladder</Header.Content>
+                        </Link>
+                    </Header>
+                    <Header as={"h3"} icon>
+                        <Link to={QuickHitPage.RECENT_GAMES}>
+                            <Icon name='history' circular/>
+                            <Header.Content>Recent games</Header.Content>
+                        </Link>
+                    </Header>
+                    <NewGame players={Array.from(loaderData.playersMap.values())} customModalOpenElement={
+                        <Header as={"h3"} icon>
+                            <Icon name='plus' circular/>
+                            <Header.Content>Enter game</Header.Content>
+                        </Header>
+                    }/>
+                    <NewPlayer customModalOpenElement={
+                        <Header as={"h3"} icon>
+                            <Icon name='add user' circular/>
+                            <Header.Content>Sign up</Header.Content>
+                        </Header>
+                    }/>
+                </ButtonGroup>
             </Transition>
         </div>
     );

@@ -9,6 +9,7 @@ import {makeErrorToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DB_Match, DB_Player} from "../../types/database/models";
+import {WinLoss} from "../../types/types";
 
 export interface LoaderData {
     matches: DB_Match[],
@@ -81,6 +82,24 @@ function QHDataLoader(props: QHDataLoaderProps) {
             <Loader content={"Loading data..."}/>
         </Transition>
     );
+}
+
+export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinLoss => {
+    const winLoss: WinLoss = {
+        wins: 0,
+        losses: 0
+    };
+
+    matches.forEach((match) => {
+        if (match.winning_player_id === playerId) {
+            winLoss.wins++;
+        }
+        else if (match.losing_player_id === playerId) {
+            winLoss.losses++;
+        }
+    });
+
+    return winLoss;
 }
 
 export default QHDataLoader;

@@ -6,7 +6,11 @@ import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
 import {DB_Player} from "../../types/database/models";
 import ReactTimeAgo from 'react-time-ago';
 
-function RecentGames() {
+interface RecentGamesProps {
+    focusedPlayerId?: string,
+}
+
+function RecentGames(props: RecentGamesProps) {
     const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
 
     const getMatchEvents = () : FeedEventProps[] => {
@@ -25,6 +29,14 @@ function RecentGames() {
         loaderData.matches.forEach((match) => {
             const winningPlayer = playersMap.get(match.winning_player_id)!;
             const losingPlayer = playersMap.get(match.losing_player_id)!;
+
+            // If we are focusing on a certain player's recent games only
+            if (props.focusedPlayerId) {
+                if (winningPlayer.id !== props.focusedPlayerId && losingPlayer.id !== props.focusedPlayerId) {
+                    // Skip this match in the loop, as it does not contain our focused player.
+                    return
+                }
+            }
 
             events.push({
                 meta:
@@ -48,7 +60,7 @@ function RecentGames() {
                     </div>,
                 icon: winningPlayer.icon
             })
-        })
+        });
 
         return events;
     }

@@ -9,6 +9,7 @@ import "./NewGame.css";
 
 interface NewGameProps {
     players: DB_Player[],
+    customModalOpenElement?: JSX.Element,
 }
 
 /**
@@ -64,7 +65,7 @@ function NewGame(props: NewGameProps) {
             onClose={() => setModalOpen(false)}
             onOpen={() => setModalOpen(true)}
             open={open}
-            trigger={<Button inverted><Icon name={'trophy'}/>Enter game</Button>}
+            trigger={props.customModalOpenElement ?? <Button inverted><Icon name={'trophy'}/>Enter game</Button>}
         >
             <Modal.Header>
                 <Icon name='plus'/>
