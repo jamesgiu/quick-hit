@@ -42,7 +42,7 @@ function PlayerStatistics(props: RouteComponentProps<PlayerStatisticsParams>) {
                                 <Statistic label={"Losses"} value={winLoss.losses} className={"losses"}/>
                             </Statistic.Group>
                             <Statistic.Group horizontal className={"statistics-group"}>
-                                <Statistic label={"W/L ratio"} value={`${(winLoss.wins / winLoss.wins + winLoss.losses) * 100}%`}/>
+                                <Statistic label={"W/L ratio"} value={`${Math.round(winLoss.wins / (winLoss.wins + winLoss.losses) * 100)}%`}/>
                                 <Statistic label={"Games played"} value={winLoss.wins + winLoss.losses}/>
                             </Statistic.Group>
                         </div>
