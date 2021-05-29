@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 interface PlayerCardProps {
     player: DB_Player,
-    winLoss: WinLoss,
+    winLoss?: WinLoss,
 }
 /**
  * QuickHit PlayerCard component.
@@ -26,11 +26,13 @@ function PlayerCard(props: PlayerCardProps) {
                     </Card.Header>
                 </Link>
             </Card.Content>
+            {props.winLoss &&
             <Card.Content extra>
                 <span>
                     Wins: {props.winLoss.wins} Losses: {props.winLoss.losses}
                 </span>
             </Card.Content>
+            }
         </Card>
     )
 }

@@ -4,9 +4,10 @@ import {Button, ButtonGroup, Header, Icon, SegmentGroup, Transition} from "seman
 import { Link } from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 import NewGame from "../Ladder/NewGame/NewGame";
-import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
+import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
 import {DB_Player} from "../../types/database/models";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
+import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 
 /**
  * QuickHit Home page.
@@ -16,6 +17,13 @@ function Home() {
 
     const receiveDataFromLoader = (data: LoaderData) => {
         setLoaderData(data);
+    }
+
+    const getCurrentChampion = () : DB_Player => {
+        const players = Array.from(loaderData.playersMap.values());
+        players.sort((player1, player2) => {return getWinLossForPlayer(player2.id, loaderData.matches).wins - getWinLossForPlayer(player1.id, loaderData.matches).wins});
+
+        return players[0];
     }
 
     return (
@@ -55,6 +63,18 @@ function Home() {
                         </Header>
                     }/>
                 </ButtonGroup>
+            </Transition>
+            <Transition visible={!loaderData.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
+                <div className={"champion-area"}>
+                    <Header as={"h4"} inverted>
+                        {loaderData.playersMap.size > 0 &&
+                        <PlayerCard player={getCurrentChampion()}/>
+                        }
+                    </Header>
+                    <Header.Subheader>
+                        is the current <span className={"champion-text"}> champion </span>
+                    </Header.Subheader>
+                </div>
             </Transition>
         </div>
     );

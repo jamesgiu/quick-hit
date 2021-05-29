@@ -30,7 +30,7 @@ function Ladder() {
         });
 
         // Sorting the player items by wins.
-        playerItems.sort((player1, player2) => {return player1.props.winLoss.wins > player2.props.winLoss.wins ? -1 : 1});
+        playerItems.sort((player1, player2) => {return player2.props.winLoss.wins - player1.props.winLoss.wins});
         return playerItems;
     }
 

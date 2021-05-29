@@ -1,3 +1,6 @@
+html {
+    background-color: rgba(53, 54, 58, 1);
+}
 .App {
     text-align: center;
     background-color: rgba(53, 54, 58, 1);
@@ -8,6 +11,7 @@
 .app-main-content {
     width: 90%;
     margin: 2% auto auto;
+    padding-bottom: 5%;
 }
 
 .header .content {

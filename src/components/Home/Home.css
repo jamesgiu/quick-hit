@@ -8,3 +8,33 @@
     font-size: 2rem;
     height: auto;
 }
+
+.home-menu-buttons {
+    padding-bottom: 10%;
+}
+
+.home .champion-area i {
+    font-size: 2rem;
+    margin: auto;
+}
+
+.home .champion-area {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+.home .champion-area {
+    color: white;
+}
+
+.home .champion-area .player-card {
+    width: 80px;
+    border-radius: 30px;
+    margin: auto;
+    box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+}
+
+.home .champion-area .champion-text {
+    color: orangered;
+}

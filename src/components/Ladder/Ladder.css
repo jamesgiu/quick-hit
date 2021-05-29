@@ -21,6 +21,8 @@
 
 .players-area .card {
     width: 10%;
+    box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+    border-radius: 15px;
 }
 
 .players-area .card:first-child {
@@ -41,4 +43,8 @@
 .players-area .card:last-child {
     background-color: #282c34;
     width: 8%;
+}
+
+.new-buttons {
+    margin-top: 50px;
 }
