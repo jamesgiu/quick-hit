@@ -12,4 +12,6 @@
 
 .recent-games .games-feed .event .label i.icon {
     color: orange;
+    margin-top: 60%;
+    font-size: 2rem;
 }
