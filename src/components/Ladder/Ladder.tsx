@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import './Ladder.css';
-import {DB_Match, DB_Player} from "../../types/database/models";
-import {WinLoss} from "../../types/types";
+import {DB_Player} from "../../types/database/models";
 import {Button, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
 import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
-import { Link } from 'react-router-dom';
-import {QuickHitPage} from "../../util/QuickHitPage";
 
 type LadderStyle = 'vertical' | 'horizontal';
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Home.css';
-import {Button, ButtonGroup, Header, Icon, SegmentGroup, Transition} from "semantic-ui-react";
+import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 import NewGame from "../Ladder/NewGame/NewGame";
