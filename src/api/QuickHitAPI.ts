@@ -23,7 +23,7 @@ export class QuickHitAPI {
         });
     }
 
-    public static addNewPlayer(playerToAdd: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+    public static addOrUpdatePlayer(playerToAdd: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.PATCH, `{"${playerToAdd.id}" : ${JSON.stringify(playerToAdd)}}`)
             .then(() => {
                 onSuccess()
@@ -32,9 +32,11 @@ export class QuickHitAPI {
         });
     }
 
-    public static addNewMatch(matchToAdd: DB_Match, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+    public static addNewMatch(matchToAdd: DB_Match, winningPlayer: DB_Player, losingPlayer: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.PATCH, `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`)
             .then(() => {
+                this.addOrUpdatePlayer(winningPlayer,()=>{}, onFailure);
+                this.addOrUpdatePlayer(losingPlayer,()=>{}, onFailure);
                 onSuccess()
             }).catch((error: AxiosError) => {
             onFailure(error.message)

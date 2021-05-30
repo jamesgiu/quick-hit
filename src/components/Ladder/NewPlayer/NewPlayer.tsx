@@ -46,10 +46,12 @@ function NewPlayer(props: NewPlayerProps) {
         const player : DB_Player = {
             id: uuidv4(),
             name,
-            icon
+            icon,
+            /* Default ELO rank */
+            elo: 1200
         };
 
-        QuickHitAPI.addNewPlayer(player, onSuccess, onError);
+        QuickHitAPI.addOrUpdatePlayer(player, onSuccess, onError);
     }
 
     return (

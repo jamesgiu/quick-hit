@@ -41,7 +41,13 @@ function RecentGames(props: RecentGamesProps) {
             events.push({
                 meta:
                     <div className={"event-content"}>
-                        {winningPlayer.name} defeated {losingPlayer.name} <ReactTimeAgo date={new Date(match.date)}/>...
+                        {winningPlayer.name} ({match.winning_player_original_elo}
+                        <span className={"elo-gain"}>
+                            +{match.winner_new_elo - match.winning_player_original_elo}
+                        </span>) defeated {losingPlayer.name} ({match.losing_player_original_elo}
+                        <span className={"elo-loss"}>
+                            -{match.losing_player_original_elo - match.loser_new_elo}
+                        </span>) <ReactTimeAgo date={new Date(match.date)}/>...
                         <Divider/>
                     </div>,
                 date:

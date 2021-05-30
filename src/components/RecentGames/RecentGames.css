@@ -15,3 +15,13 @@
     margin-top: 20%;
     font-size: 2rem;
 }
+
+.elo-gain {
+    color: green;
+    padding: 2px;
+}
+
+.elo-loss {
+    color: red;
+    padding: 2px;
+}

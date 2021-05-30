@@ -37,6 +37,9 @@ function PlayerStatistics(props: RouteComponentProps<PlayerStatisticsParams>) {
                         <Header.Content>{player.name}</Header.Content>
                     </Header>
                       <div className={"player-stats-wrapper"}>
+                              <Statistic.Group className={"statistics-group"}>
+                                  <Statistic label={"Rating"} value={player.elo}/>
+                              </Statistic.Group>
                              <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={winLoss.wins} className={"wins"}/>
                                 <Statistic label={"Losses"} value={winLoss.losses} className={"losses"}/>
