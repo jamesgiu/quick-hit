@@ -38,6 +38,12 @@ function NewGame(props: NewGameProps) {
             makeErrorToast("Game not added!", errorMsg);
         }
 
+        if (winningPlayerId === losingPlayerId)
+        {
+            makeErrorToast("Get outta here", "A player cannot beat themselves (in table tennis)");
+            return;
+        }
+
         if (winningPlayerScore < losingPlayerScore)
         {
             makeErrorToast("Come on man", "Winning player score must be higher than losing player score");
