@@ -41,7 +41,7 @@ function NewGame(props: NewGameProps) {
 
         if (winningPlayer?.id === losingPlayer?.id)
         {
-            makeErrorToast("Get outta here", "A player cannot beat themselves (in table tennis)");
+            makeErrorToast("Get outta here", "Players cannot beat themselves on QuickHit");
             return;
         }
 

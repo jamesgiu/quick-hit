@@ -27,10 +27,12 @@ function PlayerCard(props: PlayerCardProps) {
                 </Link>
             </Card.Content>
             <Card.Meta>
-                {props.player.elo}
             </Card.Meta>
             {props.winLoss &&
             <Card.Content extra>
+                <div>
+                    {props.player.elo}
+                </div>
                 <span>
                     Wins: {props.winLoss.wins} Losses: {props.winLoss.losses}
                 </span>

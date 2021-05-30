@@ -19,9 +19,11 @@
 .elo-gain {
     color: green;
     padding: 2px;
+    font-weight: 500;
 }
 
 .elo-loss {
-    color: red;
+    color: rgba(255,50,0,1);
     padding: 2px;
+    font-weight: 500;
 }
