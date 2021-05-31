@@ -5,7 +5,7 @@
 .ui.card.player-card .content a {
     color: black;
     font-weight: 700;
-    transition: font-size 1s;
+    transition: font-size 0.5s;
 }
 
 .player-card a:hover {
