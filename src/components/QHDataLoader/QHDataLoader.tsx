@@ -5,7 +5,7 @@
 // experience.
 
 import React, {useEffect, useState} from "react";
-import {makeErrorToast} from "../Toast/Toast";
+import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DB_Match, DB_Player} from "../../types/database/models";
@@ -25,16 +25,30 @@ interface QHDataLoaderProps {
 const POLL_TIME_MS = 30000;
 
 function QHDataLoader(props: QHDataLoaderProps) {
-    const [matches, setMatches] = useState<DB_Match[]>([]);
-    const [players, setPlayers] = useState<DB_Player[]>([]);
+    const [matches, setMatches] = useState<DB_Match[]>();
+    const [players, setPlayers] = useState<DB_Player[]>();
     const [loading, setLoading] = useState<boolean>(true);
 
     // On component mount.
     useEffect(()=> {
         const getMatches = () => {
-            const onSuccess = (matches: DB_Match[]): void => {
-                setMatches(matches);
-                setLoading(false);
+            const onSuccess = (receivedMatches: DB_Match[]): void => {
+                // If matches have already been retrieved.
+                if (matches) {
+                    // Check for match data changes
+                    if (receivedMatches.length !== matches.length) {
+                        // Match data has changed, prompt user for a refresh.
+                        makeRefreshToast();
+                        // Stop checking for new data.
+                        clearInterval(dataPoller);
+                        // FIXME sets loading indefinitely to prevent actions and force a refresh.
+                        setLoading(true);
+                    }
+                }
+                else {
+                    setMatches(receivedMatches);
+                    setLoading(false);
+                }
             }
 
             const onFailure = (error: string): void => {
@@ -66,7 +80,9 @@ function QHDataLoader(props: QHDataLoaderProps) {
 
         getData();
 
-        const dataPoller = setInterval(getData, POLL_TIME_MS);
+        const dataPoller = setInterval(() => {
+            getData();
+        }, POLL_TIME_MS);
 
         // Runs on component unmount
         return function cleanup() {
@@ -78,12 +94,14 @@ function QHDataLoader(props: QHDataLoaderProps) {
     useEffect(()=> {
         const playersMap : Map<string, DB_Player> = new Map();
 
-        players.forEach((player) => {
-            playersMap.set(player.id, player);
-        });
+        if (players) {
+            players.forEach((player) => {
+                playersMap.set(player.id, player);
+            });
+        }
 
         const loaderData : LoaderData = {
-            matches,
+            matches: matches ?? [],
             playersMap,
             loading
         };

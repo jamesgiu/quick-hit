@@ -36,4 +36,14 @@ export const makeErrorToast = (title: string, message: string): void => {
     });
 }
 
+export const makeRefreshToast = (): void => {
+    toast({
+        time: 0,
+        title: "New matches have been added",
+        description: "Please refresh the application.",
+        type: "error",
+        icon: "warning"
+    });
+}
+
 export default Toaster;

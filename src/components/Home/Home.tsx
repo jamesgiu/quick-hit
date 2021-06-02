@@ -4,7 +4,7 @@ import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 import NewGame from "../Ladder/NewGame/NewGame";
-import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
+import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
 import {DB_Player} from "../../types/database/models";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";

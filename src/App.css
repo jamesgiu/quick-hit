@@ -6,6 +6,7 @@ html {
     background-color: rgba(53, 54, 58, 1);
     color: white;
     height: 100vh;
+    overflow-y: scroll;
 }
 
 .app-main-content {
