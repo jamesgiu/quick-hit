@@ -21,7 +21,7 @@ function Home() {
 
     const getCurrentChampion = () : DB_Player => {
         const players = Array.from(loaderData.playersMap.values());
-        players.sort((player1, player2) => {return getWinLossForPlayer(player2.id, loaderData.matches).wins - getWinLossForPlayer(player1.id, loaderData.matches).wins});
+        players.sort((player1, player2) => {return player2.elo - player1.elo});
 
         return players[0];
     }

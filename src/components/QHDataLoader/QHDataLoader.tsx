@@ -21,6 +21,9 @@ interface QHDataLoaderProps {
     dataReceivedCallback: (snapshot: LoaderData) => void,
 }
 
+// How frequently to poll the Firebase DB for new data.
+const POLL_TIME_MS = 30000;
+
 function QHDataLoader(props: QHDataLoaderProps) {
     const [matches, setMatches] = useState<DB_Match[]>([]);
     const [players, setPlayers] = useState<DB_Player[]>([]);
@@ -56,8 +59,19 @@ function QHDataLoader(props: QHDataLoaderProps) {
             QuickHitAPI.getPlayers(onSuccess, onFailure);
         }
 
-        getMatches();
-        getPlayers();
+        const getData = () => {
+            getMatches();
+            getPlayers();
+        };
+
+        getData();
+
+        const dataPoller = setInterval(getData, POLL_TIME_MS);
+
+        // Runs on component unmount
+        return function cleanup() {
+           clearInterval(dataPoller);
+        };
     }, [])
 
     // Whenever the snapshot updates, notify the parents.
