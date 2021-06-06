@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Ladder.css';
 import {DB_Player} from "../../types/database/models";
 import {Button, Checkbox, Header, Icon, Transition} from "semantic-ui-react";
@@ -16,6 +16,7 @@ function Ladder() {
     const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
     const [hideZeroGamePlayers, setHideZeroGamePlayers] = useState<boolean>(true);
+    const [forceRefreshOnNextRender, setForceRefreshOnNextRender] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
         const playerItems: JSX.Element[] = [];
@@ -46,6 +47,17 @@ function Ladder() {
         setLoaderData(data);
     }
 
+    const refreshContent = () => {
+        setForceRefreshOnNextRender(true);
+    }
+
+    // Use effect handler for force refresh, ensuring that it gets set to false after being set to true.
+    useEffect(() => {
+        if (forceRefreshOnNextRender) {
+            setForceRefreshOnNextRender(false);
+        }
+    }, [forceRefreshOnNextRender])
+
     return (
         <div className="players">
             <Header as={"h2"} icon>
@@ -58,7 +70,9 @@ function Ladder() {
                 </div>
                 <Checkbox toggle defaultChecked onChange={()=>setHideZeroGamePlayers(!hideZeroGamePlayers)} />
             </div>
-            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
+            {
+                forceRefreshOnNextRender ? null : <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
+            }
             <Transition visible={!loaderData.loading}>
                 <span>
                     <span className={`players-area ${ladderStyle}`}>
@@ -66,8 +80,8 @@ function Ladder() {
                     </span>
                     <div className={"new-buttons"}>
                         <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
-                        <NewPlayer/>
-                        <NewGame players={Array.from(loaderData.playersMap.values())}/>
+                        <NewPlayer onNewPlayerAdded={refreshContent}/>
+                        <NewGame players={Array.from(loaderData.playersMap.values())} onNewGameAdded={refreshContent}/>
                     </div>
             </span>
             </Transition>

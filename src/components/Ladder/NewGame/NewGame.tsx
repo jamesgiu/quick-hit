@@ -4,13 +4,14 @@ import {v4 as uuidv4} from 'uuid';
 import {DB_Match, DB_Player} from "../../../types/database/models";
 import {QuickHitAPI} from "../../../api/QuickHitAPI";
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
-import {QuickHitPage} from "../../../util/QuickHitPage";
 import "./NewGame.css";
 import EloRank from "elo-rank";
 
 interface NewGameProps {
     players: DB_Player[],
     customModalOpenElement?: JSX.Element,
+    // Callback for when a new game is added.
+    onNewGameAdded?: ()=> void,
 }
 
 /**
@@ -28,11 +29,9 @@ function NewGame(props: NewGameProps) {
             makeSuccessToast("Game added!", "Back to work?");
             setModalOpen(false);
 
-            // FIXME Replace this with firing an event to the parent to force a new request without refreshing
-            // the application.
-            setTimeout( () => {
-                window.location.href = QuickHitPage.LADDER;
-            }, 1000);
+            if (props.onNewGameAdded) {
+                props.onNewGameAdded();
+            }
         }
 
         const onError = (errorMsg: string) => {
