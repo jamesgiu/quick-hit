@@ -1,27 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import './Ladder.css';
-import {DB_Player} from "../../types/database/models";
 import {Button, Checkbox, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
-import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
+import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
+import {TTDataPropsType} from "../../containers/shared";
 
 type LadderStyle = 'vertical' | 'horizontal';
 
 /**
  * QuickHit Ladder page.
  */
-function Ladder() {
-    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
+function Ladder(props: TTDataPropsType) {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
     const [hideZeroGamePlayers, setHideZeroGamePlayers] = useState<boolean>(true);
     const [forceRefreshOnNextRender, setForceRefreshOnNextRender] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
         const playerItems: JSX.Element[] = [];
-        Array.from(loaderData.playersMap.values()).forEach((player) => {
-            const winLoss = getWinLossForPlayer(player.id, loaderData.matches);
+        Array.from(props.loaderData.playersMap.values()).forEach((player) => {
+            const winLoss = getWinLossForPlayer(player.id, props.loaderData.matches);
 
             const playerCard = (
                 <PlayerCard player={player} winLoss={winLoss}/>
@@ -41,10 +40,6 @@ function Ladder() {
         // Sorting the player items by wins.
         playerItems.sort((player1, player2) => {return player2.props.player.elo - player1.props.player.elo});
         return playerItems;
-    }
-
-    const receiveDataFromLoader = (data: LoaderData) => {
-        setLoaderData(data);
     }
 
     const refreshContent = () => {
@@ -70,10 +65,7 @@ function Ladder() {
                 </div>
                 <Checkbox toggle defaultChecked onChange={()=>setHideZeroGamePlayers(!hideZeroGamePlayers)} />
             </div>
-            {
-                forceRefreshOnNextRender ? null : <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
-            }
-            <Transition visible={!loaderData.loading}>
+            <Transition visible={!props.loaderData.loading}>
                 <span>
                     <span className={`players-area ${ladderStyle}`}>
                            {renderPlayers()}
@@ -81,7 +73,7 @@ function Ladder() {
                     <div className={"new-buttons"}>
                         <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
                         <NewPlayer onNewPlayerAdded={refreshContent}/>
-                        <NewGame players={Array.from(loaderData.playersMap.values())} onNewGameAdded={refreshContent}/>
+                        <NewGame players={Array.from(props.loaderData.playersMap.values())} onNewGameAdded={refreshContent}/>
                     </div>
             </span>
             </Transition>

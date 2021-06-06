@@ -1,32 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './RecentGames.css';
 import {Divider, Feed, Header, Icon, Transition} from "semantic-ui-react";
 import {FeedEventProps} from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
-import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
-import {DB_Player} from "../../types/database/models";
 import ReactTimeAgo from 'react-time-ago';
+import {TTDataPropsType} from "../../containers/shared";
 
-interface RecentGamesProps {
+export interface RecentGamesProps {
     focusedPlayerId?: string,
 }
 
-function RecentGames(props: RecentGamesProps) {
-    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
+interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {};
 
+function RecentGames(props: RecentGamesCombinedProps) {
+    console.log(props);
     const getMatchEvents = () : FeedEventProps[] => {
-        if (loaderData.playersMap.size === 0) {
+        if (props.loaderData.playersMap.size === 0) {
             return [];
         }
 
         const events : FeedEventProps[] = [];
-        const playersMap = loaderData.playersMap;
+        const playersMap = props.loaderData.playersMap;
 
         // Sort list from oldest to newest
-        loaderData.matches.sort((matchA, matchB) => {
+        props.loaderData.matches.sort((matchA, matchB) => {
            return new Date(matchB.date).getTime() - new Date(matchA.date).getTime();
         })
 
-        loaderData.matches.forEach((match) => {
+        props.loaderData.matches.forEach((match) => {
             const winningPlayer = playersMap.get(match.winning_player_id)!;
             const losingPlayer = playersMap.get(match.losing_player_id)!;
 
@@ -71,18 +71,13 @@ function RecentGames(props: RecentGamesProps) {
         return events;
     }
 
-    const receiveDataFromLoader = (data: LoaderData) => {
-        setLoaderData(data);
-    }
-
     return (
         <div className="recent-games">
             <Header as={"h2"} icon>
                 <Icon name='history' circular/>
                 <Header.Content>Recent games</Header.Content>
             </Header>
-            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
-            <Transition visible={!loaderData.loading}>
+            <Transition visible={!props.loaderData.loading}>
                 <Feed className={"games-feed"} events={getMatchEvents()}/>
             </Transition>
         </div>

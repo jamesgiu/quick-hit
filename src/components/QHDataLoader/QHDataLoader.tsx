@@ -3,57 +3,49 @@
 
 // Can do an initial fetch and cache the data in Redux - or fetch on every page change for a more responsive
 // experience.
-
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
-
-export interface LoaderData {
-    matches: DB_Match[],
-    playersMap: Map<string, DB_Player>,
-    loading: boolean,
-}
+import {TTStoreState} from "../../redux/types/TTTypes";
 
 interface QHDataLoaderProps {
-    dataReceivedCallback: (snapshot: LoaderData) => void,
+    // Redux actions
+    setMatches: (newMatches: DB_Match[]) => void,
+    setPlayers: (newPlayers: Map<string, DB_Player>) => void,
+    setLoading: (newLoading: boolean) => void,
+    // Redux store
+    loaderData: TTStoreState,
 }
 
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
 
 function QHDataLoader(props: QHDataLoaderProps) {
-    const [matches, setMatches] = useState<DB_Match[]>();
-    const [players, setPlayers] = useState<DB_Player[]>();
-    const [loading, setLoading] = useState<boolean>(true);
-
     // On component mount.
     useEffect(()=> {
         const getMatches = () => {
             const onSuccess = (receivedMatches: DB_Match[]): void => {
-                // If matches have already been retrieved.
-                if (matches) {
-                    // Check for match data changes
-                    if (receivedMatches.length !== matches.length) {
-                        // Match data has changed, prompt user for a refresh.
-                        makeRefreshToast();
-                        // Stop checking for new data.
-                        clearInterval(dataPoller);
-                        // FIXME sets loading indefinitely to prevent actions and force a refresh.
-                        setLoading(true);
-                    }
+                // Check for match data changes
+                if (receivedMatches.length !== props.loaderData.matches.length && props.loaderData.matches.length > 0) {
+                    // Match data has changed, prompt user for a refresh.
+                    makeRefreshToast();
+                    // Stop checking for new data.
+                    clearInterval(dataPoller);
+                    // FIXME sets loading indefinitely to prevent actions and force a refresh.
+                    props.setLoading(true);
                 }
                 else {
-                    setMatches(receivedMatches);
-                    setLoading(false);
+                    props.setMatches(receivedMatches);
+                    props.setLoading(false);
                 }
             }
 
             const onFailure = (error: string): void => {
                 makeErrorToast("Could not get matches", error);
-                setLoading(false);
+                props.setLoading(false);
             }
 
             QuickHitAPI.getMatches(onSuccess, onFailure);
@@ -61,13 +53,21 @@ function QHDataLoader(props: QHDataLoaderProps) {
 
         const getPlayers = () => {
             const onSuccess = (players: DB_Player[]): void => {
-                setPlayers(players);
-                setLoading(false);
+                const playersMap : Map<string, DB_Player> = new Map();
+
+                if (players) {
+                    players.forEach((player) => {
+                        playersMap.set(player.id, player);
+                    });
+                }
+
+                props.setPlayers(playersMap);
+                props.setLoading(false);
             }
 
             const onFailure = (error: string): void => {
                 makeErrorToast("Could not get players", error);
-                setLoading(false);
+                props.setLoading(false);
             }
 
             QuickHitAPI.getPlayers(onSuccess, onFailure);
@@ -90,27 +90,8 @@ function QHDataLoader(props: QHDataLoaderProps) {
         };
     }, [])
 
-    // Whenever the snapshot updates, notify the parents.
-    useEffect(()=> {
-        const playersMap : Map<string, DB_Player> = new Map();
-
-        if (players) {
-            players.forEach((player) => {
-                playersMap.set(player.id, player);
-            });
-        }
-
-        const loaderData : LoaderData = {
-            matches: matches ?? [],
-            playersMap,
-            loading
-        };
-
-        props.dataReceivedCallback(loaderData);
-    }, [players, matches, loading]);
-
     return (
-        <Transition visible={loading}>
+        <Transition visible={props.loaderData.loading}>
             <Loader content={"Loading data..."}/>
         </Transition>
     );

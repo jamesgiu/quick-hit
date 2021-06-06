@@ -12,6 +12,8 @@ import {PersistGate} from "redux-persist/integration/react";
 import {Provider} from "react-redux";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import {TTStoreState} from "./redux/types/TTTypes";
+import {ttReducer} from "./redux/reducers/TTReducer";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -23,10 +25,12 @@ const persistConfig = {
 
 export interface QuickHitReduxStores {
     page: PageStoreState,
+    ttData: TTStoreState,
 }
 
 const reducers = persistCombineReducers(persistConfig, {
-    page: pageReducer as Reducer
+    page: pageReducer as Reducer,
+    ttData: ttReducer as Reducer,
 });
 
 export const store = createStore(reducers as Reducer, {

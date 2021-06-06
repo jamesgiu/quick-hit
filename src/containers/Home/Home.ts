@@ -8,6 +8,7 @@ import Home from "../../components/Home/Home";
 export function mapStateToProps(store: QuickHitReduxStores) {
     return {
         pageDimensions: store.page.dimensions,
+        loaderData: { loading: store.ttData.loading, playersMap: store.ttData.playersMap, matches: store.ttData.matches },
     }
 }
 
