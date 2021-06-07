@@ -10,14 +10,16 @@ export function mapStateToProps(store: TTStoreState) {
         loading: store.loading,
         players: store.players,
         matches: store.matches,
+        refresh: store.refresh,
     }
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.SetLoadingAction | actions.SetMatchesAction | actions.SetPlayersAction>) {
+export function mapDispatchToProps(dispatch: Dispatch<actions.SetLoadingAction | actions.SetMatchesAction | actions.SetPlayersAction | actions.SetForceRefreshAction>) {
     return {
         setMatches: (newMatches: DB_Match[]) => dispatch(actions.setMatches(newMatches)),
         setPlayers: (newPlayers: DB_Player[]) => dispatch(actions.setPlayers(newPlayers)),
         setLoading: (newLoading: boolean) => dispatch(actions.setLoading(newLoading)),
+        setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
     };
 }
 

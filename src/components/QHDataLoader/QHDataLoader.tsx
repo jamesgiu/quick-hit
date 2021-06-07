@@ -3,7 +3,7 @@
 
 // Can do an initial fetch and cache the data in Redux - or fetch on every page change for a more responsive
 // experience.
-import React, {useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
@@ -22,63 +22,68 @@ interface QHDataLoaderProps extends TTDataPropsType {
 const POLL_TIME_MS = 30000;
 
 function QHDataLoader(props: QHDataLoaderProps) {
+    const intervalRef = useRef<NodeJS.Timeout>();
+    const [polling, setPolling] = useState<boolean>(true);
+
+    const getMatches = () => {
+        const onSuccess = (receivedMatches: DB_Match[]): void => {
+            // Check for match data changes, and alert the user to manually refresh when they return, unless it was an
+            // expected/forced refresh.
+            if (!props.refresh && receivedMatches.length !== props.matches.length && props.matches.length > 0) {
+                // Match data has changed, prompt user for a refresh.
+                makeRefreshToast();
+                // Stop checking for new data.
+                setPolling(false);
+                // FIXME sets loading indefinitely to prevent actions and force a refresh.
+                props.setLoading(true);
+            }
+            else {
+                props.setLoading(false);
+                props.setMatches(receivedMatches);
+            }
+        }
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get matches", error);
+            props.setLoading(false);
+        }
+
+        QuickHitAPI.getMatches(onSuccess, onFailure);
+    }
+
+    const getPlayers = () => {
+        const onSuccess = (players: DB_Player[]): void => {
+            props.setPlayers(players);
+            props.setLoading(false);
+        }
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get players", error);
+            props.setLoading(false);
+        }
+
+        QuickHitAPI.getPlayers(onSuccess, onFailure);
+    }
+
+    const getData = () => {
+        console.log(props);
+        getMatches();
+        getPlayers();
+    };
+
     // On component mount.
     useEffect(()=> {
-        const getMatches = () => {
-            const onSuccess = (receivedMatches: DB_Match[]): void => {
-                // Check for match data changes
-                if (receivedMatches.length !== props.matches.length && props.matches.length > 0) {
-                    // Match data has changed, prompt user for a refresh.
-                    makeRefreshToast();
-                    // Stop checking for new data.
-                    clearInterval(dataPoller);
-                    // FIXME sets loading indefinitely to prevent actions and force a refresh.
-                    props.setLoading(true);
-                }
-                else {
-                    props.setLoading(false);
-                    props.setMatches(receivedMatches);
-                }
-            }
-
-            const onFailure = (error: string): void => {
-                makeErrorToast("Could not get matches", error);
-                props.setLoading(false);
-            }
-
-            QuickHitAPI.getMatches(onSuccess, onFailure);
-        }
-
-        const getPlayers = () => {
-            const onSuccess = (players: DB_Player[]): void => {
-                props.setPlayers(players);
-                props.setLoading(false);
-            }
-
-            const onFailure = (error: string): void => {
-                makeErrorToast("Could not get players", error);
-                props.setLoading(false);
-            }
-
-            QuickHitAPI.getPlayers(onSuccess, onFailure);
-        }
-
-        const getData = () => {
-            getMatches();
-            getPlayers();
-        };
-
         getData();
+    }, []);
 
-        const dataPoller = setInterval(() => {
-            getData();
-        }, POLL_TIME_MS);
-
-        // Runs on component unmount
-        return function cleanup() {
-           clearInterval(dataPoller);
-        };
-    }, [])
+    // Set the data loop, and on prop change, reset the loop as the Interval function will retain the props
+    // present at the time of invocation.
+    useEffect(()=> {
+        clearInterval(intervalRef.current!);
+        if (polling) {
+            intervalRef.current = setInterval(getData, POLL_TIME_MS);
+        }
+    }, [props, polling]);
 
     return (
         <Transition visible={props.loading}>

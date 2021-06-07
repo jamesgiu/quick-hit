@@ -16,8 +16,12 @@ export interface SetLoadingAction {
     value: boolean,
 }
 
+export interface SetForceRefreshAction {
+    type: constants.SET_FORCE_REFRESH_TYPE,
+    value: boolean,
+}
+
 export function setMatches(newMatches: DB_Match[]): SetMatchesAction {
-    console.log("set matches called", newMatches);
     return {
         type: constants.SET_MATCHES,
         value: newMatches
@@ -25,7 +29,6 @@ export function setMatches(newMatches: DB_Match[]): SetMatchesAction {
 }
 
 export function setPlayers(newPlayers: DB_Player[]): SetPlayersAction {
-    console.log("set players called", newPlayers);
     return {
         type: constants.SET_PLAYERS,
         value: newPlayers
@@ -33,9 +36,15 @@ export function setPlayers(newPlayers: DB_Player[]): SetPlayersAction {
 }
 
 export function setLoading(newLoading: boolean): SetLoadingAction {
-    console.log("set loading called", newLoading);
     return {
         type: constants.SET_LOADING,
         value: newLoading
+    };
+}
+
+export function setRefresh(newRefresh: boolean): SetForceRefreshAction {
+    return {
+        type: constants.SET_FORCE_REFRESH,
+        value: newRefresh
     };
 }

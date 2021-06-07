@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './Ladder.css';
 import {Button, Checkbox, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
@@ -15,7 +15,6 @@ type LadderStyle = 'vertical' | 'horizontal';
 function Ladder(props: TTDataPropsType) {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
     const [hideZeroGamePlayers, setHideZeroGamePlayers] = useState<boolean>(true);
-    const [forceRefreshOnNextRender, setForceRefreshOnNextRender] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
 
@@ -44,15 +43,9 @@ function Ladder(props: TTDataPropsType) {
     }
 
     const refreshContent = () => {
-        setForceRefreshOnNextRender(true);
+       // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
+       props.setForceRefresh(true);
     }
-
-    // Use effect handler for force refresh, ensuring that it gets set to false after being set to true.
-    useEffect(() => {
-        if (forceRefreshOnNextRender) {
-            setForceRefreshOnNextRender(false);
-        }
-    }, [forceRefreshOnNextRender])
 
     return (
         <div className="players">

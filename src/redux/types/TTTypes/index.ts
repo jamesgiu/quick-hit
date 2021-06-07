@@ -4,4 +4,5 @@ export interface TTStoreState {
     matches: DB_Match[],
     players: DB_Player[],
     loading: boolean,
+    refresh: boolean,
 }
