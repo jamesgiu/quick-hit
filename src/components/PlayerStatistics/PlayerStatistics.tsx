@@ -1,30 +1,25 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './PlayerStatistics.css';
 import {RouteComponentProps} from "react-router";
-import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
-import {DB_Player} from "../../types/database/models";
 import {Header, Icon, Statistic, Transition} from "semantic-ui-react";
-import RecentGames from "../RecentGames/RecentGames";
 import {WinLoss} from "../../types/types";
+import {TTDataPropsType} from "../../containers/shared";
+import RecentGames from "../../containers/RecentGames";
+import {getPlayersMap, getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 
 interface PlayerStatisticsParams {
     playerId: string
 }
 
-function PlayerStatistics(props: RouteComponentProps<PlayerStatisticsParams>) {
-    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
+interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsType {}
 
-    const receiveDataFromLoader = (data: LoaderData) => {
-        setLoaderData(data);
-    }
-
-    const player = loaderData.playersMap.get(props.match.params.playerId);
-    const winLoss : WinLoss = player ? getWinLossForPlayer(player.id, loaderData.matches) : {wins: 0, losses: 0};
+function PlayerStatistics(props: PlayerStatisticsProps) {
+    const player = getPlayersMap(props.players).get(props.match.params.playerId);
+    const winLoss : WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
 
     return (
         <div className="player-statistics">
-            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
-            <Transition visible={!loaderData.loading}>
+            <Transition visible={!props.loading}>
             {
             !player ?
                 <span className={"error"}>

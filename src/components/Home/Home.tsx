@@ -1,34 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import './Home.css';
 import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 import NewGame from "../Ladder/NewGame/NewGame";
-import QHDataLoader, {LoaderData} from "../QHDataLoader/QHDataLoader";
 import {DB_Player} from "../../types/database/models";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
+import {TTDataPropsType} from "../../containers/shared";
 
 /**
  * QuickHit Home page.
  */
-function Home() {
-    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
-
-    const receiveDataFromLoader = (data: LoaderData) => {
-        setLoaderData(data);
-    }
-
+function Home(props: TTDataPropsType) {
     const getCurrentChampion = () : DB_Player => {
-        const players = Array.from(loaderData.playersMap.values());
+        const players = props.players;
         players.sort((player1, player2) => {return player2.elo - player1.elo});
 
         return players[0];
     }
 
+    useEffect(()=> {
+    }, [props]);
+
     return (
         <div className="home">
-            <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
             <Transition transitionOnMount={true}>
                 <Header as={"h2"} icon inverted>
                     <Icon name='table tennis' circular/>
@@ -50,7 +46,7 @@ function Home() {
                             <Header.Content>Recent games</Header.Content>
                         </Link>
                     </Header>
-                    <NewGame players={Array.from(loaderData.playersMap.values())} customModalOpenElement={
+                    <NewGame players={props.players} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='plus' circular/>
                             <Header.Content>Enter game</Header.Content>
@@ -64,10 +60,10 @@ function Home() {
                     }/>
                 </ButtonGroup>
             </Transition>
-            <Transition visible={!loaderData.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
+            <Transition visible={!props.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
                 <div className={"champion-area"}>
                     <Header as={"h4"} inverted>
-                        {loaderData.playersMap.size > 0 &&
+                        {props.players.length > 0 &&
                         <PlayerCard player={getCurrentChampion()}/>
                         }
                     </Header>

@@ -3,114 +3,95 @@
 
 // Can do an initial fetch and cache the data in Redux - or fetch on every page change for a more responsive
 // experience.
-
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
+import {TTDataPropsType} from "../../containers/shared";
 
-export interface LoaderData {
-    matches: DB_Match[],
-    playersMap: Map<string, DB_Player>,
-    loading: boolean,
-}
-
-interface QHDataLoaderProps {
-    dataReceivedCallback: (snapshot: LoaderData) => void,
+interface QHDataLoaderProps extends TTDataPropsType {
+    // Redux actions
+    setMatches: (newMatches: DB_Match[]) => void,
+    setPlayers: (newPlayers: DB_Player[]) => void,
+    setLoading: (newLoading: boolean) => void,
 }
 
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
 
 function QHDataLoader(props: QHDataLoaderProps) {
-    const [matches, setMatches] = useState<DB_Match[]>();
-    const [players, setPlayers] = useState<DB_Player[]>();
-    const [loading, setLoading] = useState<boolean>(true);
+    const intervalRef = useRef<NodeJS.Timeout>();
+    const [polling, setPolling] = useState<boolean>(true);
+
+    const getMatches = () => {
+        const onSuccess = (receivedMatches: DB_Match[]): void => {
+            // Check for match data changes, and alert the user to manually refresh when they return, unless it was an
+            // expected/forced refresh.
+            if (!props.refresh && receivedMatches.length !== props.matches.length && props.matches.length > 0) {
+                // Match data has changed, prompt user for a refresh.
+                makeRefreshToast();
+                // Stop checking for new data.
+                setPolling(false);
+                // FIXME sets loading indefinitely to prevent actions and force a refresh.
+                props.setLoading(true);
+            }
+            else {
+                props.setLoading(false);
+                props.setMatches(receivedMatches);
+            }
+        }
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get matches", error);
+            props.setLoading(false);
+        }
+
+        QuickHitAPI.getMatches(onSuccess, onFailure);
+    }
+
+    const getPlayers = () => {
+        const onSuccess = (players: DB_Player[]): void => {
+            props.setPlayers(players);
+            props.setLoading(false);
+        }
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get players", error);
+            props.setLoading(false);
+        }
+
+        QuickHitAPI.getPlayers(onSuccess, onFailure);
+    }
+
+    const getData = () => {
+        getMatches();
+        getPlayers();
+    };
 
     // On component mount.
     useEffect(()=> {
-        const getMatches = () => {
-            const onSuccess = (receivedMatches: DB_Match[]): void => {
-                // If matches have already been retrieved.
-                if (matches) {
-                    // Check for match data changes
-                    if (receivedMatches.length !== matches.length) {
-                        // Match data has changed, prompt user for a refresh.
-                        makeRefreshToast();
-                        // Stop checking for new data.
-                        clearInterval(dataPoller);
-                        // FIXME sets loading indefinitely to prevent actions and force a refresh.
-                        setLoading(true);
-                    }
-                }
-                else {
-                    setMatches(receivedMatches);
-                    setLoading(false);
-                }
-            }
-
-            const onFailure = (error: string): void => {
-                makeErrorToast("Could not get matches", error);
-                setLoading(false);
-            }
-
-            QuickHitAPI.getMatches(onSuccess, onFailure);
-        }
-
-        const getPlayers = () => {
-            const onSuccess = (players: DB_Player[]): void => {
-                setPlayers(players);
-                setLoading(false);
-            }
-
-            const onFailure = (error: string): void => {
-                makeErrorToast("Could not get players", error);
-                setLoading(false);
-            }
-
-            QuickHitAPI.getPlayers(onSuccess, onFailure);
-        }
-
-        const getData = () => {
-            getMatches();
-            getPlayers();
-        };
-
         getData();
+    }, []);
 
-        const dataPoller = setInterval(() => {
-            getData();
-        }, POLL_TIME_MS);
-
-        // Runs on component unmount
-        return function cleanup() {
-           clearInterval(dataPoller);
-        };
-    }, [])
-
-    // Whenever the snapshot updates, notify the parents.
+    // Set the data loop, and on prop change, reset the loop as the Interval function will retain the props
+    // present at the time of invocation.
     useEffect(()=> {
-        const playersMap : Map<string, DB_Player> = new Map();
-
-        if (players) {
-            players.forEach((player) => {
-                playersMap.set(player.id, player);
-            });
+        clearInterval(intervalRef.current!);
+        if (polling) {
+            intervalRef.current = setInterval(getData, POLL_TIME_MS);
         }
 
-        const loaderData : LoaderData = {
-            matches: matches ?? [],
-            playersMap,
-            loading
-        };
-
-        props.dataReceivedCallback(loaderData);
-    }, [players, matches, loading]);
+        // If we were forced to refresh
+        if (props.refresh) {
+            getData();
+            props.setForceRefresh(false);
+        }
+    }, [props, polling]);
 
     return (
-        <Transition visible={loading}>
+        <Transition visible={props.loading}>
             <Loader content={"Loading data..."}/>
         </Transition>
     );
@@ -132,6 +113,18 @@ export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinL
     });
 
     return winLoss;
+}
+
+export const getPlayersMap = (players: DB_Player[]) : Map<string, DB_Player> => {
+    const playersMap : Map<string, DB_Player> = new Map();
+
+    if (players) {
+        players.forEach((player) => {
+            playersMap.set(player.id, player);
+        });
+    }
+
+    return playersMap;
 }
 
 export default QHDataLoader;

@@ -3,15 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css'
 import App from './App';
-import storage from 'redux-persist/lib/storage';
-import {PageStoreState} from "./redux/types/PageTypes";
-import {pageInitialState, pageReducer} from "./redux/reducers/PageReducer";
-import {persistCombineReducers, persistStore} from 'redux-persist';
 import {createStore, Reducer} from "redux";
-import {PersistGate} from "redux-persist/integration/react";
+import storage from 'redux-persist/lib/storage';
 import {Provider} from "react-redux";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import {dataInitialState, ttReducer} from "./redux/reducers/TTReducer";
+import {ViewStoreState} from "./redux/types/ViewTypes";
+import {TTStoreState} from "./redux/types/TTTypes";
+import { persistCombineReducers } from 'redux-persist';
+import {viewInitialState, viewReducer} from "./redux/reducers/ViewReducer";
+import persistStore from "redux-persist/es/persistStore";
+import {PersistGate} from "redux-persist/integration/react";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -19,18 +22,23 @@ TimeAgo.addDefaultLocale(en);
 const persistConfig = {
     key: 'root',
     storage,
+    // We do not want to store the tt data in persist - as it should reload anew on each application refresh.
+    blacklist: ['ttData']
 };
 
 export interface QuickHitReduxStores {
-    page: PageStoreState,
+    ttData: TTStoreState,
+    viewStore: ViewStoreState
 }
 
 const reducers = persistCombineReducers(persistConfig, {
-    page: pageReducer as Reducer
+    viewStore: viewReducer as Reducer,
+    ttData: ttReducer as Reducer,
 });
 
 export const store = createStore(reducers as Reducer, {
-    page: pageInitialState
+    ttData: dataInitialState,
+    viewStore: viewInitialState,
 });
 
 const persistor = persistStore(store);

@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './Ladder.css';
-import {DB_Player} from "../../types/database/models";
 import {Button, Checkbox, Header, Icon, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
-import QHDataLoader, {getWinLossForPlayer, LoaderData} from "../QHDataLoader/QHDataLoader";
+import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
+import {TTDataPropsType} from "../../containers/shared";
 
 type LadderStyle = 'vertical' | 'horizontal';
+
+interface LadderProps extends TTDataPropsType {
+    hideZeroGamePlayers: boolean,
+    setHideZeroGamePlayers: (zeroGamePlayers: boolean) => void,
+}
 
 /**
  * QuickHit Ladder page.
  */
-function Ladder() {
-    const [loaderData, setLoaderData] = useState<LoaderData>({playersMap: new Map<string, DB_Player>(), matches: [], loading: true});
+function Ladder(props: LadderProps) {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
-    const [hideZeroGamePlayers, setHideZeroGamePlayers] = useState<boolean>(true);
-    const [forceRefreshOnNextRender, setForceRefreshOnNextRender] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
+
         const playerItems: JSX.Element[] = [];
-        Array.from(loaderData.playersMap.values()).forEach((player) => {
-            const winLoss = getWinLossForPlayer(player.id, loaderData.matches);
+        props.players.forEach((player) => {
+            const winLoss = getWinLossForPlayer(player.id, props.matches);
 
             const playerCard = (
                 <PlayerCard player={player} winLoss={winLoss}/>
             );
 
             // If we are hiding zero game players, then only push if they have played a game
-            if (hideZeroGamePlayers) {
+            if (props.hideZeroGamePlayers) {
                 if (winLoss.wins + winLoss.losses > 0) {
                     playerItems.push(playerCard);
                 }
@@ -43,20 +46,10 @@ function Ladder() {
         return playerItems;
     }
 
-    const receiveDataFromLoader = (data: LoaderData) => {
-        setLoaderData(data);
-    }
-
     const refreshContent = () => {
-        setForceRefreshOnNextRender(true);
+       // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
+       props.setForceRefresh(true);
     }
-
-    // Use effect handler for force refresh, ensuring that it gets set to false after being set to true.
-    useEffect(() => {
-        if (forceRefreshOnNextRender) {
-            setForceRefreshOnNextRender(false);
-        }
-    }, [forceRefreshOnNextRender])
 
     return (
         <div className="players">
@@ -68,12 +61,9 @@ function Ladder() {
                 <div>
                     Hide players who haven't played a game:
                 </div>
-                <Checkbox toggle defaultChecked onChange={()=>setHideZeroGamePlayers(!hideZeroGamePlayers)} />
+                <Checkbox toggle checked={props.hideZeroGamePlayers} onChange={()=>props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)} />
             </div>
-            {
-                forceRefreshOnNextRender ? null : <QHDataLoader dataReceivedCallback={receiveDataFromLoader}/>
-            }
-            <Transition visible={!loaderData.loading}>
+            <Transition visible={!props.loading}>
                 <span>
                     <span className={`players-area ${ladderStyle}`}>
                            {renderPlayers()}
@@ -81,7 +71,7 @@ function Ladder() {
                     <div className={"new-buttons"}>
                         <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
                         <NewPlayer onNewPlayerAdded={refreshContent}/>
-                        <NewGame players={Array.from(loaderData.playersMap.values())} onNewGameAdded={refreshContent}/>
+                        <NewGame players={props.players} onNewGameAdded={refreshContent}/>
                     </div>
             </span>
             </Transition>
