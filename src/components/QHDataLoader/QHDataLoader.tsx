@@ -82,6 +82,12 @@ function QHDataLoader(props: QHDataLoaderProps) {
         if (polling) {
             intervalRef.current = setInterval(getData, POLL_TIME_MS);
         }
+
+        // If we were forced to refresh
+        if (props.refresh) {
+            getData();
+            props.setForceRefresh(false);
+        }
     }, [props, polling]);
 
     return (
