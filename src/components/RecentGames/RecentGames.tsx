@@ -13,7 +13,6 @@ export interface RecentGamesProps {
 interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {};
 
 function RecentGames(props: RecentGamesCombinedProps) {
-    console.log(props);
     const getMatchEvents = () : FeedEventProps[] => {
         if (props.players.length === 0) {
             return [];

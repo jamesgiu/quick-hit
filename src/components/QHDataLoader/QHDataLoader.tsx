@@ -66,7 +66,6 @@ function QHDataLoader(props: QHDataLoaderProps) {
     }
 
     const getData = () => {
-        console.log(props);
         getMatches();
         getPlayers();
     };

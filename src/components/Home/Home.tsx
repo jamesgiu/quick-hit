@@ -13,7 +13,6 @@ import {TTDataPropsType} from "../../containers/shared";
  * QuickHit Home page.
  */
 function Home(props: TTDataPropsType) {
-    console.log("Home props", props);
     const getCurrentChampion = () : DB_Player => {
         const players = props.players;
         players.sort((player1, player2) => {return player2.elo - player1.elo});
@@ -22,8 +21,6 @@ function Home(props: TTDataPropsType) {
     }
 
     useEffect(()=> {
-        console.log("home props changed")
-        console.log(props);
     }, [props]);
 
     return (

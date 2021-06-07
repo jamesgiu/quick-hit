@@ -9,12 +9,16 @@ import {TTDataPropsType} from "../../containers/shared";
 
 type LadderStyle = 'vertical' | 'horizontal';
 
+interface LadderProps extends TTDataPropsType {
+    hideZeroGamePlayers: boolean,
+    setHideZeroGamePlayers: (zeroGamePlayers: boolean) => void,
+}
+
 /**
  * QuickHit Ladder page.
  */
-function Ladder(props: TTDataPropsType) {
+function Ladder(props: LadderProps) {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
-    const [hideZeroGamePlayers, setHideZeroGamePlayers] = useState<boolean>(true);
 
     const renderPlayers = (): JSX.Element[] => {
 
@@ -27,7 +31,7 @@ function Ladder(props: TTDataPropsType) {
             );
 
             // If we are hiding zero game players, then only push if they have played a game
-            if (hideZeroGamePlayers) {
+            if (props.hideZeroGamePlayers) {
                 if (winLoss.wins + winLoss.losses > 0) {
                     playerItems.push(playerCard);
                 }
@@ -57,7 +61,7 @@ function Ladder(props: TTDataPropsType) {
                 <div>
                     Hide players who haven't played a game:
                 </div>
-                <Checkbox toggle defaultChecked onChange={()=>setHideZeroGamePlayers(!hideZeroGamePlayers)} />
+                <Checkbox toggle checked={props.hideZeroGamePlayers} onChange={()=>props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)} />
             </div>
             <Transition visible={!props.loading}>
                 <span>
