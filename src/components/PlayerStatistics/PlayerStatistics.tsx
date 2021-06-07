@@ -5,7 +5,7 @@ import {Header, Icon, Statistic, Transition} from "semantic-ui-react";
 import {WinLoss} from "../../types/types";
 import {TTDataPropsType} from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
-import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
+import {getPlayersMap, getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 
 interface PlayerStatisticsParams {
     playerId: string
@@ -14,12 +14,12 @@ interface PlayerStatisticsParams {
 interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsType {}
 
 function PlayerStatistics(props: PlayerStatisticsProps) {
-    const player = props.loaderData.playersMap.get(props.match.params.playerId);
-    const winLoss : WinLoss = player ? getWinLossForPlayer(player.id, props.loaderData.matches) : {wins: 0, losses: 0};
+    const player = getPlayersMap(props.players).get(props.match.params.playerId);
+    const winLoss : WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
 
     return (
         <div className="player-statistics">
-            <Transition visible={!props.loaderData.loading}>
+            <Transition visible={!props.loading}>
             {
             !player ?
                 <span className={"error"}>

@@ -1,21 +1,13 @@
-import {QuickHitReduxStores} from "../../index";
-import {PageDimensions} from "../../types/types";
-import {Dispatch} from "redux";
-import * as actions from "../../redux/actions/PageActions";
 import {connect} from "react-redux";
 import Home from "../../components/Home/Home";
+import {TTStoreState} from "../../redux/types/TTTypes";
 
-export function mapStateToProps(store: QuickHitReduxStores) {
+export function mapStateToProps(store: TTStoreState) {
     return {
-        pageDimensions: store.page.dimensions,
-        loaderData: { loading: store.ttData.loading, playersMap: store.ttData.playersMap, matches: store.ttData.matches },
+        loading: store.loading,
+        players: store.players,
+        matches: store.matches,
     }
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.SetPageDimensionsAction>) {
-    return {
-        setPageDimensions: (newPageDimensions: PageDimensions) => dispatch(actions.setPageDimensions(newPageDimensions)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, {})(Home);

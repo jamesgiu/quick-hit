@@ -15,8 +15,8 @@ import QHDataLoader from "./containers/QHDataLoader";
 function App() {
     return (
         <BrowserRouter>
-            <QHDataLoader/>
             <div className="App">
+                <QHDataLoader/>
                 <Navbar/>
                 <div className={"app-main-content"}>
                     <Switch>

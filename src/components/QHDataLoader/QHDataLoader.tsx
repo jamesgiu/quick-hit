@@ -9,15 +9,13 @@ import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DB_Match, DB_Player} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
-import {TTStoreState} from "../../redux/types/TTTypes";
+import {TTDataPropsType} from "../../containers/shared";
 
-interface QHDataLoaderProps {
+interface QHDataLoaderProps extends TTDataPropsType {
     // Redux actions
     setMatches: (newMatches: DB_Match[]) => void,
-    setPlayers: (newPlayers: Map<string, DB_Player>) => void,
+    setPlayers: (newPlayers: DB_Player[]) => void,
     setLoading: (newLoading: boolean) => void,
-    // Redux store
-    loaderData: TTStoreState,
 }
 
 // How frequently to poll the Firebase DB for new data.
@@ -29,7 +27,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
         const getMatches = () => {
             const onSuccess = (receivedMatches: DB_Match[]): void => {
                 // Check for match data changes
-                if (receivedMatches.length !== props.loaderData.matches.length && props.loaderData.matches.length > 0) {
+                if (receivedMatches.length !== props.matches.length && props.matches.length > 0) {
                     // Match data has changed, prompt user for a refresh.
                     makeRefreshToast();
                     // Stop checking for new data.
@@ -38,8 +36,8 @@ function QHDataLoader(props: QHDataLoaderProps) {
                     props.setLoading(true);
                 }
                 else {
-                    props.setMatches(receivedMatches);
                     props.setLoading(false);
+                    props.setMatches(receivedMatches);
                 }
             }
 
@@ -53,15 +51,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
 
         const getPlayers = () => {
             const onSuccess = (players: DB_Player[]): void => {
-                const playersMap : Map<string, DB_Player> = new Map();
-
-                if (players) {
-                    players.forEach((player) => {
-                        playersMap.set(player.id, player);
-                    });
-                }
-
-                props.setPlayers(playersMap);
+                props.setPlayers(players);
                 props.setLoading(false);
             }
 
@@ -91,7 +81,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
     }, [])
 
     return (
-        <Transition visible={props.loaderData.loading}>
+        <Transition visible={props.loading}>
             <Loader content={"Loading data..."}/>
         </Transition>
     );
@@ -113,6 +103,18 @@ export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinL
     });
 
     return winLoss;
+}
+
+export const getPlayersMap = (players: DB_Player[]) : Map<string, DB_Player> => {
+    const playersMap : Map<string, DB_Player> = new Map();
+
+    if (players) {
+        players.forEach((player) => {
+            playersMap.set(player.id, player);
+        });
+    }
+
+    return playersMap;
 }
 
 export default QHDataLoader;

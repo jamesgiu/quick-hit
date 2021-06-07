@@ -1,10 +1,12 @@
 import {connect} from "react-redux";
 import RecentGames, {RecentGamesProps} from "../../components/RecentGames/RecentGames";
-import {QuickHitReduxStores} from "../../index";
+import {TTStoreState} from "../../redux/types/TTTypes";
 
-export function mapStateToProps(store: QuickHitReduxStores, ownProps: RecentGamesProps) {
+export function mapStateToProps(store: TTStoreState, ownProps: RecentGamesProps) {
     return {
-        loaderData: { loading: store.ttData.loading, playersMap: store.ttData.playersMap, matches: store.ttData.matches },
+        loading: store.loading,
+        players: store.players,
+        matches: store.matches,
         focusedPlayerId: ownProps.focusedPlayerId,
     }
 }

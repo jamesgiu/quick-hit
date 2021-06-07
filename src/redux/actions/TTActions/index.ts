@@ -8,7 +8,7 @@ export interface SetMatchesAction {
 
 export interface SetPlayersAction {
     type: constants.SET_PLAYERS_TYPE,
-    value: Map<string, DB_Player>,
+    value: DB_Player[],
 }
 
 export interface SetLoadingAction {
@@ -17,13 +17,15 @@ export interface SetLoadingAction {
 }
 
 export function setMatches(newMatches: DB_Match[]): SetMatchesAction {
+    console.log("set matches called", newMatches);
     return {
         type: constants.SET_MATCHES,
         value: newMatches
     };
 }
 
-export function setPlayers(newPlayers: Map<string, DB_Player>): SetPlayersAction {
+export function setPlayers(newPlayers: DB_Player[]): SetPlayersAction {
+    console.log("set players called", newPlayers);
     return {
         type: constants.SET_PLAYERS,
         value: newPlayers
@@ -31,6 +33,7 @@ export function setPlayers(newPlayers: Map<string, DB_Player>): SetPlayersAction
 }
 
 export function setLoading(newLoading: boolean): SetLoadingAction {
+    console.log("set loading called", newLoading);
     return {
         type: constants.SET_LOADING,
         value: newLoading

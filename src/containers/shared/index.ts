@@ -1,12 +1,11 @@
-import {QuickHitReduxStores} from "../../index";
 import {TTStoreState} from "../../redux/types/TTTypes";
 
-export interface TTDataPropsType {
-    loaderData: TTStoreState,
-}
+export interface TTDataPropsType extends TTStoreState {}
 
-export function mapTTDataToProps(store: QuickHitReduxStores) {
+export function mapTTDataToProps(store: TTStoreState) {
     return {
-        loaderData: { loading: store.ttData.loading, playersMap: store.ttData.playersMap, matches: store.ttData.matches },
+        loading: store.loading,
+        players: store.players,
+        matches: store.matches,
     }
 }

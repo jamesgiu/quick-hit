@@ -18,9 +18,10 @@ function Ladder(props: TTDataPropsType) {
     const [forceRefreshOnNextRender, setForceRefreshOnNextRender] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
+
         const playerItems: JSX.Element[] = [];
-        Array.from(props.loaderData.playersMap.values()).forEach((player) => {
-            const winLoss = getWinLossForPlayer(player.id, props.loaderData.matches);
+        props.players.forEach((player) => {
+            const winLoss = getWinLossForPlayer(player.id, props.matches);
 
             const playerCard = (
                 <PlayerCard player={player} winLoss={winLoss}/>
@@ -65,7 +66,7 @@ function Ladder(props: TTDataPropsType) {
                 </div>
                 <Checkbox toggle defaultChecked onChange={()=>setHideZeroGamePlayers(!hideZeroGamePlayers)} />
             </div>
-            <Transition visible={!props.loaderData.loading}>
+            <Transition visible={!props.loading}>
                 <span>
                     <span className={`players-area ${ladderStyle}`}>
                            {renderPlayers()}
@@ -73,7 +74,7 @@ function Ladder(props: TTDataPropsType) {
                     <div className={"new-buttons"}>
                         <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
                         <NewPlayer onNewPlayerAdded={refreshContent}/>
-                        <NewGame players={Array.from(props.loaderData.playersMap.values())} onNewGameAdded={refreshContent}/>
+                        <NewGame players={props.players} onNewGameAdded={refreshContent}/>
                     </div>
             </span>
             </Transition>

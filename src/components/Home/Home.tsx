@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './Home.css';
 import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
@@ -13,13 +13,18 @@ import {TTDataPropsType} from "../../containers/shared";
  * QuickHit Home page.
  */
 function Home(props: TTDataPropsType) {
-    console.log(props);
+    console.log("Home props", props);
     const getCurrentChampion = () : DB_Player => {
-        const players = Array.from(props.loaderData.playersMap.values());
+        const players = props.players;
         players.sort((player1, player2) => {return player2.elo - player1.elo});
 
         return players[0];
     }
+
+    useEffect(()=> {
+        console.log("home props changed")
+        console.log(props);
+    }, [props]);
 
     return (
         <div className="home">
@@ -44,7 +49,7 @@ function Home(props: TTDataPropsType) {
                             <Header.Content>Recent games</Header.Content>
                         </Link>
                     </Header>
-                    <NewGame players={Array.from(props.loaderData.playersMap.values())} customModalOpenElement={
+                    <NewGame players={props.players} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='plus' circular/>
                             <Header.Content>Enter game</Header.Content>
@@ -58,10 +63,10 @@ function Home(props: TTDataPropsType) {
                     }/>
                 </ButtonGroup>
             </Transition>
-            <Transition visible={!props.loaderData.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
+            <Transition visible={!props.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
                 <div className={"champion-area"}>
                     <Header as={"h4"} inverted>
-                        {props.loaderData.playersMap.size > 0 &&
+                        {props.players.length > 0 &&
                         <PlayerCard player={getCurrentChampion()}/>
                         }
                     </Header>

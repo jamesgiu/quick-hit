@@ -4,6 +4,7 @@ import {Divider, Feed, Header, Icon, Transition} from "semantic-ui-react";
 import {FeedEventProps} from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from 'react-time-ago';
 import {TTDataPropsType} from "../../containers/shared";
+import {getPlayersMap} from "../QHDataLoader/QHDataLoader";
 
 export interface RecentGamesProps {
     focusedPlayerId?: string,
@@ -14,19 +15,19 @@ interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {};
 function RecentGames(props: RecentGamesCombinedProps) {
     console.log(props);
     const getMatchEvents = () : FeedEventProps[] => {
-        if (props.loaderData.playersMap.size === 0) {
+        if (props.players.length === 0) {
             return [];
         }
 
         const events : FeedEventProps[] = [];
-        const playersMap = props.loaderData.playersMap;
+        const playersMap = getPlayersMap(props.players);
 
         // Sort list from oldest to newest
-        props.loaderData.matches.sort((matchA, matchB) => {
+        props.matches.sort((matchA, matchB) => {
            return new Date(matchB.date).getTime() - new Date(matchA.date).getTime();
         })
 
-        props.loaderData.matches.forEach((match) => {
+        props.matches.forEach((match) => {
             const winningPlayer = playersMap.get(match.winning_player_id)!;
             const losingPlayer = playersMap.get(match.losing_player_id)!;
 
@@ -77,7 +78,7 @@ function RecentGames(props: RecentGamesCombinedProps) {
                 <Icon name='history' circular/>
                 <Header.Content>Recent games</Header.Content>
             </Header>
-            <Transition visible={!props.loaderData.loading}>
+            <Transition visible={!props.loading}>
                 <Feed className={"games-feed"} events={getMatchEvents()}/>
             </Transition>
         </div>
