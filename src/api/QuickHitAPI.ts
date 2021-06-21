@@ -1,4 +1,4 @@
-import {DB_Match, DB_Player} from "../types/database/models";
+import {DbMatch, DbPlayer} from "../types/database/models";
 import {ApiActions, HttpMethod} from "./ApiTypes";
 import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
 
@@ -6,7 +6,7 @@ const FB_URL = process.env.REACT_APP_FB_URL;
 const FB_API_KEY = process.env.REACT_APP_FB_API_KEY;
 
 export class QuickHitAPI {
-    public static getPlayers(onSuccess: (players: DB_Player[]) => void, onFailure: (errorString: string) => void): void {
+    public static getPlayers(onSuccess: (players: DbPlayer[]) => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data))
@@ -15,7 +15,7 @@ export class QuickHitAPI {
         })
     }
 
-    public static getMatches(onSuccess: (matches: DB_Match[]) => void, onFailure: (errorString: string) => void): void {
+    public static getMatches(onSuccess: (matches: DbMatch[]) => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
@@ -24,20 +24,20 @@ export class QuickHitAPI {
         });
     }
 
-    public static addOrUpdatePlayer(playerToAdd: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+    public static addOrUpdatePlayer(playerToAdd: DbPlayer, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.PATCH, `{"${playerToAdd.id}" : ${JSON.stringify(playerToAdd)}}`)
             .then(() => {
                 onSuccess()
             }).catch((error: AxiosError) => {
-                onFailure(error.message)
+            onFailure(error.message)
         });
     }
 
-    public static addNewMatch(matchToAdd: DB_Match, winningPlayer: DB_Player, losingPlayer: DB_Player, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+    public static addNewMatch(matchToAdd: DbMatch, winningPlayer: DbPlayer, losingPlayer: DbPlayer, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.PATCH, `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`)
             .then(() => {
-                this.addOrUpdatePlayer(winningPlayer,()=>{}, onFailure);
-                this.addOrUpdatePlayer(losingPlayer,()=>{}, onFailure);
+                this.addOrUpdatePlayer(winningPlayer, ()=>{return;}, onFailure);
+                this.addOrUpdatePlayer(losingPlayer, () => {return;}, onFailure);
                 onSuccess()
             }).catch((error: AxiosError) => {
             onFailure(error.message)

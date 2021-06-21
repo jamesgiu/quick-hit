@@ -1,12 +1,11 @@
-import {Form, Modal, Icon, Card, Button} from "semantic-ui-react";
-import {SemanticICONS} from "semantic-ui-react/dist/commonjs/generic";
+import {Button, Card, Form, Icon, Modal, SemanticICONS} from "semantic-ui-react";
 import React, {useState} from "react";
 import "./NewPlayer.css";
-import {QuickHitAPI} from "../../../api/QuickHitAPI";
-import {DB_Player} from "../../../types/database/models";
-import {v4 as uuidv4} from 'uuid';
-import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 import {FA_ICONS} from "../../../util/fa-icons";
+import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
+import {DbPlayer} from "../../../types/database/models";
+import { v4 as uuidv4 } from 'uuid';
+import {QuickHitAPI} from "../../../api/QuickHitAPI";
 
 interface NewPlayerProps {
     customModalOpenElement?: JSX.Element
@@ -41,7 +40,7 @@ function NewPlayer(props: NewPlayerProps) {
             makeErrorToast("Player not added!", errorMsg);
         }
 
-        const player : DB_Player = {
+        const player : DbPlayer = {
             id: uuidv4(),
             name,
             icon,

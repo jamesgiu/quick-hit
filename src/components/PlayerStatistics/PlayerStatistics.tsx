@@ -11,22 +11,23 @@ interface PlayerStatisticsParams {
     playerId: string
 }
 
-interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsType {}
+interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsType {
+}
 
 function PlayerStatistics(props: PlayerStatisticsProps) {
     const player = getPlayersMap(props.players).get(props.match.params.playerId);
-    const winLoss : WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
+    const winLoss: WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
 
     return (
         <div className="player-statistics">
             <Transition visible={!props.loading}>
-            {
-            !player ?
-                <span className={"error"}>
+                {
+                    !player ?
+                        <span className={"error"}>
                     Player {props.match.params.playerId} does not exist.
                 </span>
-            :
-                <span>
+                        :
+                        <span>
                     <Header as={"h2"} icon>
                         <Icon name={player.icon} circular/>
                         <Header.Content>{player.name}</Header.Content>
@@ -40,13 +41,14 @@ function PlayerStatistics(props: PlayerStatisticsProps) {
                                 <Statistic label={"Losses"} value={winLoss.losses} className={"losses"}/>
                             </Statistic.Group>
                             <Statistic.Group horizontal className={"statistics-group"}>
-                                <Statistic label={"W/L ratio"} value={`${Math.round(winLoss.wins / (winLoss.wins + winLoss.losses) * 100)}%`}/>
+                                <Statistic label={"W/L ratio"}
+                                           value={`${Math.round(winLoss.wins / (winLoss.wins + winLoss.losses) * 100)}%`}/>
                                 <Statistic label={"Games played"} value={winLoss.wins + winLoss.losses}/>
                             </Statistic.Group>
                         </div>
                     <RecentGames focusedPlayerId={player.id}/>
                 </span>
-            }
+                }
             </Transition>
         </div>
     );

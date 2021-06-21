@@ -1,13 +1,15 @@
 import {Card, Icon} from "semantic-ui-react";
 import React from "react";
-import {DB_Player} from "../../../types/database/models";
-import {WinLoss} from "../../../types/types";
 import "./PlayerCard.css";
+import {Link} from "react-router-dom";
+import {DbPlayer} from "../../../types/database/models";
+import {WinLoss} from "../../../types/types";
 import {QuickHitPage} from "../../../util/QuickHitPage";
-import { Link } from "react-router-dom";
+
+
 
 interface PlayerCardProps {
-    player: DB_Player,
+    player: DbPlayer,
     winLoss?: WinLoss,
 }
 /**

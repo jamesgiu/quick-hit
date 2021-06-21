@@ -1,8 +1,8 @@
-import {DB_Match, DB_Player} from "../../../types/database/models";
+import {DbMatch, DbPlayer} from "../../../types/database/models";
 
 export interface TTStoreState {
-    matches: DB_Match[],
-    players: DB_Player[],
+    matches: DbMatch[],
+    players: DbPlayer[],
     loading: boolean,
     refresh: boolean,
 }

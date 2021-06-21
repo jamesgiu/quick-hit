@@ -10,20 +10,21 @@ export interface RecentGamesProps {
     focusedPlayerId?: string,
 }
 
-interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {};
+interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {
+}
 
 function RecentGames(props: RecentGamesCombinedProps) {
-    const getMatchEvents = () : FeedEventProps[] => {
+    const getMatchEvents = (): FeedEventProps[] => {
         if (props.players.length === 0) {
             return [];
         }
 
-        const events : FeedEventProps[] = [];
+        const events: FeedEventProps[] = [];
         const playersMap = getPlayersMap(props.players);
 
         // Sort list from oldest to newest
         props.matches.sort((matchA, matchB) => {
-           return new Date(matchB.date).getTime() - new Date(matchA.date).getTime();
+            return new Date(matchB.date).getTime() - new Date(matchA.date).getTime();
         })
 
         props.matches.forEach((match) => {

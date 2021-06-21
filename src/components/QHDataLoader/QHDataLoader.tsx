@@ -7,14 +7,14 @@ import React, {useEffect, useRef, useState} from "react";
 import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
-import {DB_Match, DB_Player} from "../../types/database/models";
+import {DbMatch, DbPlayer} from "../../types/database/models";
 import {WinLoss} from "../../types/types";
 import {TTDataPropsType} from "../../containers/shared";
 
 interface QHDataLoaderProps extends TTDataPropsType {
     // Redux actions
-    setMatches: (newMatches: DB_Match[]) => void,
-    setPlayers: (newPlayers: DB_Player[]) => void,
+    setMatches: (newMatches: DbMatch[]) => void,
+    setPlayers: (newPlayers: DbPlayer[]) => void,
     setLoading: (newLoading: boolean) => void,
 }
 
@@ -26,7 +26,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
     const [polling, setPolling] = useState<boolean>(true);
 
     const getMatches = () => {
-        const onSuccess = (receivedMatches: DB_Match[]): void => {
+        const onSuccess = (receivedMatches: DbMatch[]): void => {
             // Check for match data changes, and alert the user to manually refresh when they return, unless it was an
             // expected/forced refresh.
             if (!props.refresh && receivedMatches.length !== props.matches.length && props.matches.length > 0) {
@@ -36,8 +36,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
                 setPolling(false);
                 // FIXME sets loading indefinitely to prevent actions and force a refresh.
                 props.setLoading(true);
-            }
-            else {
+            } else {
                 props.setLoading(false);
                 props.setMatches(receivedMatches);
             }
@@ -52,7 +51,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
     }
 
     const getPlayers = () => {
-        const onSuccess = (players: DB_Player[]): void => {
+        const onSuccess = (players: DbPlayer[]): void => {
             props.setPlayers(players);
             props.setLoading(false);
         }
@@ -71,13 +70,13 @@ function QHDataLoader(props: QHDataLoaderProps) {
     };
 
     // On component mount.
-    useEffect(()=> {
+    useEffect(() => {
         getData();
     }, []);
 
     // Set the data loop, and on prop change, reset the loop as the Interval function will retain the props
     // present at the time of invocation.
-    useEffect(()=> {
+    useEffect(() => {
         clearInterval(intervalRef.current!);
         if (polling) {
             intervalRef.current = setInterval(getData, POLL_TIME_MS);
@@ -97,7 +96,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
     );
 }
 
-export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinLoss => {
+export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
         losses: 0
@@ -106,8 +105,7 @@ export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinL
     matches.forEach((match) => {
         if (match.winning_player_id === playerId) {
             winLoss.wins++;
-        }
-        else if (match.losing_player_id === playerId) {
+        } else if (match.losing_player_id === playerId) {
             winLoss.losses++;
         }
     });
@@ -115,8 +113,8 @@ export const getWinLossForPlayer = (playerId: string, matches: DB_Match[]): WinL
     return winLoss;
 }
 
-export const getPlayersMap = (players: DB_Player[]) : Map<string, DB_Player> => {
-    const playersMap : Map<string, DB_Player> = new Map();
+export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
+    const playersMap: Map<string, DbPlayer> = new Map();
 
     if (players) {
         players.forEach((player) => {

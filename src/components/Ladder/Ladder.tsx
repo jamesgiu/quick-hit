@@ -35,20 +35,21 @@ function Ladder(props: LadderProps) {
                 if (winLoss.wins + winLoss.losses > 0) {
                     playerItems.push(playerCard);
                 }
-            }
-            else {
+            } else {
                 playerItems.push(playerCard);
             }
         });
 
         // Sorting the player items by wins.
-        playerItems.sort((player1, player2) => {return player2.props.player.elo - player1.props.player.elo});
+        playerItems.sort((player1, player2) => {
+            return player2.props.player.elo - player1.props.player.elo
+        });
         return playerItems;
     }
 
     const refreshContent = () => {
-       // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
-       props.setForceRefresh(true);
+        // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
+        props.setForceRefresh(true);
     }
 
     return (
@@ -61,7 +62,8 @@ function Ladder(props: LadderProps) {
                 <div>
                     Hide players who haven't played a game:
                 </div>
-                <Checkbox toggle checked={props.hideZeroGamePlayers} onChange={()=>props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)} />
+                <Checkbox toggle checked={props.hideZeroGamePlayers}
+                          onChange={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}/>
             </div>
             <Transition visible={!props.loading}>
                 <span>
@@ -69,11 +71,14 @@ function Ladder(props: LadderProps) {
                            {renderPlayers()}
                     </span>
                     <div className={"new-buttons"}>
-                        <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'} onClick={() => {toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')}}/>
+                        <Button basic circular icon={ladderStyle === 'vertical' ? 'arrow right' : 'arrow down'}
+                                onClick={() => {
+                                    toggleLadderStyle(ladderStyle === 'vertical' ? 'horizontal' : 'vertical')
+                                }}/>
                         <NewPlayer onNewPlayerAdded={refreshContent}/>
                         <NewGame players={props.players} onNewGameAdded={refreshContent}/>
                     </div>
-            </span>
+                </span>
             </Transition>
         </div>
     );

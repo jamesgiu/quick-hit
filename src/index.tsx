@@ -11,7 +11,7 @@ import en from 'javascript-time-ago/locale/en';
 import {dataInitialState, ttReducer} from "./redux/reducers/TTReducer";
 import {ViewStoreState} from "./redux/types/ViewTypes";
 import {TTStoreState} from "./redux/types/TTTypes";
-import { persistCombineReducers } from 'redux-persist';
+import {persistCombineReducers} from 'redux-persist';
 import {viewInitialState, viewReducer} from "./redux/reducers/ViewReducer";
 import persistStore from "redux-persist/es/persistStore";
 import {PersistGate} from "redux-persist/integration/react";

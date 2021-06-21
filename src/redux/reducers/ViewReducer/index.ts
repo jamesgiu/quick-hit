@@ -2,7 +2,7 @@ import {SetZeroGamesFilterAction} from "../../actions/ViewActions";
 import {ViewStoreState} from "../../types/ViewTypes";
 import {SET_HIDE_ZERO_GAME_PLAYERS} from "../../constants/ViewConstants";
 
-export const viewInitialState : ViewStoreState = {
+export const viewInitialState: ViewStoreState = {
     hideZeroGamePlayers: true
 };
 

@@ -2,7 +2,7 @@ import {TTStoreState} from "../../types/TTTypes";
 import {SET_FORCE_REFRESH, SET_LOADING, SET_MATCHES, SET_PLAYERS} from "../../constants/TTConstants";
 import {SetForceRefreshAction, SetLoadingAction, SetMatchesAction, SetPlayersAction} from "../../actions/TTActions";
 
-export const dataInitialState : TTStoreState = {
+export const dataInitialState: TTStoreState = {
     players: [],
     matches: [],
     loading: true,

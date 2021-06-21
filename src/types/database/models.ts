@@ -1,6 +1,6 @@
 import {SemanticICONS} from "semantic-ui-react";
 
-export interface DB_Match {
+export interface DbMatch {
     id: string,
     date: string,
     winning_player_id: string,
@@ -13,7 +13,7 @@ export interface DB_Match {
     loser_new_elo: number,
 }
 
-export interface DB_Player {
+export interface DbPlayer {
     icon: SemanticICONS,
     id: string,
     name: string,

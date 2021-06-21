@@ -1,27 +1,27 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './Home.css';
 import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
-import { Link } from 'react-router-dom';
-import {QuickHitPage} from "../../util/QuickHitPage";
+import {Link} from 'react-router-dom';
 import NewGame from "../Ladder/NewGame/NewGame";
-import {DB_Player} from "../../types/database/models";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import {TTDataPropsType} from "../../containers/shared";
+import {DbPlayer} from "../../types/database/models";
+import {QuickHitPage} from "../../util/QuickHitPage";
+
 
 /**
  * QuickHit Home page.
  */
 function Home(props: TTDataPropsType) {
-    const getCurrentChampion = () : DB_Player => {
+    const getCurrentChampion = (): DbPlayer => {
         const players = props.players;
-        players.sort((player1, player2) => {return player2.elo - player1.elo});
+        players.sort((player1, player2) => {
+            return player2.elo - player1.elo
+        });
 
         return players[0];
     }
-
-    useEffect(()=> {
-    }, [props]);
 
     return (
         <div className="home">

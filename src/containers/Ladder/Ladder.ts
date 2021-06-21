@@ -3,7 +3,7 @@ import Ladder from "../../components/Ladder/Ladder";
 import {Dispatch} from "redux";
 import * as ttActions from "../../redux/actions/TTActions";
 import * as viewActions from "../../redux/actions/ViewActions";
-import {DB_Match, DB_Player} from "../../types/database/models";
+import {DbMatch, DbPlayer} from "../../types/database/models";
 import {QuickHitReduxStores} from "../../index";
 
 export function mapStateToProps(store: QuickHitReduxStores) {
@@ -18,8 +18,8 @@ export function mapStateToProps(store: QuickHitReduxStores) {
 
 export function mapDispatchToProps(dispatch: Dispatch<ttActions.SetLoadingAction | ttActions.SetMatchesAction | ttActions.SetPlayersAction | ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction>) {
     return {
-        setMatches: (newMatches: DB_Match[]) => dispatch(ttActions.setMatches(newMatches)),
-        setPlayers: (newPlayers: DB_Player[]) => dispatch(ttActions.setPlayers(newPlayers)),
+        setMatches: (newMatches: DbMatch[]) => dispatch(ttActions.setMatches(newMatches)),
+        setPlayers: (newPlayers: DbPlayer[]) => dispatch(ttActions.setPlayers(newPlayers)),
         setLoading: (newLoading: boolean) => dispatch(ttActions.setLoading(newLoading)),
         setForceRefresh: (newRefresh: boolean) => dispatch(ttActions.setRefresh(newRefresh)),
         setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers))

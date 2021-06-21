@@ -1,14 +1,14 @@
-import {Form, Modal, Icon, Button} from "semantic-ui-react";
+import {Button, Form, Icon, Modal} from "semantic-ui-react";
 import React from "react";
-import {v4 as uuidv4} from 'uuid';
-import {DB_Match, DB_Player} from "../../../types/database/models";
-import {QuickHitAPI} from "../../../api/QuickHitAPI";
-import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 import "./NewGame.css";
+import {DbMatch, DbPlayer} from "../../../types/database/models";
+import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 import EloRank from "elo-rank";
+import { v4 as uuidv4 } from 'uuid';
+import {QuickHitAPI} from "../../../api/QuickHitAPI";
 
 interface NewGameProps {
-    players: DB_Player[],
+    players: DbPlayer[],
     customModalOpenElement?: JSX.Element,
     // Callback for when a new game is added.
     onNewGameAdded?: ()=> void,
@@ -19,8 +19,8 @@ interface NewGameProps {
  */
 function NewGame(props: NewGameProps) {
     const [open, setModalOpen] = React.useState<boolean>(false)
-    const [winningPlayer, setWinningPlayer] = React.useState<DB_Player>()
-    const [losingPlayer, setLosingPlayer] = React.useState<DB_Player>()
+    const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>()
+    const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>()
     const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>(0)
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>(0)
 
@@ -62,7 +62,7 @@ function NewGame(props: NewGameProps) {
         const winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
         const loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
 
-        const matchToAdd : DB_Match = {
+        const matchToAdd : DbMatch = {
             id: uuidv4(),
             date: new Date().toISOString(),
             winning_player_id: winningPlayer!.id,
@@ -81,7 +81,7 @@ function NewGame(props: NewGameProps) {
         QuickHitAPI.addNewMatch(matchToAdd, winningPlayer!, losingPlayer!, onSuccess, onError);
     }
 
-    const renderPlayerOption = (player: DB_Player) => {
+    const renderPlayerOption = (player: DbPlayer) => {
         return { key: player.id, text: <span><Icon name={player.icon} size={"small"}/>{player.name}</span>, value: player as any}
     }
 

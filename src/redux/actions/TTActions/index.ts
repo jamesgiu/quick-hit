@@ -1,14 +1,14 @@
 import * as constants from "../../constants/TTConstants";
-import {DB_Match, DB_Player} from "../../../types/database/models";
+import {DbMatch, DbPlayer} from "../../../types/database/models";
 
 export interface SetMatchesAction {
     type: constants.SET_MATCHES_TYPE,
-    value: DB_Match[],
+    value: DbMatch[],
 }
 
 export interface SetPlayersAction {
     type: constants.SET_PLAYERS_TYPE,
-    value: DB_Player[],
+    value: DbPlayer[],
 }
 
 export interface SetLoadingAction {
@@ -21,14 +21,14 @@ export interface SetForceRefreshAction {
     value: boolean,
 }
 
-export function setMatches(newMatches: DB_Match[]): SetMatchesAction {
+export function setMatches(newMatches: DbMatch[]): SetMatchesAction {
     return {
         type: constants.SET_MATCHES,
         value: newMatches
     };
 }
 
-export function setPlayers(newPlayers: DB_Player[]): SetPlayersAction {
+export function setPlayers(newPlayers: DbPlayer[]): SetPlayersAction {
     return {
         type: constants.SET_PLAYERS,
         value: newPlayers
