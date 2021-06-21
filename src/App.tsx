@@ -20,6 +20,7 @@ function App() {
                 <Navbar/>
                 <div className={"app-main-content"}>
                     <Switch>
+                        <Route exact path={"/quick-hit"} component={Home}/>
                         <Route exact path={QuickHitPage.HOME} component={Home}/>
                         <Route exact path={QuickHitPage.LADDER} component={Ladder}/>
                         <Route exact path={QuickHitPage.RECENT_GAMES} component={RecentGames}/>
