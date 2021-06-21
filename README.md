@@ -1,5 +1,10 @@
 # Quick Hit
-Table tennis tracking application using React and Firebase
+Table tennis tracking application using React and Firebase.
+
+![Image 1](./public/markdown_img_1.PNG)
+![Image 2](./public/markdown_img_2.PNG)
+
+## Commands
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -8,6 +13,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+## Getting started with Firebase
 ### Creating a Firebase Realtime Database
 
 The .env file should contain details for the application to reach your Firebase DB:
