@@ -1,6 +1,7 @@
 import {DbMatch, DbPlayer} from "../types/database/models";
 import {ApiActions, HttpMethod} from "./ApiTypes";
 import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
+import {store} from "../index";
 
 const FB_URL = process.env.REACT_APP_FB_URL;
 const FB_API_KEY = process.env.REACT_APP_FB_API_KEY;
@@ -64,7 +65,7 @@ export class QuickHitAPI {
             baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FB_API_KEY}`,
             data: {
                 "email": process.env.REACT_APP_FB_SRV_ACC_NAME,
-                "password": process.env.REACT_APP_FB_SRV_ACC_PW,
+                "password": store.getState().authStore.authKey,
                 "returnSecureToken": true
             },
             headers: {'Content-Type': 'application/json'}

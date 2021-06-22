@@ -11,7 +11,7 @@ import {QuickHitPage} from "../../util/QuickHitPage";
 
 
 /**
- * QuickHit Home page.
+ * QuickHit KeyPrompt page.
  */
 function Home(props: TTDataPropsType) {
     const getCurrentChampion = (): DbPlayer => {
