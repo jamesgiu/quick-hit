@@ -1,9 +1,6 @@
 # Quick Hit
 Table tennis tracking application using React and Firebase.
 
-![Image 1](./public/markdown_img_1.PNG)
-![Image 2](./public/markdown_img_2.PNG)
-
 Hosted at: https://jamesgiu.github.io/quick-hit/
 
 ## Commands
@@ -76,3 +73,8 @@ REACT_APP_FB_SRV_ACC_NAME="<YOUR-SVC-ACC-USERNAME>"
       }
     }
     ```
+
+## Screenshots
+
+![Image 1](./public/markdown_img_1.PNG)
+![Image 2](./public/markdown_img_2.PNG)
