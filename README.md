@@ -21,6 +21,12 @@ Will deploy the application to `github-pages` to be hosted.
 
 See more: https://github.com/jamesgiu/quick-hit/deployments/activity_log?environment=github-pages
 
+## Contributing
+Feel free to contribute to any [Issues](https://github.com/jamesgiu/quick-hit/issues) or [make your own](https://github.com/jamesgiu/quick-hit/issues/new/choose)! 
+
+The guidelines are as follows:
+* There are no guidelines in the wild west.
+
 ## Getting started with Firebase
 ### Creating a Firebase Realtime Database
 
