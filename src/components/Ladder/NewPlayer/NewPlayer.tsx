@@ -13,7 +13,7 @@ interface NewPlayerProps {
 }
 
 const renderIconOption = (icon: SemanticICONS) => {
-    return { key: icon, text: <Icon name={icon} size={"big"}/>, value: icon }
+    return <option value={icon}>{icon}</option>;
 }
 
 const iconOptions = FA_ICONS.map((icon) => renderIconOption(icon));
@@ -67,13 +67,16 @@ function NewPlayer(props: NewPlayerProps) {
                     <Form.Group widths='equal'>
                         <Form.Input fluid label='Name' required placeholder='Name'
                                     onChange={(event, data) => setName(data.value)}/>
-                        <Form.Select fluid label='Icon' required placeholder='user'
-                                     options={iconOptions}
-                                     search={(options, value) => {return options.filter((option) => option.value?.toString().startsWith(value))}}
-                                     onChange={(event, data) => setIcon(data.value)} />
+                        <Form.Field required>
+                            <label>Icon</label>
+                            <select onChange={(event) => setIcon(event.target.value)}>
+                                <option selected disabled hidden value=""></option>
+                                {iconOptions}
+                            </select>
+                        </Form.Field>
                     </Form.Group>
                     <Card>
-                        Picture preview: {icon ? <Icon name={icon} size={"huge"} circular style={{margin: "auto", color: "orangered"}}/> : "Select or type an icon name."}
+                        Picture preview: {icon ? <Icon name={icon} size={"huge"} circular style={{margin: "auto", color: "orangered"}}/> : "Select an icon name."}
                     </Card>
                     <Form.Group><a href={"https://react.semantic-ui.com/elements/icon/"} target="_blank" rel={"noreferrer"}><Icon name={"help"}>Icon search</Icon></a></Form.Group>
                     <Form.Button>Create</Form.Button>
