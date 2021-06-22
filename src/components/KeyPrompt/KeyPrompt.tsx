@@ -35,6 +35,7 @@ function KeyPrompt(props : KeyPromptProps) {
                 <Button icon={"key"} onClick={()=> {
                     props.setAuthKey(key);
                     setIsOpen(false);
+                    location.reload();
                 }}>Proceed</Button>
             </Modal.Content>
         </Modal>

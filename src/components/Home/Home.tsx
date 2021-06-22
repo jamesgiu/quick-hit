@@ -7,7 +7,7 @@ import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import {TTDataPropsType} from "../../containers/shared";
 import {DbPlayer} from "../../types/database/models";
-import {QuickHitPage} from "../../util/QuickHitPage";
+import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
 
 
 /**
@@ -35,13 +35,13 @@ function Home(props: TTDataPropsType) {
             <Transition transitionOnMount={true}>
                 <ButtonGroup horizontal className={"home-menu-buttons"}>
                     <Header as={"h3"} icon>
-                        <Link to={QuickHitPage.LADDER}>
+                        <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}>
                             <Icon name='trophy' circular/>
                             <Header.Content>Ladder</Header.Content>
                         </Link>
                     </Header>
                     <Header as={"h3"} icon>
-                        <Link to={QuickHitPage.RECENT_GAMES}>
+                        <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}>
                             <Icon name='history' circular/>
                             <Header.Content>Recent games</Header.Content>
                         </Link>
