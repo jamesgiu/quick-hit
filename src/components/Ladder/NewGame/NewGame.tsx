@@ -109,7 +109,7 @@ function NewGame(props: NewGameProps) {
                             })}}
                             placeholder='Chicken Dinner'
                             required
-                            onChange={(event, data) => setWinningPlayer(data.value as any)}
+                            onChange={(event, data) => setWinningPlayer(data.value as DbPlayer | any)}
                         />
                         <Form.Field>
                             <label>Winning player score</label>
@@ -127,7 +127,7 @@ function NewGame(props: NewGameProps) {
                             })}}
                             placeholder='Big Dog'
                             required
-                            onChange={(event, data) => setLosingPlayer(data.value as any)}
+                            onChange={(event, data) => setLosingPlayer(data.value as DbPlayer | any)}
                         />
                         <Form.Field>
                             <label>Losing player score</label>
