@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import './KeyPrompt.css';
 import {Button, Form, Icon, Menu, Modal} from "semantic-ui-react";
 
 interface KeyPromptProps {
