@@ -4,6 +4,7 @@ import {Icon, Menu} from "semantic-ui-react";
 import {Link} from 'react-router-dom';
 import {QuickHitPage} from "../../util/QuickHitPage";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
+import KeyPrompt from "../../containers/KeyPrompt";
 
 /**
  * QuickHit's navbar.
@@ -35,6 +36,7 @@ function Navbar() {
                 </Link>
                 <Menu.Menu position={"right"}>
                     <NewPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"}/>}/>
+                    <KeyPrompt/>
                 </Menu.Menu>
             </Menu>
         </div>
