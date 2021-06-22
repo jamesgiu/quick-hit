@@ -82,7 +82,7 @@ function NewGame(props: NewGameProps) {
     }
 
     const renderPlayerOption = (player: DbPlayer) => {
-        return { key: player.id, text: <span><Icon name={player.icon} size={"small"}/>{player.name}</span>, value: player as any}
+        return { key: player.id, text: <span><Icon name={player.icon} size={"small"}/>{player.name}</span>, value: player as DbPlayer | any}
     }
 
     return (
@@ -103,9 +103,13 @@ function NewGame(props: NewGameProps) {
                             fluid
                             label={<b>Winning player<Icon name={"trophy"}/></b>}
                             options={props.players.map((player) => renderPlayerOption(player))}
+                            search={(options, value) => {return options.filter((option) => {
+                                const player = option.value as DbPlayer | any;
+                                return player.name.toLowerCase().startsWith(value.toLowerCase())
+                            })}}
                             placeholder='Chicken Dinner'
                             required
-                            onChange={(event, data) => setWinningPlayer(data.value as any)}
+                            onChange={(event, data) => setWinningPlayer(data.value as DbPlayer | any)}
                         />
                         <Form.Field>
                             <label>Winning player score</label>
@@ -117,9 +121,13 @@ function NewGame(props: NewGameProps) {
                             fluid
                             label={<b>Losing player<Icon name={"close"}/></b>}
                             options={props.players.map((player) => renderPlayerOption(player))}
+                            search={(options, value) => {return options.filter((option) => {
+                                const player = option.value as DbPlayer | any;
+                                return player.name.toLowerCase().startsWith(value.toLowerCase())
+                            })}}
                             placeholder='Big Dog'
                             required
-                            onChange={(event, data) => setLosingPlayer(data.value as any)}
+                            onChange={(event, data) => setLosingPlayer(data.value as DbPlayer | any)}
                         />
                         <Form.Field>
                             <label>Losing player score</label>
