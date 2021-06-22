@@ -4,6 +4,8 @@ Table tennis tracking application using React and Firebase.
 ![Image 1](./public/markdown_img_1.PNG)
 ![Image 2](./public/markdown_img_2.PNG)
 
+Hosted at: https://jamesgiu.github.io/quick-hit/
+
 ## Commands
 ### `npm start`
 
@@ -13,14 +15,24 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+### `npm run deploy`
+
+Will deploy the application to `github-pages` to be hosted. 
+
+See more: https://github.com/jamesgiu/quick-hit/deployments/activity_log?environment=github-pages
+
 ## Getting started with Firebase
 ### Creating a Firebase Realtime Database
 
-The .env file should contain details for the application to reach your Firebase DB:
+The .env file(s) should contain details for the application to reach your Firebase DB.
+
+`.env.development` will be used for `npm start`.
+
+`.env.production` will be used for `npm build`.
 
 The following is an example file:
 ```aidl
-REACT_APP_FB_URL=https://<YOUR-DB>.asia-southeast1.firebasedatabase.app/
+REACT_APP_FB_URL=https://<YOUR-DB>.<YOUR-REGION>.firebasedatabase.app/
 REACT_APP_FB_API_KEY=<WEB-API-KEY>
 REACT_APP_FB_SRV_ACC_NAME="firebase-admin@<YOUR-DB>.iam.gserviceaccount.com"
 REACT_APP_FB_SRV_ACC_PW="<PW>"
