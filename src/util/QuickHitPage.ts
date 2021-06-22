@@ -1,4 +1,6 @@
-export const BASE_PATH = (): string => { return process.env.REACT_APP_BASE_PATH ?? "" };
+export function BASE_PATH() {
+    return process.env.REACT_APP_QH_BASE_PATH ?? ""
+}
 
 /**
  * Enum that represents possible pages in the QuickHit ELO application.
