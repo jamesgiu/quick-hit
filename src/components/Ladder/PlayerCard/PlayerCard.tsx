@@ -4,7 +4,7 @@ import "./PlayerCard.css";
 import {Link} from "react-router-dom";
 import {DbPlayer} from "../../../types/database/models";
 import {WinLoss} from "../../../types/types";
-import {QuickHitPage} from "../../../util/QuickHitPage";
+import {BASE_PATH, QuickHitPage} from "../../../util/QuickHitPage";
 
 
 
@@ -19,7 +19,7 @@ function PlayerCard(props: PlayerCardProps) {
     return (
         <Card as={"span"} className="player-card">
             <Card.Content>
-                <Link to={QuickHitPage.STATISTICS.replace(":playerId", props.player.id)}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", props.player.id)}`}>
                     <Card.Header>
                         <div>
                             <Icon name={props.player.icon} size={"big"}/>

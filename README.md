@@ -40,8 +40,7 @@ The following is an example file:
 ```aidl
 REACT_APP_FB_URL=https://<YOUR-DB>.<YOUR-REGION>.firebasedatabase.app/
 REACT_APP_FB_API_KEY=<WEB-API-KEY>
-REACT_APP_FB_SRV_ACC_NAME="firebase-admin@<YOUR-DB>.iam.gserviceaccount.com"
-REACT_APP_FB_SRV_ACC_PW="<PW>"
+REACT_APP_FB_SRV_ACC_NAME="<YOUR-SVC-ACC-USERNAME>"
 ```
 
 ### Creating the database
@@ -54,16 +53,14 @@ REACT_APP_FB_SRV_ACC_PW="<PW>"
 
 ### Getting the service account and API key
 1. On the console view (https://console.firebase.google.com/u/1/), click on the Settings cog next to "Project Overview"
-2. Click on "Service accounts"
-3. Take note of the "Firebase service account" email address, this will be used for `REACT_APP_FB_SRV_ACC_NAME` in `.env`
-4. Click on "general"
-5. Take note of the "Web API Key", this will be used for `REACT_APP_FB_API_KEY` in `.env`.
+2. Click on "general"
+3. Take note of the "Web API Key", this will be used for `REACT_APP_FB_API_KEY` in `.env`.
 
 ### Setting up basic auth with the Service account user
 1. On the console view (https://console.firebase.google.com/u/1/), select "Authentication" and then "Get started"
 2. Enable the Email/Password Sign-in method
 3. Go to "Users" then click "Add user"
-4. Add the service account and a password for it, this password will be used for `REACT_APP_FB_SRV_ACC_PW` in `.env`
+4. Add a service account and a password for it, this password will be prompted for when a user first uses the application.
 
 ### Protecting the database
 1. On the console view (https://console.firebase.google.com/u/1/), select "Authentication" and then "Users"
