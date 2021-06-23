@@ -23,6 +23,11 @@ function Home(props: TTDataPropsType) {
         return players[0];
     }
 
+    const refreshContent = () => {
+        // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
+        props.setForceRefresh(true);
+    }
+
     return (
         <div className="home">
             <Transition transitionOnMount={true}>
@@ -46,13 +51,13 @@ function Home(props: TTDataPropsType) {
                             <Header.Content>Recent games</Header.Content>
                         </Link>
                     </Header>
-                    <NewGame players={props.players} customModalOpenElement={
+                    <NewGame players={props.players} onNewGameAdded={refreshContent} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='plus' circular/>
                             <Header.Content>Enter game</Header.Content>
                         </Header>
                     }/>
-                    <NewPlayer customModalOpenElement={
+                    <NewPlayer onNewPlayerAdded={refreshContent} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='add user' circular/>
                             <Header.Content>Sign up</Header.Content>
