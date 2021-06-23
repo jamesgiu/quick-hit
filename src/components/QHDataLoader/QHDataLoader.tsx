@@ -8,7 +8,7 @@ import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DbMatch, DbPlayer} from "../../types/database/models";
-import {WinLoss} from "../../types/types";
+import {MinMaxELO, WinLoss} from "../../types/types";
 import {TTDataPropsType} from "../../containers/shared";
 
 interface QHDataLoaderProps extends TTDataPropsType {
@@ -111,6 +111,30 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
     });
 
     return winLoss;
+}
+
+export const getMinMaxELOsForPlayer = (playerId: string, matches: DbMatch[]): MinMaxELO => {
+    let minELO = 1200;
+    let maxELO = 1200;
+
+    matches.forEach((match) => {
+        if (match.winning_player_id === playerId) {
+            if (match.winning_player_original_elo < minELO) {
+                minELO = match.winning_player_original_elo;
+            }
+            if (match.winner_new_elo > maxELO) {
+                maxELO = match.winner_new_elo;
+            }
+        } else if (match.losing_player_id === playerId) {
+            if (match.loser_new_elo < minELO) {
+                minELO = match.loser_new_elo;
+            }
+            if (match.losing_player_original_elo > maxELO) {
+                maxELO = match.losing_player_original_elo;
+            }
+        }
+    });
+    return {minELO, maxELO};
 }
 
 export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {

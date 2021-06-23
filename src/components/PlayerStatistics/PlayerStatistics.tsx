@@ -2,10 +2,10 @@ import React from 'react';
 import './PlayerStatistics.css';
 import {RouteComponentProps} from "react-router";
 import {Header, Icon, Statistic, Transition} from "semantic-ui-react";
-import {WinLoss} from "../../types/types";
+import {MinMaxELO, WinLoss} from "../../types/types";
 import {TTDataPropsType} from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
-import {getPlayersMap, getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
+import {getMinMaxELOsForPlayer, getPlayersMap, getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 
 interface PlayerStatisticsParams {
     playerId: string
@@ -17,6 +17,7 @@ interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsPara
 function PlayerStatistics(props: PlayerStatisticsProps) {
     const player = getPlayersMap(props.players).get(props.match.params.playerId);
     const winLoss: WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
+    const minMaxELOs: MinMaxELO = player ? getMinMaxELOsForPlayer(player.id, props.matches) : {minELO: 1200, maxELO: 1200};
 
     return (
         <div className="player-statistics">
@@ -34,13 +35,15 @@ function PlayerStatistics(props: PlayerStatisticsProps) {
                     </Header>
                       <div className={"player-stats-wrapper"}>
                               <Statistic.Group className={"statistics-group"}>
+                                  <Statistic label={"Min rating"} value={minMaxELOs.minELO} className={"minELO"}/>
                                   <Statistic label={"Rating"} value={player.elo}/>
+                                  <Statistic label={"Max rating"} value={minMaxELOs.maxELO} className={"maxELO"}/>
                               </Statistic.Group>
                              <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={winLoss.wins} className={"wins"}/>
                                 <Statistic label={"Losses"} value={winLoss.losses} className={"losses"}/>
                             </Statistic.Group>
-                            <Statistic.Group horizontal className={"statistics-group"}>
+                            <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"W/L ratio"}
                                            value={`${Math.round(winLoss.wins / (winLoss.wins + winLoss.losses) * 100)}%`}/>
                                 <Statistic label={"Games played"} value={winLoss.wins + winLoss.losses}/>
