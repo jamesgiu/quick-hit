@@ -45,7 +45,7 @@ export class QuickHitAPI {
         });
     }
 
-    private static makeAxiosRequest(uri: string, method: HttpMethod, data?: any): AxiosPromise {
+    private static makeAxiosRequest(uri: string, method: HttpMethod, data?: string): AxiosPromise {
         return this.authenticateToFirebase().then(response => {
             const idToken = response.data.idToken;
 

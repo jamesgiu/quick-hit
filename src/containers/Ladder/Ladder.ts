@@ -3,10 +3,16 @@ import Ladder from "../../components/Ladder/Ladder";
 import {Dispatch} from "redux";
 import * as ttActions from "../../redux/actions/TTActions";
 import * as viewActions from "../../redux/actions/ViewActions";
-import {DbMatch, DbPlayer} from "../../types/database/models";
 import {QuickHitReduxStores} from "../../index";
+import {TTStoreState} from "../../redux/types/TTTypes";
+import {ViewStoreState} from "../../redux/types/ViewTypes";
+import {TTRefreshDispatchType} from "../shared";
 
-export function mapStateToProps(store: QuickHitReduxStores) {
+export interface ViewDispatchType {
+    setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => void,
+}
+
+export function mapStateToProps(store: QuickHitReduxStores) : TTStoreState & ViewStoreState {
     return {
         loading: store.ttData.loading,
         players: store.ttData.players,
@@ -16,11 +22,8 @@ export function mapStateToProps(store: QuickHitReduxStores) {
     }
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<ttActions.SetLoadingAction | ttActions.SetMatchesAction | ttActions.SetPlayersAction | ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction>) {
+export function mapDispatchToProps(dispatch: Dispatch<ttActions.SetLoadingAction | ttActions.SetMatchesAction | ttActions.SetPlayersAction | ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction>) : TTRefreshDispatchType & ViewDispatchType {
     return {
-        setMatches: (newMatches: DbMatch[]) => dispatch(ttActions.setMatches(newMatches)),
-        setPlayers: (newPlayers: DbPlayer[]) => dispatch(ttActions.setPlayers(newPlayers)),
-        setLoading: (newLoading: boolean) => dispatch(ttActions.setLoading(newLoading)),
         setForceRefresh: (newRefresh: boolean) => dispatch(ttActions.setRefresh(newRefresh)),
         setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers))
     };

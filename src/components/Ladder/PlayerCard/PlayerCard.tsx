@@ -15,7 +15,7 @@ interface PlayerCardProps {
 /**
  * QuickHit PlayerCard component.
  */
-function PlayerCard(props: PlayerCardProps) {
+function PlayerCard(props: PlayerCardProps): JSX.Element {
     return (
         <Card as={"span"} className="player-card">
             <Card.Content>

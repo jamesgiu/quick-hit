@@ -3,7 +3,7 @@ import './PlayerStatistics.css';
 import {RouteComponentProps} from "react-router";
 import {Header, Icon, Statistic, Transition} from "semantic-ui-react";
 import {MinMaxELO, WinLoss} from "../../types/types";
-import {TTDataPropsType} from "../../containers/shared";
+import {TTDataPropsTypeCombined} from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
 import {getMinMaxELOsForPlayer, getPlayersMap, getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 
@@ -11,10 +11,10 @@ interface PlayerStatisticsParams {
     playerId: string
 }
 
-interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsType {
+interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsTypeCombined {
 }
 
-function PlayerStatistics(props: PlayerStatisticsProps) {
+function PlayerStatistics(props: PlayerStatisticsProps) : JSX.Element {
     const player = getPlayersMap(props.players).get(props.match.params.playerId);
     const winLoss: WinLoss = player ? getWinLossForPlayer(player.id, props.matches) : {wins: 0, losses: 0};
     const minMaxELOs: MinMaxELO = player ? getMinMaxELOsForPlayer(player.id, props.matches) : {minELO: 1200, maxELO: 1200};

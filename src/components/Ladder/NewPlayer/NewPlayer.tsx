@@ -21,9 +21,9 @@ const iconOptions = FA_ICONS.map((icon) => renderIconOption(icon));
 /**
  * QuickHit NewPlayer component.
  */
-function NewPlayer(props: NewPlayerProps) {
+function NewPlayer(props: NewPlayerProps) : JSX.Element {
     const [open, setModalOpen] = React.useState(false)
-    const [icon, setIcon] = useState<string | any>("");
+    const [icon, setIcon] = useState<string>("");
     const [name, setName] = useState<string>("");
 
     const sendCreateRequest = () => {
@@ -43,7 +43,7 @@ function NewPlayer(props: NewPlayerProps) {
         const player : DbPlayer = {
             id: uuidv4(),
             name,
-            icon,
+            icon: icon as SemanticICONS,
             /* Default ELO rank */
             elo: 1200
         };
@@ -70,10 +70,10 @@ function NewPlayer(props: NewPlayerProps) {
                         <Form.Select fluid label='Icon' required placeholder='user'
                                      options={iconOptions}
                                      search={(options, value) => {return options.filter((option) => option.value?.toString().startsWith(value))}}
-                                     onChange={(event, data) => setIcon(data.value)} />
+                                     onChange={(event, data) => setIcon(data.value as string)} />
                     </Form.Group>
                     <Card>
-                        Picture preview: {icon ? <Icon name={icon} size={"huge"} circular style={{margin: "auto", color: "orangered"}}/> : "Select or type an icon name."}
+                        Picture preview: {icon ? <Icon name={icon as SemanticICONS} size={"huge"} circular style={{margin: "auto", color: "orangered"}}/> : "Select or type an icon name."}
                     </Card>
                     <Form.Group><a href={"https://react.semantic-ui.com/elements/icon/"} target="_blank" rel={"noreferrer"}><Icon name={"help"}>Icon search</Icon></a></Form.Group>
                     <Form.Button>Create</Form.Button>

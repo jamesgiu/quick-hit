@@ -1,4 +1,4 @@
-export function BASE_PATH() {
+export function BASE_PATH() : string {
     return process.env.REACT_APP_QH_BASE_PATH ?? ""
 }
 

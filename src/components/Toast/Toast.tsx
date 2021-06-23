@@ -10,7 +10,7 @@ const TOAST_DEFAULT_OPTS = {
 /**
  * QuickHit Toast
  */
-function Toaster() {
+function Toaster() : JSX.Element {
     return (
         <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"}/>
     );
