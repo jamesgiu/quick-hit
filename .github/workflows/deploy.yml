@@ -19,11 +19,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: true # to allow further authenticated git commands
+        fetch-depth: 0 # fetch all history for other branches and tags
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: git config --global user.email "qh-deploy@deploy.com"
-    - run: git config --global user.name "qh-deploy-action"
+    - run: | 
+          git config user.name github-actions
+          git config user.email github-actions@github.com
     - run: npm ci
     - run: npm run deploy
