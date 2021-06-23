@@ -3,9 +3,15 @@ import * as actions from "../../redux/actions/TTActions";
 import {connect} from "react-redux";
 import QHDataLoader from "../../components/QHDataLoader/QHDataLoader";
 import {DbMatch, DbPlayer} from "../../types/database/models";
-import {mapTTDataToProps} from "../shared";
+import {mapTTDataToProps, TTRefreshDispatchType} from "../shared";
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.SetLoadingAction | actions.SetMatchesAction | actions.SetPlayersAction | actions.SetForceRefreshAction>) {
+interface DataLoaderDispatchType extends TTRefreshDispatchType {
+    setMatches: (newMatches: DbMatch[]) => void,
+    setPlayers: (newPlayers: DbPlayer[]) => void,
+    setLoading: (newLoading: boolean) => void,
+}
+
+export function mapDispatchToProps(dispatch: Dispatch<actions.SetLoadingAction | actions.SetMatchesAction | actions.SetPlayersAction | actions.SetForceRefreshAction>) : DataLoaderDispatchType {
     return {
         setMatches: (newMatches: DbMatch[]) => dispatch(actions.setMatches(newMatches)),
         setPlayers: (newPlayers: DbPlayer[]) => dispatch(actions.setPlayers(newPlayers)),

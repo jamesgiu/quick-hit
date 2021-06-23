@@ -3,17 +3,16 @@ import './RecentGames.css';
 import {Divider, Feed, Header, Icon, Transition} from "semantic-ui-react";
 import {FeedEventProps} from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from 'react-time-ago';
-import {TTDataPropsType} from "../../containers/shared";
+import {TTDataPropsTypeCombined} from "../../containers/shared";
 import {getPlayersMap} from "../QHDataLoader/QHDataLoader";
 
 export interface RecentGamesProps {
     focusedPlayerId?: string,
 }
 
-interface RecentGamesCombinedProps extends RecentGamesProps, TTDataPropsType {
-}
+export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
-function RecentGames(props: RecentGamesCombinedProps) {
+function RecentGames(props: RecentGamesCombinedProps) : JSX.Element {
     const getMatchEvents = (): FeedEventProps[] => {
         if (props.players.length === 0) {
             return [];
@@ -28,14 +27,18 @@ function RecentGames(props: RecentGamesCombinedProps) {
         })
 
         props.matches.forEach((match) => {
-            const winningPlayer = playersMap.get(match.winning_player_id)!;
-            const losingPlayer = playersMap.get(match.losing_player_id)!;
+            const winningPlayer = playersMap.get(match.winning_player_id);
+            const losingPlayer = playersMap.get(match.losing_player_id);
+
+            if(!(winningPlayer && losingPlayer)) {
+                return;
+            }
 
             // If we are focusing on a certain player's recent games only
             if (props.focusedPlayerId) {
                 if (winningPlayer.id !== props.focusedPlayerId && losingPlayer.id !== props.focusedPlayerId) {
                     // Skip this match in the loop, as it does not contain our focused player.
-                    return
+                    return;
                 }
             }
 

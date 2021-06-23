@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import NewGame from "../Ladder/NewGame/NewGame";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
-import {TTDataPropsType} from "../../containers/shared";
+import {TTDataPropsTypeCombined} from "../../containers/shared";
 import {DbPlayer} from "../../types/database/models";
 import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
 
@@ -13,7 +13,7 @@ import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
 /**
  * QuickHit KeyPrompt page.
  */
-function Home(props: TTDataPropsType) {
+function Home(props: TTDataPropsTypeCombined) : JSX.Element {
     const getCurrentChampion = (): DbPlayer => {
         const players = props.players;
         players.sort((player1, player2) => {

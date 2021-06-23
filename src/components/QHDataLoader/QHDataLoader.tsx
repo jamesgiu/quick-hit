@@ -9,9 +9,9 @@ import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DbMatch, DbPlayer} from "../../types/database/models";
 import {MinMaxELO, WinLoss} from "../../types/types";
-import {TTDataPropsType} from "../../containers/shared";
+import {TTDataPropsTypeCombined} from "../../containers/shared";
 
-interface QHDataLoaderProps extends TTDataPropsType {
+interface QHDataLoaderProps extends TTDataPropsTypeCombined {
     // Redux actions
     setMatches: (newMatches: DbMatch[]) => void,
     setPlayers: (newPlayers: DbPlayer[]) => void,
@@ -21,7 +21,7 @@ interface QHDataLoaderProps extends TTDataPropsType {
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
 
-function QHDataLoader(props: QHDataLoaderProps) {
+function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
     const intervalRef = useRef<NodeJS.Timeout>();
     const [polling, setPolling] = useState<boolean>(true);
 
@@ -72,12 +72,14 @@ function QHDataLoader(props: QHDataLoaderProps) {
     // On component mount.
     useEffect(() => {
         getData();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Set the data loop, and on prop change, reset the loop as the Interval function will retain the props
     // present at the time of invocation.
     useEffect(() => {
-        clearInterval(intervalRef.current!);
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
         if (polling) {
             intervalRef.current = setInterval(getData, POLL_TIME_MS);
         }
@@ -87,7 +89,7 @@ function QHDataLoader(props: QHDataLoaderProps) {
             getData();
             props.setForceRefresh(false);
         }
-    }, [props, polling]);
+    }, [props, polling]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Transition visible={props.loading}>

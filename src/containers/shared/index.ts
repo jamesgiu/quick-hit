@@ -3,11 +3,13 @@ import {Dispatch} from "redux";
 import * as actions from "../../redux/actions/TTActions";
 import {QuickHitReduxStores} from "../../index";
 
-export interface TTDataPropsType extends  TTStoreState {
+export type TTDataPropsTypeCombined = TTStoreState & TTRefreshDispatchType;
+
+export interface TTRefreshDispatchType {
     setForceRefresh: (newRefresh: boolean) => void;
 }
 
-export function mapTTDataToProps(store: QuickHitReduxStores) {
+export function mapTTDataToProps(store: QuickHitReduxStores) : TTStoreState {
     return {
         loading: store.ttData.loading,
         players: store.ttData.players,
@@ -16,7 +18,7 @@ export function mapTTDataToProps(store: QuickHitReduxStores) {
     }
 }
 
-export function mapTTDispatchToProps(dispatch: Dispatch<actions.SetForceRefreshAction>) {
+export function mapTTDispatchToProps(dispatch: Dispatch<actions.SetForceRefreshAction>) : TTRefreshDispatchType {
     return {
         setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
     }

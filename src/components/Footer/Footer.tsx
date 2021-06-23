@@ -4,7 +4,7 @@ import './Footer.css';
 /**
  * Footer component in QuickHit.
  */
-function Footer() {
+function Footer() : JSX.Element  {
     return (
         <div className="footer">
             https://github.com/jamesgiu/quick-hit

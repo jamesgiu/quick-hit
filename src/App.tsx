@@ -12,7 +12,7 @@ import RecentGames from "./containers/RecentGames";
 import PlayerStatistics from "./containers/PlayerStatistics";
 import QHDataLoader from "./containers/QHDataLoader";
 
-function App() {
+function App() : JSX.Element {
     return (
         <BrowserRouter>
             <div className="App">

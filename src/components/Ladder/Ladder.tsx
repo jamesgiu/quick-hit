@@ -5,11 +5,11 @@ import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
 import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
-import {TTDataPropsType} from "../../containers/shared";
+import {TTDataPropsTypeCombined} from "../../containers/shared";
 
 type LadderStyle = 'vertical' | 'horizontal';
 
-interface LadderProps extends TTDataPropsType {
+export interface LadderProps extends TTDataPropsTypeCombined {
     hideZeroGamePlayers: boolean,
     setHideZeroGamePlayers: (zeroGamePlayers: boolean) => void,
 }
@@ -17,7 +17,7 @@ interface LadderProps extends TTDataPropsType {
 /**
  * QuickHit Ladder page.
  */
-function Ladder(props: LadderProps) {
+function Ladder(props: LadderProps) : JSX.Element {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
 
     const renderPlayers = (): JSX.Element[] => {

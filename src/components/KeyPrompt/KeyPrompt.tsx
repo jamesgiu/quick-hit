@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Form, Icon, Menu, Modal} from "semantic-ui-react";
 
-interface KeyPromptProps {
+export interface KeyPromptProps {
     authKey?: string,
     setAuthKey: (newKey: string) => void,
 }
@@ -9,7 +9,7 @@ interface KeyPromptProps {
 /**
  * QuickHit KeyPrompt prompt.
  */
-function KeyPrompt(props : KeyPromptProps) {
+function KeyPrompt(props : KeyPromptProps) : JSX.Element {
     const [key, setKey] = useState<string>("");
     const [isOpen, setIsOpen] = useState<boolean>(false);
     return (

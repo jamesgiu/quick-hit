@@ -17,7 +17,7 @@ interface NewGameProps {
 /**
  * QuickHit NewPlayer component.
  */
-function NewGame(props: NewGameProps) {
+function NewGame(props: NewGameProps) : JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false)
     const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>()
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>()
@@ -38,6 +38,10 @@ function NewGame(props: NewGameProps) {
             makeErrorToast("Game not added!", errorMsg);
         }
 
+        if (!(winningPlayer && losingPlayer)) {
+            return;
+        }
+
         if (winningPlayer?.id === losingPlayer?.id)
         {
             makeErrorToast("Get outta here", "Players cannot beat themselves on QuickHit");
@@ -51,8 +55,8 @@ function NewGame(props: NewGameProps) {
         }
 
         const elo = new EloRank(15);
-        const winnerElo = winningPlayer!.elo;
-        const loserElo = losingPlayer!.elo;
+        const winnerElo = winningPlayer.elo;
+        const loserElo = losingPlayer.elo;
 
         //Gets expected score for first parameter
         const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
@@ -65,24 +69,24 @@ function NewGame(props: NewGameProps) {
         const matchToAdd : DbMatch = {
             id: uuidv4(),
             date: new Date().toISOString(),
-            winning_player_id: winningPlayer!.id,
+            winning_player_id: winningPlayer.id,
             winning_player_score: winningPlayerScore,
             winning_player_original_elo: winnerElo,
-            losing_player_id: losingPlayer!.id,
+            losing_player_id: losingPlayer.id,
             losing_player_score: losingPlayerScore,
             losing_player_original_elo: loserElo,
             winner_new_elo: winnerNewElo,
             loser_new_elo: loserNewElo
         }
         // Assigning new elo values to player object, then PATCHING.
-        winningPlayer!.elo = winnerNewElo;
-        losingPlayer!.elo = loserNewElo;
+        winningPlayer.elo = winnerNewElo;
+        losingPlayer.elo = loserNewElo;
 
-        QuickHitAPI.addNewMatch(matchToAdd, winningPlayer!, losingPlayer!, onSuccess, onError);
+        QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
     }
 
     const renderPlayerOption = (player: DbPlayer) => {
-        return { key: player.id, text: <span><Icon name={player.icon} size={"small"}/>{player.name}</span>, value: player as DbPlayer | any}
+        return { key: player.id, text: <span><Icon name={player.icon} size={"small"}/>{player.name}</span>, value: JSON.stringify(player)}
     }
 
     return (
@@ -104,12 +108,12 @@ function NewGame(props: NewGameProps) {
                             label={<b>Winning player<Icon name={"trophy"}/></b>}
                             options={props.players.map((player) => renderPlayerOption(player))}
                             search={(options, value) => {return options.filter((option) => {
-                                const player = option.value as DbPlayer | any;
-                                return player.name.toLowerCase().startsWith(value.toLowerCase())
+                                const player = JSON.parse(option.value as string);
+                                return player.name.toLowerCase().includes(value.toLowerCase())
                             })}}
                             placeholder='Chicken Dinner'
                             required
-                            onChange={(event, data) => setWinningPlayer(data.value as DbPlayer | any)}
+                            onChange={(event, data) => setWinningPlayer(JSON.parse(data.value as string))}
                         />
                         <Form.Field>
                             <label>Winning player score</label>
@@ -122,12 +126,12 @@ function NewGame(props: NewGameProps) {
                             label={<b>Losing player<Icon name={"close"}/></b>}
                             options={props.players.map((player) => renderPlayerOption(player))}
                             search={(options, value) => {return options.filter((option) => {
-                                const player = option.value as DbPlayer | any;
-                                return player.name.toLowerCase().startsWith(value.toLowerCase())
+                                const player = JSON.parse(option.value as string);
+                                return player.name.toLowerCase().includes(value.toLowerCase())
                             })}}
                             placeholder='Big Dog'
                             required
-                            onChange={(event, data) => setLosingPlayer(data.value as DbPlayer | any)}
+                            onChange={(event, data) => setLosingPlayer(JSON.parse(data.value as string))}
                         />
                         <Form.Field>
                             <label>Losing player score</label>
@@ -135,7 +139,7 @@ function NewGame(props: NewGameProps) {
                             onChange={(event) => setLosingPlayerScore(parseInt(event.target.value))}/>
                         </Form.Field>
                     </Form.Group>
-                    <Form.Button>GG</Form.Button>
+                    <Form.Button disabled={!(winningPlayer && winningPlayerScore && losingPlayer && losingPlayerScore)}>GG</Form.Button>
                 </Form>
             </Modal.Content>
         </Modal>

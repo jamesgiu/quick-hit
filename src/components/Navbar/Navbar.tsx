@@ -9,7 +9,7 @@ import KeyPrompt from "../../containers/KeyPrompt";
 /**
  * QuickHit's navbar.
  */
-function Navbar() {
+function Navbar() : JSX.Element {
     return (
         <div className={"tt-navbar"}>
             <Menu stackable inverted>
