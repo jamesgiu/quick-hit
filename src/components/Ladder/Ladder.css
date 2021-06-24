@@ -56,3 +56,53 @@
 .new-buttons {
     margin-top: 50px;
 }
+
+.players-area .ui.table th {
+   background-color: rgba(75, 80, 85, 1);
+   color: orange;
+   border-bottom: 1px solid orange;
+}
+
+.players-area .ui.table tr {
+    background-color: rgba(65, 70, 75, 1);
+    color: white;
+ }
+
+ .players-area .ui.table td a {
+    color: inherit;
+ }
+
+ .players-area .ui.table {
+    border: 1px solid orange;
+    text-align: center;
+    max-width: 30vw;
+    margin: auto;
+ }
+
+ .players-area .ui.table {
+    border: 1px solid orange;
+    text-align: center;
+    min-width: 300px;
+    max-width: 30vw;
+    margin: auto;
+ }
+
+ .players-area .ui.table tr:first-child {
+    background-color: goldenrod;
+    color: black;
+ }
+
+ .players-area .ui.table tr:nth-child(2) {
+    background-color: silver;
+    color: black;
+ }
+
+ .players-area .ui.table tr:nth-child(3) {
+    background-color: sandybrown;
+    color: black;
+ }
+
+ .players-area .ui.table tr:last-child {
+    background-color: black;
+    color: red;
+ }

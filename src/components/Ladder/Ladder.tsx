@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import './Ladder.css';
-import {Button, Checkbox, Header, Icon, Transition} from "semantic-ui-react";
+import {Button, Checkbox, Header, Icon, Table, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewPlayer from './NewPlayer/NewPlayer';
 import NewGame from "./NewGame/NewGame";
 import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
+import { BASE_PATH, QuickHitPage } from '../../util/QuickHitPage';
+import { Link } from 'react-router-dom';
 
 type LadderStyle = 'vertical' | 'horizontal';
 
@@ -19,32 +21,78 @@ export interface LadderProps extends TTDataPropsTypeCombined {
  */
 function Ladder(props: LadderProps) : JSX.Element {
     const [ladderStyle, toggleLadderStyle] = useState<LadderStyle>('horizontal');
+    const [showPlayerCards, toggleLadderCards] = useState<boolean>(false);
 
     const renderPlayers = (): JSX.Element[] => {
 
-        const playerItems: JSX.Element[] = [];
-        props.players.forEach((player) => {
-            const winLoss = getWinLossForPlayer(player.id, props.matches);
+        const playersLadder: JSX.Element[] = [];
 
-            const playerCard = (
-                <PlayerCard player={player} winLoss={winLoss}/>
-            );
+        if (showPlayerCards) {
+            props.players.forEach((player) => {
+                const winLoss = getWinLossForPlayer(player.id, props.matches);
 
-            // If we are hiding zero game players, then only push if they have played a game
-            if (props.hideZeroGamePlayers) {
-                if (winLoss.wins + winLoss.losses > 0) {
-                    playerItems.push(playerCard);
+                const playerCard = (
+                    <PlayerCard player={player} winLoss={winLoss}/>
+                );
+
+                // If we are hiding zero game players, then only push if they have played a game
+                if (props.hideZeroGamePlayers) {
+                    if (winLoss.wins + winLoss.losses > 0) {
+                        playersLadder.push(playerCard);
+                    }
+                } else {
+                    playersLadder.push(playerCard);
                 }
-            } else {
-                playerItems.push(playerCard);
-            }
-        });
+            });
 
-        // Sorting the player items by wins.
-        playerItems.sort((player1, player2) => {
-            return player2.props.player.elo - player1.props.player.elo
-        });
-        return playerItems;
+            // Sorting the player items by wins.
+            playersLadder.sort((player1, player2) => {
+                return player2.props.player.elo - player1.props.player.elo
+            });
+        } else {
+            const playerTableRows: JSX.Element[] = [];
+
+            const sortedPlayers = props.players.sort((player1, player2) => {
+                return player2.elo - player1.elo
+            });
+
+            sortedPlayers.forEach((player) => {
+                const winLoss = getWinLossForPlayer(player.id, props.matches);
+                let addPlayer = true;
+                if (props.hideZeroGamePlayers && winLoss.losses + winLoss.wins == 0) {
+                    addPlayer = false;
+                }
+                if (addPlayer) {
+                    playerTableRows.push(
+                        <Table.Row>
+                            <Table.Cell>
+                                <Icon name={player.icon} size={"small"}/>
+                                <Link to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}>
+                                    {player.name}
+                                </Link>
+                            </Table.Cell>
+                            <Table.Cell>{player.elo}</Table.Cell>
+                            <Table.Cell>{winLoss.wins}-{winLoss.losses}</Table.Cell>
+                        </Table.Row>
+                    );
+                }
+            });
+
+            playersLadder.push(<Table unstackable celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Player</Table.HeaderCell>
+                        <Table.HeaderCell>ELO</Table.HeaderCell>
+                        <Table.HeaderCell>W-L</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {playerTableRows}
+                </Table.Body>
+            </Table>
+            );
+        }
+        return playersLadder;
     }
 
     const refreshContent = () => {
@@ -64,6 +112,13 @@ function Ladder(props: LadderProps) : JSX.Element {
                 </div>
                 <Checkbox toggle checked={props.hideZeroGamePlayers}
                           onChange={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}/>
+            </div>
+            <div>
+                <div>
+                    Show player cards:
+                </div>
+                <Checkbox toggle checked={showPlayerCards}
+                          onChange={() => toggleLadderCards(!showPlayerCards)}/>
             </div>
             <Transition visible={!props.loading}>
                 <span>
