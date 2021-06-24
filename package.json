@@ -36,6 +36,7 @@
   "scripts": {
     "start": "react-scripts start",
     "lint": "eslint . --ext=.ts,.tsx",
+    "lint:css": "stylelint 'src/**/*.css'",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
