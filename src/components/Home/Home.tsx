@@ -9,7 +9,6 @@ import {TTDataPropsTypeCombined} from "../../containers/shared";
 import {DbPlayer} from "../../types/database/models";
 import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
 
-
 /**
  * QuickHit KeyPrompt page.
  */

@@ -1,8 +1,8 @@
 import {render} from "@testing-library/react";
-import Footer from "./Footer";
+import NewPlayer from "./NewPlayer";
 
 it("renders without crashing", ()=> {
     render(
-        <Footer/>
+        <NewPlayer onNewPlayerAdded={jest.fn}/>
     )
 });
