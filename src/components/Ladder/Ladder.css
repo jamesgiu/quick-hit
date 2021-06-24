@@ -6,11 +6,8 @@
   background-color: rgba(20, 24, 38, 0.2);
 }
 
-.vertical .card {
-  flex-direction: row;
-  display: inline-list-item;
-  font-size: 0.8rem;
-  height: 10vh;
+.players .player-row span {
+  display: block;
 }
 
 .horizontal .card {
