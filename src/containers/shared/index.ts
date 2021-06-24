@@ -1,7 +1,7 @@
 import {TTStoreState} from "../../redux/types/TTTypes";
 import {Dispatch} from "redux";
 import * as actions from "../../redux/actions/TTActions";
-import {QuickHitReduxStores} from "../../index";
+import {QuickHitReduxStores} from "../../redux/types/store";
 
 export type TTDataPropsTypeCombined = TTStoreState & TTRefreshDispatchType;
 

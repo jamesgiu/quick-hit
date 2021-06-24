@@ -1,8 +1,7 @@
 import {DbMatch, DbPlayer} from "../types/database/models";
 import {ApiActions, HttpMethod} from "./ApiTypes";
 import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
-import {store} from "../index";
-
+import store from "../redux/types/store";
 const FB_URL = process.env.REACT_APP_FB_URL;
 const FB_API_KEY = process.env.REACT_APP_FB_API_KEY;
 

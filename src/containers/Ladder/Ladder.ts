@@ -3,10 +3,10 @@ import Ladder from "../../components/Ladder/Ladder";
 import {Dispatch} from "redux";
 import * as ttActions from "../../redux/actions/TTActions";
 import * as viewActions from "../../redux/actions/ViewActions";
-import {QuickHitReduxStores} from "../../index";
 import {TTStoreState} from "../../redux/types/TTTypes";
 import {ViewStoreState} from "../../redux/types/ViewTypes";
 import {TTRefreshDispatchType} from "../shared";
+import {QuickHitReduxStores} from "../../redux/types/store";
 
 export interface ViewDispatchType {
     setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => void,

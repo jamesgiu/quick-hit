@@ -1,8 +1,8 @@
 import {render} from "@testing-library/react";
-import Footer from "./Footer";
+import NotFound from "./NotFound";
 
 it("renders without crashing", ()=> {
     render(
-        <Footer/>
+        <NotFound/>
     )
 });

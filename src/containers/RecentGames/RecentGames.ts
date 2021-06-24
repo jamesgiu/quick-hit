@@ -1,8 +1,8 @@
 import {connect} from "react-redux";
 import RecentGames, {RecentGamesProps} from "../../components/RecentGames/RecentGames";
 import {mapTTDispatchToProps} from "../shared";
-import {QuickHitReduxStores} from "../../index";
 import {TTStoreState} from "../../redux/types/TTTypes";
+import {QuickHitReduxStores} from "../../redux/types/store";
 
 export function mapStateToProps(store: QuickHitReduxStores, ownProps: RecentGamesProps) : TTStoreState & RecentGamesProps {
     return {
