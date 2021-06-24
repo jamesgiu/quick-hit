@@ -1,5 +1,4 @@
 import React from 'react';
-import './NotFound.css';
 import {Header, Icon} from "semantic-ui-react";
 
 function NotFound() : JSX.Element {

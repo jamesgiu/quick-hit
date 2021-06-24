@@ -64,8 +64,8 @@ function Ladder(props: LadderProps) : JSX.Element {
                 }
                 if (addPlayer) {
                     playerTableRows.push(
-                        <Table.Row>
-                            <Table.Cell>
+                        <Table.Row className={"player-row"}>
+                            <Table.Cell className={"player-cell"}>
                                 <Icon name={player.icon} size={"small"}/>
                                 <Link to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}>
                                     {player.name}
@@ -106,19 +106,17 @@ function Ladder(props: LadderProps) : JSX.Element {
                 <Icon name='trophy' circular/>
                 <Header.Content>Ladder</Header.Content>
             </Header>
-            <div className={"toggle-zero-game-players"}>
-                <div>
+            <div className={"toggles"}>
+                <span>
                     Hide players who haven't played a game:
-                </div>
-                <Checkbox toggle checked={props.hideZeroGamePlayers}
-                          onChange={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}/>
-            </div>
-            <div>
-                <div>
+                        <Checkbox toggle checked={props.hideZeroGamePlayers}
+                                  onChange={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}/>
+                </span>
+                <span>
                     Show player cards:
-                </div>
-                <Checkbox toggle checked={showPlayerCards}
-                          onChange={() => toggleLadderCards(!showPlayerCards)}/>
+                       <Checkbox toggle checked={showPlayerCards}
+                                 onChange={() => toggleLadderCards(!showPlayerCards)}/>
+                </span>
             </div>
             <Transition visible={!props.loading}>
                 <span>
