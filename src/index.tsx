@@ -3,14 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css'
 import App from './App';
-import {createStore, Reducer} from "redux";
-import storage from 'redux-persist/lib/storage';
 import {Provider} from "react-redux";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-import {dataInitialState, ttReducer} from "./redux/reducers/TTReducer";
-import {persistCombineReducers} from 'redux-persist';
-import {viewInitialState, viewReducer} from "./redux/reducers/ViewReducer";
 import persistStore from "redux-persist/es/persistStore";
 import {PersistGate} from "redux-persist/integration/react";
 import store from "./redux/types/store";

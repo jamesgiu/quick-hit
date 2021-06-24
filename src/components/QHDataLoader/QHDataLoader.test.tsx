@@ -4,7 +4,6 @@ import {combineReducers, createStore, Reducer} from "redux";
 import {dataInitialState, ttReducer} from "../../redux/reducers/TTReducer";
 import {authInitialState, authReducer} from "../../redux/reducers/AuthReducer";
 import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
 import QHDataLoader from "../../containers/QHDataLoader";
 
 it("renders and runs connect without crashing", ()=> {
