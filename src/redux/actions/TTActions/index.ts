@@ -1,5 +1,5 @@
 import * as constants from "../../constants/TTConstants";
-import {DbMatch, DbPlayer} from "../../../types/database/models";
+import {DbHappyHour, DbMatch, DbPlayer} from "../../../types/database/models";
 
 export interface SetMatchesAction {
     type: constants.SET_MATCHES_TYPE,
@@ -19,6 +19,11 @@ export interface SetLoadingAction {
 export interface SetForceRefreshAction {
     type: constants.SET_FORCE_REFRESH_TYPE,
     value: boolean,
+}
+
+export interface SetHappyHourAction {
+    type: constants.SET_HAPPY_HOUR_TYPE,
+    value: DbHappyHour,
 }
 
 export function setMatches(newMatches: DbMatch[]): SetMatchesAction {
@@ -46,5 +51,12 @@ export function setRefresh(newRefresh: boolean): SetForceRefreshAction {
     return {
         type: constants.SET_FORCE_REFRESH,
         value: newRefresh
+    };
+}
+
+export function setHappyHour(newHappyHour: DbHappyHour): SetHappyHourAction {
+    return {
+        type: constants.SET_HAPPY_HOUR,
+        value: newHappyHour
     };
 }

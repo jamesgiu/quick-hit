@@ -19,3 +19,17 @@ export interface DbPlayer {
     name: string,
     elo: number
 }
+
+export interface DbHappyHour {
+    /* yyyy-mm-dd */
+    date: string,
+    /* In 24 hour time */
+    hourStart: number,
+    /* how much the ELO will be worth in this time period */
+    multiplier: number
+}
+
+export function getTodaysDate() : string {
+    // yyyy-mm-dd
+    return new Date().toLocaleDateString().replaceAll("/","-");
+}

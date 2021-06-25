@@ -6,7 +6,7 @@ import NewGame from "../Ladder/NewGame/NewGame";
 import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
-import {DbPlayer} from "../../types/database/models";
+import {DbHappyHour, DbPlayer} from "../../types/database/models";
 import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
 
 /**
@@ -50,7 +50,7 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
                             <Header.Content>Recent games</Header.Content>
                         </Link>
                     </Header>
-                    <NewGame players={props.players} onNewGameAdded={refreshContent} customModalOpenElement={
+                    <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='plus' circular/>
                             <Header.Content>Enter game</Header.Content>
@@ -76,8 +76,25 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
                     </Header.Subheader>
                 </div>
             </Transition>
+            <Transition visible={!props.loading} animation={"fade"} duration={500} unmountOnHide={true}>
+                <span className={"happy-hour"}>
+                    <Header>
+                        {props.happyHour?.multiplier}x happy hour!
+                    </Header>
+                    <Header.Subheader>
+                        Today's happy hour is starting at {renderDateString(props.happyHour)}
+                    </Header.Subheader>
+                </span>
+            </Transition>
         </div>
     );
+}
+
+const renderDateString = (happyHour: DbHappyHour) : string => {
+    const date = new Date();
+    date.setHours(happyHour.hourStart, 0, 0);
+
+    return date.toLocaleTimeString();
 }
 
 export default Home;

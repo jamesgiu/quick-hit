@@ -26,5 +26,12 @@
       "id" : "f0e6e38f-2914-490b-a595-a4567d3266d7",
       "name" : "test 2"
     }
+  },
+  "happyhour": {
+    "25-06-2021": {
+      "date": "25-06-2021",
+      "hourStart": 12,
+      "multiplier": 4
+    }
   }
 }

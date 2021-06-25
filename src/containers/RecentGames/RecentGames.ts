@@ -10,6 +10,7 @@ export function mapStateToProps(store: QuickHitReduxStores, ownProps: RecentGame
         players: store.ttData.players,
         matches: store.ttData.matches,
         refresh: store.ttData.refresh,
+        happyHour: store.ttData.happyHour,
         focusedPlayerId: ownProps.focusedPlayerId,
     }
 }

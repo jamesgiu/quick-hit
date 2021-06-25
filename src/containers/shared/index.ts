@@ -14,6 +14,7 @@ export function mapTTDataToProps(store: QuickHitReduxStores) : TTStoreState {
         loading: store.ttData.loading,
         players: store.ttData.players,
         matches: store.ttData.matches,
+        happyHour: store.ttData.happyHour,
         refresh: store.ttData.refresh,
     }
 }
