@@ -32,5 +32,5 @@ export interface DbHappyHour {
 
 export function getTodaysDate() : string {
     // yyyy-mm-dd
-    return new Date().toLocaleDateString().replaceAll("/","-");
+    return new Date().toLocaleDateString().replace(/\//g, "-");
 }
