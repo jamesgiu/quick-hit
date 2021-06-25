@@ -10,7 +10,8 @@
       "winner_new_elo" : 1209,
       "winning_player_id" : "f0e6e38f-2914-490b-a595-a4567d3266d7",
       "winning_player_original_elo" : 1202,
-      "winning_player_score" : 11
+      "winning_player_score" : 11,
+      "happy_hour": false
     }
   },
   "player" : {
@@ -25,6 +26,13 @@
       "icon" : "blind",
       "id" : "f0e6e38f-2914-490b-a595-a4567d3266d7",
       "name" : "test 2"
+    }
+  },
+  "happyhour": {
+    "25-06-2021": {
+      "date": "25-06-2021",
+      "hourStart": 12,
+      "multiplier": 4
     }
   }
 }

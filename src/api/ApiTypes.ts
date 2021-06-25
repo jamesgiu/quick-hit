@@ -8,4 +8,5 @@ export enum HttpMethod {
 export enum ApiActions {
     PLAYERS = "player.json",
     MATCHES = "match.json",
+    HAPPY_HOUR = "happyhour.json"
 }

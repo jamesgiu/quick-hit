@@ -40,3 +40,18 @@
 .home .champion-area .champion-text {
   color: orangered;
 }
+
+.home .happy-hour {
+  width: 300px;
+  border-radius: 10px;
+  padding: 5px;
+  margin: auto;
+  background-color: #0f0f10;
+  position: absolute;
+  bottom: 5vh;
+  box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+}
+
+.home .happy-hour .header {
+  color: darkorange;
+}

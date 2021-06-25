@@ -19,12 +19,13 @@ export function mapStateToProps(store: QuickHitReduxStores) : TTStoreState & Vie
         players: store.ttData.players,
         matches: store.ttData.matches,
         refresh: store.ttData.refresh,
+        happyHour: store.ttData.happyHour,
         hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
         showCards: store.viewStore.showCards
     }
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<ttActions.SetLoadingAction | ttActions.SetMatchesAction | ttActions.SetPlayersAction | ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction | viewActions.SetShowCardsAction>) : TTRefreshDispatchType & ViewDispatchType {
+export function mapDispatchToProps(dispatch: Dispatch<ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction | viewActions.SetShowCardsAction>) : TTRefreshDispatchType & ViewDispatchType {
     return {
         setForceRefresh: (newRefresh: boolean) => dispatch(ttActions.setRefresh(newRefresh)),
         setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers)),

@@ -1,7 +1,7 @@
 import {Button, Form, Icon, Modal} from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import {DbMatch, DbPlayer} from "../../../types/database/models";
+import {DbHappyHour, DbMatch, DbPlayer} from "../../../types/database/models";
 import {makeErrorToast, makeSuccessToast} from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +9,7 @@ import {QuickHitAPI} from "../../../api/QuickHitAPI";
 
 interface NewGameProps {
     players: DbPlayer[],
+    happyHour: DbHappyHour,
     customModalOpenElement?: JSX.Element,
     // Callback for when a new game is added.
     onNewGameAdded?: ()=> void,
@@ -54,7 +55,16 @@ function NewGame(props: NewGameProps) : JSX.Element {
             return;
         }
 
-        const elo = new EloRank(15);
+        let kFactor = 15;
+        let happyHour = false;
+
+        // If it is currently a happy hour.
+        if (new Date().getHours() <= props.happyHour.hourStart &&  new Date().getHours() >= props.happyHour.hourStart - 1) {
+            kFactor = 15 * props.happyHour.multiplier;
+            happyHour = true;
+        }
+
+        const elo = new EloRank(kFactor);
         const winnerElo = winningPlayer.elo;
         const loserElo = losingPlayer.elo;
 
@@ -76,7 +86,8 @@ function NewGame(props: NewGameProps) : JSX.Element {
             losing_player_score: losingPlayerScore,
             losing_player_original_elo: loserElo,
             winner_new_elo: winnerNewElo,
-            loser_new_elo: loserNewElo
+            loser_new_elo: loserNewElo,
+            happy_hour: happyHour
         }
         // Assigning new elo values to player object, then PATCHING.
         winningPlayer.elo = winnerNewElo;

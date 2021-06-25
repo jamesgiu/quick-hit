@@ -1,4 +1,4 @@
-import {DbMatch, DbPlayer} from "../types/database/models";
+import {DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../types/database/models";
 import {ApiActions, HttpMethod} from "./ApiTypes";
 import axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
 import store from "../redux/types/store";
@@ -33,6 +33,24 @@ export class QuickHitAPI {
         });
     }
 
+    public static getTodaysHappyHour(onSuccess: (happyHour?: DbHappyHour) => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(`${ApiActions.HAPPY_HOUR}?orderBy="$key"&startAt="${getTodaysDate()}"&`, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data[getTodaysDate()])
+            }).catch((error: AxiosError) => {
+            onFailure(error.message)
+        });
+    }
+
+    public static setHappyHourToday(happyHour: DbHappyHour, onSuccess: () => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.HAPPY_HOUR, HttpMethod.PATCH, `{"${happyHour.date}" : ${JSON.stringify(happyHour)}}`)
+            .then(() => {
+                onSuccess()
+            }).catch((error: AxiosError) => {
+            onFailure(error.message)
+        });
+    }
+
     public static addNewMatch(matchToAdd: DbMatch, winningPlayer: DbPlayer, losingPlayer: DbPlayer, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.PATCH, `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`)
             .then(() => {
@@ -51,7 +69,7 @@ export class QuickHitAPI {
             return axios({
                 method: method,
                 baseURL: FB_URL,
-                url: `${uri}?auth=${idToken}`,
+                url: `${uri}?auth=${idToken}`.replaceAll("&?", "&"),
                 data: data,
                 headers: {'Content-Type': 'application/json'}
             });

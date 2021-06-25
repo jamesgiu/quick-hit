@@ -34,5 +34,4 @@ export interface QuickHitReduxStores {
     authStore: AuthStoreState
 }
 
-
 export default store;

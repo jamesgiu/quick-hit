@@ -131,7 +131,7 @@ function Ladder(props: LadderProps) : JSX.Element {
                     </span>
                     <div className={"new-buttons"}>
                         <NewPlayer onNewPlayerAdded={refreshContent}/>
-                        <NewGame players={props.players} onNewGameAdded={refreshContent}/>
+                        <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour}/>
                     </div>
                 </span>
             </Transition>

@@ -7,16 +7,12 @@ import React, {useEffect, useRef, useState} from "react";
 import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
-import {DbMatch, DbPlayer} from "../../types/database/models";
+import {DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../../types/database/models";
 import {MinMaxELO, WinLoss} from "../../types/types";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
+import {DataLoaderDispatchType} from "../../containers/QHDataLoader/QHDataLoader";
 
-interface QHDataLoaderProps extends TTDataPropsTypeCombined {
-    // Redux actions
-    setMatches: (newMatches: DbMatch[]) => void,
-    setPlayers: (newPlayers: DbPlayer[]) => void,
-    setLoading: (newLoading: boolean) => void,
-}
+type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
 
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
@@ -24,6 +20,30 @@ const POLL_TIME_MS = 30000;
 function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
     const intervalRef = useRef<NodeJS.Timeout>();
     const [polling, setPolling] = useState<boolean>(true);
+
+    const getHappyHourOrSetIfNotPresent = () => {
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not determine today's happy hour", error);
+            props.setLoading(false);
+        }
+
+        const onSuccess = (happyHour?: DbHappyHour): void => {
+            if (happyHour?.date) {
+                props.setHappyHour(happyHour);
+            }
+            else {
+                // No happy hour generated for today, generate one
+                const newHappyHour : DbHappyHour = {
+                    date: getTodaysDate(),
+                    hourStart: randomIntFromInterval(9, 16),
+                    multiplier: randomIntFromInterval(2,6)
+                }
+
+                QuickHitAPI.setHappyHourToday(newHappyHour, ()=>{return}, onFailure);
+            }
+        }
+        QuickHitAPI.getTodaysHappyHour(onSuccess, onFailure);
+    }
 
     const getMatches = () => {
         const onSuccess = (receivedMatches: DbMatch[]): void => {
@@ -65,6 +85,7 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
     }
 
     const getData = () => {
+        getHappyHourOrSetIfNotPresent();
         getMatches();
         getPlayers();
     };
@@ -80,6 +101,7 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
         }
+
         if (polling) {
             intervalRef.current = setInterval(getData, POLL_TIME_MS);
         }
@@ -92,9 +114,11 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
     }, [props, polling]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <Transition visible={props.loading}>
-            <Loader content={"Loading data..."}/>
-        </Transition>
+        <div className={"data-loader"}>
+            <Transition visible={props.loading}>
+                <Loader content={"Loading data..."}/>
+            </Transition>
+        </div>
     );
 }
 
@@ -149,6 +173,10 @@ export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
     }
 
     return playersMap;
+}
+
+const randomIntFromInterval = (min: number, max: number) : number => {
+    return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 export default QHDataLoader;
