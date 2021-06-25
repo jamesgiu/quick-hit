@@ -67,6 +67,7 @@ function RecentGames(props: RecentGamesCombinedProps) : JSX.Element {
                         <Icon name={losingPlayer.icon} color={"red"}/>
                         <span className={"game-loser"}>{losingPlayer.name} </span>
                         <span className={"game-loser"}>({match.losing_player_score})</span>
+                        <span className={"happy-hour"}>{match.happy_hour && <span><Icon name={"smile"}/>Happy hour!</span>}</span>
                     </div>,
                 icon: winningPlayer.icon
             })

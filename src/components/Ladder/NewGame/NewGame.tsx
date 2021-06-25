@@ -56,10 +56,12 @@ function NewGame(props: NewGameProps) : JSX.Element {
         }
 
         let kFactor = 15;
+        let happyHour = false;
 
         // If it is currently a happy hour.
         if (new Date().getHours() <= props.happyHour.hourStart &&  new Date().getHours() >= props.happyHour.hourStart - 1) {
             kFactor = 15 * props.happyHour.multiplier;
+            happyHour = true;
         }
 
         const elo = new EloRank(kFactor);
@@ -84,7 +86,8 @@ function NewGame(props: NewGameProps) : JSX.Element {
             losing_player_score: losingPlayerScore,
             losing_player_original_elo: loserElo,
             winner_new_elo: winnerNewElo,
-            loser_new_elo: loserNewElo
+            loser_new_elo: loserNewElo,
+            happy_hour: happyHour
         }
         // Assigning new elo values to player object, then PATCHING.
         winningPlayer.elo = winnerNewElo;

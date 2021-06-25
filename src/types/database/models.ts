@@ -11,6 +11,7 @@ export interface DbMatch {
     losing_player_original_elo: number,
     winner_new_elo: number,
     loser_new_elo: number,
+    happy_hour: boolean,
 }
 
 export interface DbPlayer {
