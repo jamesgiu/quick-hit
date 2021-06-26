@@ -22,8 +22,8 @@ function NewGame(props: NewGameProps) : JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false)
     const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>()
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>()
-    const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>(0)
-    const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>(0)
+    const [winningPlayerScore, setWinningPlayerScore] = React.useState<number | undefined>(undefined)
+    const [losingPlayerScore, setLosingPlayerScore] = React.useState<number | undefined>(undefined)
 
     const sendCreateRequest =  ()  => {
         const onSuccess = () => {
@@ -39,7 +39,7 @@ function NewGame(props: NewGameProps) : JSX.Element {
             makeErrorToast("Game not added!", errorMsg);
         }
 
-        if (!(winningPlayer && losingPlayer)) {
+        if (!(winningPlayer && losingPlayer) || winningPlayerScore === undefined || losingPlayerScore === undefined) {
             return;
         }
 
@@ -129,7 +129,7 @@ function NewGame(props: NewGameProps) : JSX.Element {
                         <Form.Field>
                             <label>Winning player score</label>
                             <input type={"number"} min={0} required
-                                   onChange={(event) => setWinningPlayerScore(parseInt(event.target.value))}
+                                   onChange={(event) => setWinningPlayerScore(event.target.value !== "" ? parseInt(event.target.value) : undefined)}
                             />
                         </Form.Field>
                         <Form.Select
@@ -147,10 +147,10 @@ function NewGame(props: NewGameProps) : JSX.Element {
                         <Form.Field>
                             <label>Losing player score</label>
                             <input type={"number"} min={0} required
-                            onChange={(event) => setLosingPlayerScore(parseInt(event.target.value))}/>
+                                   onChange={(event) => setLosingPlayerScore(event.target.value !== "" ? parseInt(event.target.value) : undefined)}/>
                         </Form.Field>
                     </Form.Group>
-                    <Form.Button disabled={!(winningPlayer && winningPlayerScore && losingPlayer && losingPlayerScore)}>GG</Form.Button>
+                    <Form.Button disabled={!(winningPlayer && winningPlayerScore !== undefined && losingPlayer && losingPlayerScore !== undefined)}>GG</Form.Button>
                 </Form>
             </Modal.Content>
         </Modal>
