@@ -25,10 +25,16 @@ function NewGame(props: NewGameProps) : JSX.Element {
     const [winningPlayerScore, setWinningPlayerScore] = React.useState<number | undefined>(undefined)
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number | undefined>(undefined)
 
-    const sendCreateRequest =  ()  => {
+    const sendCreateRequest =  (addAnother: boolean)  => {
         const onSuccess = () => {
             makeSuccessToast("Game added!", "Back to work?");
-            setModalOpen(false);
+            if (!addAnother) {
+                setModalOpen(false);
+            }
+            setWinningPlayer(undefined);
+            setLosingPlayer(undefined);
+            setWinningPlayerScore(undefined);
+            setLosingPlayerScore(undefined);
 
             if (props.onNewGameAdded) {
                 props.onNewGameAdded();
@@ -49,7 +55,7 @@ function NewGame(props: NewGameProps) : JSX.Element {
             return;
         }
 
-        if (winningPlayerScore < losingPlayerScore)
+        if (winningPlayerScore <= losingPlayerScore)
         {
             makeErrorToast("Come on man", "Winning player score must be higher than losing player score");
             return;
@@ -112,7 +118,7 @@ function NewGame(props: NewGameProps) : JSX.Element {
                 New game
             </Modal.Header>
             <Modal.Content className={"new-game-form"}>
-                <Form onSubmit={sendCreateRequest}>
+                <Form>
                     <Form.Group widths='equal'>
                         <Form.Select
                             fluid
@@ -125,10 +131,11 @@ function NewGame(props: NewGameProps) : JSX.Element {
                             placeholder='Chicken Dinner'
                             required
                             onChange={(event, data) => setWinningPlayer(JSON.parse(data.value as string))}
+                            value={winningPlayer ? renderPlayerOption(winningPlayer).value : ""}
                         />
                         <Form.Field>
                             <label>Winning player score</label>
-                            <input type={"number"} min={0} required
+                            <input type={"number"} min={0} required value={winningPlayerScore ?? ""}
                                    onChange={(event) => setWinningPlayerScore(event.target.value !== "" ? parseInt(event.target.value) : undefined)}
                             />
                         </Form.Field>
@@ -143,14 +150,26 @@ function NewGame(props: NewGameProps) : JSX.Element {
                             placeholder='Big Dog'
                             required
                             onChange={(event, data) => setLosingPlayer(JSON.parse(data.value as string))}
+                            value={losingPlayer ? renderPlayerOption(losingPlayer).value : ""}
                         />
                         <Form.Field>
                             <label>Losing player score</label>
-                            <input type={"number"} min={0} required
+                            <input type={"number"} min={0} required value={losingPlayerScore ?? ""}
                                    onChange={(event) => setLosingPlayerScore(event.target.value !== "" ? parseInt(event.target.value) : undefined)}/>
                         </Form.Field>
                     </Form.Group>
-                    <Form.Button disabled={!(winningPlayer && winningPlayerScore !== undefined && losingPlayer && losingPlayerScore !== undefined)}>GG</Form.Button>
+                    <Button onClick={() => sendCreateRequest(false)}
+                            disabled={!(winningPlayer && winningPlayerScore !== undefined &&
+                                        losingPlayer && losingPlayerScore !== undefined)}
+                    >
+                        GG
+                    </Button>
+                    <Button onClick={() => sendCreateRequest(true)}
+                            disabled={!(winningPlayer && winningPlayerScore !== undefined &&
+                                        losingPlayer && losingPlayerScore !== undefined)}
+                    >
+                        Just one more game
+                    </Button>
                 </Form>
             </Modal.Content>
         </Modal>
