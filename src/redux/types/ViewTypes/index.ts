@@ -1,4 +1,4 @@
 export interface ViewStoreState {
-    hideZeroGamePlayers: boolean,
-    showCards: boolean
+    hideZeroGamePlayers: boolean;
+    showCards: boolean;
 }

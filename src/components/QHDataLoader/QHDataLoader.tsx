@@ -3,13 +3,13 @@
 
 // Can do an initial fetch and cache the data in Redux - or fetch on every page change for a more responsive
 // experience.
-import React, {useEffect, useRef, useState} from "react";
-import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
-import {QuickHitAPI} from "../../api/QuickHitAPI";
-import {Loader, Transition} from "semantic-ui-react";
-import {DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../../types/database/models";
-import {TTDataPropsTypeCombined} from "../../containers/shared";
-import {DataLoaderDispatchType} from "../../containers/QHDataLoader/QHDataLoader";
+import React, { useEffect, useRef, useState } from "react";
+import { makeErrorToast, makeRefreshToast } from "../Toast/Toast";
+import { QuickHitAPI } from "../../api/QuickHitAPI";
+import { Loader, Transition } from "semantic-ui-react";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../../types/database/models";
+import { TTDataPropsTypeCombined } from "../../containers/shared";
+import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
 import { ExtraPlayerStats, WinLoss } from "../../types/types";
 
 type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
@@ -17,7 +17,7 @@ type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
 
-function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
+function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     const intervalRef = useRef<NodeJS.Timeout>();
     const [polling, setPolling] = useState<boolean>(true);
 
@@ -25,25 +25,30 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
         const onFailure = (error: string): void => {
             makeErrorToast("Could not determine today's happy hour", error);
             props.setLoading(false);
-        }
+        };
 
         const onSuccess = (happyHour?: DbHappyHour): void => {
             if (happyHour?.date) {
                 props.setHappyHour(happyHour);
-            }
-            else {
+            } else {
                 // No happy hour generated for today, generate one
-                const newHappyHour : DbHappyHour = {
+                const newHappyHour: DbHappyHour = {
                     date: getTodaysDate(),
                     hourStart: randomIntFromInterval(9, 16),
-                    multiplier: randomIntFromInterval(2,6)
-                }
+                    multiplier: randomIntFromInterval(2, 6),
+                };
 
-                QuickHitAPI.setHappyHourToday(newHappyHour, ()=>{return}, onFailure);
+                QuickHitAPI.setHappyHourToday(
+                    newHappyHour,
+                    () => {
+                        return;
+                    },
+                    onFailure
+                );
             }
-        }
+        };
         QuickHitAPI.getTodaysHappyHour(onSuccess, onFailure);
-    }
+    };
 
     const getMatches = () => {
         const onSuccess = (receivedMatches: DbMatch[]): void => {
@@ -60,32 +65,46 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
                 props.setLoading(false);
                 props.setMatches(receivedMatches);
             }
-        }
+        };
 
         const onFailure = (error: string): void => {
             makeErrorToast("Could not get matches", error);
             props.setLoading(false);
-        }
+        };
 
         QuickHitAPI.getMatches(onSuccess, onFailure);
-    }
+    };
 
     const getPlayers = () => {
         const onSuccess = (players: DbPlayer[]): void => {
             props.setPlayers(players);
             props.setLoading(false);
-        }
+        };
 
         const onFailure = (error: string): void => {
             makeErrorToast("Could not get players", error);
             props.setLoading(false);
-        }
+        };
 
         QuickHitAPI.getPlayers(onSuccess, onFailure);
-    }
+    };
+
+    const getBadges = () => {
+        const onSuccess = (badges: DbBadge[]): void => {
+            props.setBadges(badges);
+        };
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get badges", error);
+            props.setLoading(false);
+        };
+
+        QuickHitAPI.getBadges(onSuccess, onFailure);
+    };
 
     const getData = () => {
         getHappyHourOrSetIfNotPresent();
+        getBadges();
         getMatches();
         getPlayers();
     };
@@ -116,7 +135,7 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
     return (
         <div className={"data-loader"}>
             <Transition visible={props.loading}>
-                <Loader content={"Loading data..."}/>
+                <Loader content={"Loading data..."} />
             </Transition>
         </div>
     );
@@ -125,7 +144,7 @@ function QHDataLoader(props: QHDataLoaderProps) : JSX.Element {
 export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
-        losses: 0
+        losses: 0,
     };
 
     matches.forEach((match) => {
@@ -137,7 +156,7 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
     });
 
     return winLoss;
-}
+};
 
 export const getRecordAgainstPlayer = (playerId: string, opponentId: string, matches: DbMatch[]): WinLoss => {
     let wins = 0;
@@ -151,7 +170,7 @@ export const getRecordAgainstPlayer = (playerId: string, opponentId: string, mat
         }
     });
 
-    return {wins, losses};
+    return { wins, losses };
 };
 
 export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): ExtraPlayerStats => {
@@ -238,7 +257,7 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
         }
     }
 
-    return {wins, losses, minELO, maxELO, victim, nemesis};
+    return { wins, losses, minELO, maxELO, victim, nemesis };
 };
 
 export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
@@ -251,10 +270,10 @@ export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
     }
 
     return playersMap;
-}
+};
 
-const randomIntFromInterval = (min: number, max: number) : number => {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
+const randomIntFromInterval = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
 export default QHDataLoader;

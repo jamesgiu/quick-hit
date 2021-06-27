@@ -5,11 +5,10 @@ name: Deploy to GH Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -18,25 +17,25 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        persist-credentials: true # to allow further authenticated git commands
-        fetch-depth: 0 # fetch all history for other branches and tags
-        ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}
-    - run: | 
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: true # to allow further authenticated git commands
+          fetch-depth: 0 # fetch all history for other branches and tags
+          ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}
+      - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git config --global url."git@github.com:".insteadOf "https://github.com/"
-    - run: npm ci
-    - run: npm run build
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@4.1.4
-      with:
-        branch: gh-pages
-        folder: build
-        ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: build
+          ssh-key: ${{ secrets.GH_ACTIONS_SECRET }}

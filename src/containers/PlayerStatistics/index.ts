@@ -1,1 +1,1 @@
-export {default} from "./PlayerStatistics";
+export { default } from "./PlayerStatistics";

@@ -4,8 +4,8 @@ import { combineReducers, createStore, Reducer } from "redux";
 import { dataInitialState, ttReducer } from "../../redux/reducers/TTReducer";
 import { authInitialState, authReducer } from "../../redux/reducers/AuthReducer";
 import { Provider } from "react-redux";
-import Home from "../../containers/Home";
 import { BrowserRouter } from "react-router-dom";
+import AchievementFeed from "../../containers/AchievementFeed";
 
 it("renders and runs connect without crashing", () => {
     const reducers = combineReducers({
@@ -23,7 +23,7 @@ it("renders and runs connect without crashing", () => {
     render(
         <Provider store={store}>
             <BrowserRouter>
-                <Home />
+                <AchievementFeed />
             </BrowserRouter>
         </Provider>
     );

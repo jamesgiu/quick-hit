@@ -1,7 +1,7 @@
-import {TTStoreState} from "../../redux/types/TTTypes";
-import {Dispatch} from "redux";
+import { TTStoreState } from "../../redux/types/TTTypes";
+import { Dispatch } from "redux";
 import * as actions from "../../redux/actions/TTActions";
-import {QuickHitReduxStores} from "../../redux/types/store";
+import { QuickHitReduxStores } from "../../redux/types/store";
 
 export type TTDataPropsTypeCombined = TTStoreState & TTRefreshDispatchType;
 
@@ -9,18 +9,19 @@ export interface TTRefreshDispatchType {
     setForceRefresh: (newRefresh: boolean) => void;
 }
 
-export function mapTTDataToProps(store: QuickHitReduxStores) : TTStoreState {
+export function mapTTDataToProps(store: QuickHitReduxStores): TTStoreState {
     return {
         loading: store.ttData.loading,
         players: store.ttData.players,
         matches: store.ttData.matches,
         happyHour: store.ttData.happyHour,
+        badges: store.ttData.badges,
         refresh: store.ttData.refresh,
-    }
+    };
 }
 
-export function mapTTDispatchToProps(dispatch: Dispatch<actions.SetForceRefreshAction>) : TTRefreshDispatchType {
+export function mapTTDispatchToProps(dispatch: Dispatch<actions.SetForceRefreshAction>): TTRefreshDispatchType {
     return {
         setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
-    }
+    };
 }

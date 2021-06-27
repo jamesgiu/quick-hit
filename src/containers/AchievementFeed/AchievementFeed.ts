@@ -1,12 +1,17 @@
 import { connect } from "react-redux";
-import RecentGames, { RecentGamesProps } from "../../components/RecentGames/RecentGames";
-import { mapTTDispatchToProps } from "../shared";
-import { TTStoreState } from "../../redux/types/TTTypes";
+import { mapTTDataToProps, mapTTDispatchToProps } from "../shared";
+import AchievementFeed from "../../components/PlayerStatistics/AchievementFeed";
 import { QuickHitReduxStores } from "../../redux/types/store";
+import { RecentGamesProps } from "../../components/RecentGames/RecentGames";
+import { TTStoreState } from "../../redux/types/TTTypes";
+
+export interface AchievementFeedProps {
+    focusedPlayerId?: string;
+}
 
 export function mapStateToProps(
     store: QuickHitReduxStores,
-    ownProps: RecentGamesProps
+    ownProps: AchievementFeedProps
 ): TTStoreState & RecentGamesProps {
     return {
         loading: store.ttData.loading,
@@ -19,4 +24,4 @@ export function mapStateToProps(
     };
 }
 
-export default connect(mapStateToProps, mapTTDispatchToProps)(RecentGames);
+export default connect(mapTTDataToProps, mapTTDispatchToProps)(AchievementFeed);

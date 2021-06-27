@@ -26,10 +26,7 @@
 
 .player-statistics .statistics-group .ui.statistic.wins,
 .player-statistics .statistics-group .ui.statistic.losses {
-  padding: 0 5%;
-  position: relative;
-  right: 10px;
-  top: 50px;
+  padding: 5px;
 }
 
 .player-statistics .player-stats-wrapper {
@@ -38,19 +35,35 @@
   width: 50%;
 }
 
-.player-statistics .card {
-  width: 10vw;
-  border-radius: 15px;
+.player-statistics .pencil.edit-icon.icon {
+  transition: 0.5s;
+  display: inline-block;
+  font-size: 0.75em;
+  padding: 5px;
 }
 
-.edit-icon {
+.player-statistics .pencil.edit-icon.icon:hover {
   transition: 0.5s;
-  display: inline-block !important;
-  font-size: 0.75em !important;
-}
-
-.edit-icon:hover {
-  transition: 0.5s;
-  font-size: 0.9em !important;
+  font-size: 0.9em;
   cursor: pointer;
+}
+
+.player-statistics .statistics-group .victim .card {
+  background-color: darkseagreen;
+  font-weight: bolder;
+}
+
+.player-statistics .statistics-group .victim .card .icon {
+  font-size: 2rem;
+  color: green;
+}
+
+.player-statistics .statistics-group .nemesis .card {
+  background-color: indianred;
+  font-weight: bolder;
+}
+
+.player-statistics .statistics-group .nemesis .card .icon {
+  font-size: 2rem;
+  color: red;
 }
