@@ -1,13 +1,13 @@
 import React from "react";
 import "./AchievementsFeed.css";
-import {Divider, Feed, Header, Icon} from "semantic-ui-react";
+import { Divider, Feed, Header, Icon } from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import { DbBadge } from "../../types/database/models";
-import {TTDataPropsTypeCombined} from "../../containers/shared";
+import { TTDataPropsTypeCombined } from "../../containers/shared";
 
 export interface AchievementFeedProps {
-    focusedPlayerId?: string,
+    focusedPlayerId?: string;
 }
 
 function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined): JSX.Element {
@@ -19,7 +19,9 @@ function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined):
         const events: FeedEventProps[] = [];
         const playersMap = getPlayersMap(props.players);
 
-        const relevantBadges = props.badges.filter((badge: DbBadge) => {return badge.player_id === props.focusedPlayerId});
+        const relevantBadges = props.badges.filter((badge: DbBadge) => {
+            return badge.player_id === props.focusedPlayerId;
+        });
 
         // Sort list from oldest to newest
         relevantBadges.sort((badgeA, badgeB) => {
@@ -29,10 +31,12 @@ function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined):
         relevantBadges.forEach((badge) => {
             const involvedPlayer = playersMap.get(badge.involved_player);
             events.push({
-                meta: <div className={"event-summary"}>
-                    {badge.text}
-                    <Divider />
-                </div>,
+                meta: (
+                    <div className={"event-summary"}>
+                        {badge.text}
+                        <Divider />
+                    </div>
+                ),
                 date: (
                     <div className={"event-date"}>
                         {new Date(badge.date).toDateString()} during a match against:{" "}
