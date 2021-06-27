@@ -42,3 +42,15 @@
   width: 10vw;
   border-radius: 15px;
 }
+
+.edit-icon {
+  transition: 0.5s;
+  display: inline-block !important;
+  font-size: 0.75em !important;
+}
+
+.edit-icon:hover {
+  transition: 0.5s;
+  font-size: 0.9em !important;
+  cursor: pointer;
+}

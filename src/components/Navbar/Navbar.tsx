@@ -3,7 +3,7 @@ import './Navbar.css';
 import {Icon, Menu} from "semantic-ui-react";
 import {Link} from 'react-router-dom';
 import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
-import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
+import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
 import KeyPrompt from "../../containers/KeyPrompt";
 
 /**
@@ -35,7 +35,7 @@ function Navbar() : JSX.Element {
                     </Menu.Item>
                 </Link>
                 <Menu.Menu position={"right"}>
-                    <NewPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"}/>}/>
+                    <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"}/>}/>
                     <KeyPrompt/>
                 </Menu.Menu>
             </Menu>

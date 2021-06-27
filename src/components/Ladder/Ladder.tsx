@@ -2,7 +2,7 @@ import React from 'react';
 import './Ladder.css';
 import {Checkbox, Header, Icon, Table, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
-import NewPlayer from './NewPlayer/NewPlayer';
+import NewEditPlayer from './NewEditPlayer/NewEditPlayer';
 import NewGame from "./NewGame/NewGame";
 import {getWinLossForPlayer} from "../QHDataLoader/QHDataLoader";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
@@ -130,7 +130,7 @@ function Ladder(props: LadderProps) : JSX.Element {
                            {renderPlayers()}
                     </span>
                     <div className={"new-buttons"}>
-                        <NewPlayer onNewPlayerAdded={refreshContent}/>
+                        <NewEditPlayer onRequestMade={refreshContent}/>
                         <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour}/>
                     </div>
                 </span>
