@@ -8,7 +8,11 @@ export interface WinLoss {
     losses: number
 }
 
-export interface MinMaxELO {
+export interface ExtraPlayerStats {
+    wins: number,
+    losses: number,
     minELO: number,
-    maxELO: number
+    maxELO: number,
+    victim?: string,
+    nemesis?: string
 }

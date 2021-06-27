@@ -28,11 +28,17 @@
 .player-statistics .statistics-group .ui.statistic.losses {
   padding: 0 5%;
   position: relative;
-  left: 10px;
+  right: 10px;
+  top: 50px;
 }
 
 .player-statistics .player-stats-wrapper {
   margin: auto;
   font-size: 0.8rem;
   width: 50%;
+}
+
+.player-statistics .card {
+  width: 10vw;
+  border-radius: 15px;
 }

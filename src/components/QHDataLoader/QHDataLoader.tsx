@@ -8,9 +8,9 @@ import {makeErrorToast, makeRefreshToast} from "../Toast/Toast";
 import {QuickHitAPI} from "../../api/QuickHitAPI";
 import {Loader, Transition} from "semantic-ui-react";
 import {DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../../types/database/models";
-import {MinMaxELO, WinLoss} from "../../types/types";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
 import {DataLoaderDispatchType} from "../../containers/QHDataLoader/QHDataLoader";
+import { ExtraPlayerStats, WinLoss } from "../../types/types";
 
 type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
 
@@ -139,29 +139,107 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
     return winLoss;
 }
 
-export const getMinMaxELOsForPlayer = (playerId: string, matches: DbMatch[]): MinMaxELO => {
+export const getRecordAgainstPlayer = (playerId: string, opponentId: string, matches: DbMatch[]): WinLoss => {
+    let wins = 0;
+    let losses = 0;
+
+    matches.forEach((match) => {
+        if (match.winning_player_id === playerId && match.losing_player_id === opponentId) {
+            ++wins;
+        } else if (match.losing_player_id === playerId && match.winning_player_id === opponentId) {
+            ++losses;
+        }
+    });
+
+    return {wins, losses};
+};
+
+export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): ExtraPlayerStats => {
     let minELO = 1200;
     let maxELO = 1200;
+    let wins = 0;
+    let losses = 0;
+    const winsMap = new Map<string, number>();
+    const lossesMap = new Map<string, number>();
+    let victim: string | undefined = undefined;
+    let nemesis: string | undefined = undefined;
 
     matches.forEach((match) => {
         if (match.winning_player_id === playerId) {
+            ++wins;
             if (match.winning_player_original_elo < minELO) {
                 minELO = match.winning_player_original_elo;
             }
             if (match.winner_new_elo > maxELO) {
                 maxELO = match.winner_new_elo;
             }
+            if (winsMap.has(match.losing_player_id)) {
+                // Have to use a non-null assertion here because the compiler apparently isn't smart enough to realise that
+                // if the map has the key, a get call for the key won't be undefined.
+                // eslint-disable-next-line
+                winsMap.set(match.losing_player_id, winsMap.get(match.losing_player_id)! + 1);
+            } else {
+                winsMap.set(match.losing_player_id, 1);
+            }
         } else if (match.losing_player_id === playerId) {
+            ++losses;
             if (match.loser_new_elo < minELO) {
                 minELO = match.loser_new_elo;
             }
             if (match.losing_player_original_elo > maxELO) {
                 maxELO = match.losing_player_original_elo;
             }
+            if (lossesMap.has(match.winning_player_id)) {
+                // Same here with the non-null assertion.
+                // eslint-disable-next-line
+                lossesMap.set(match.winning_player_id, lossesMap.get(match.winning_player_id)! + 1);
+            } else {
+                lossesMap.set(match.winning_player_id, 1);
+            }
         }
     });
-    return {minELO, maxELO};
-}
+
+    if (wins > 0) {
+        let maxWins = 0;
+        for (const [player, wins] of winsMap) {
+            if (wins > maxWins) {
+                victim = player;
+                maxWins = wins;
+            } else if (wins === maxWins) {
+                if (victim) {
+                    // Get the first player alphabetically, because we can't guarantee map iteration order.
+                    const alphabeticalResult = victim.localeCompare(player);
+                    if (alphabeticalResult === 1) {
+                        victim = player;
+                    }
+                } else {
+                    victim = player;
+                }
+            }
+        }
+    }
+    if (losses > 0) {
+        let maxLosses = 0;
+        for (const [player, losses] of lossesMap) {
+            if (losses > maxLosses) {
+                nemesis = player;
+                maxLosses = losses;
+            } else if (losses === maxLosses) {
+                if (nemesis) {
+                    // Get the first player alphabetically, because we can't guarantee map iteration order.
+                    const alphabeticalResult = nemesis.localeCompare(player);
+                    if (alphabeticalResult === 1) {
+                        nemesis = player;
+                    }
+                } else {
+                    nemesis = player;
+                }
+            }
+        }
+    }
+
+    return {wins, losses, minELO, maxELO, victim, nemesis};
+};
 
 export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
     const playersMap: Map<string, DbPlayer> = new Map();
