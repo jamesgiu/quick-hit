@@ -1,9 +1,12 @@
-.player-card {
+.ui.card.player-card {
   font-size: 0.8rem;
+  width: 15vh;
+  box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+  border-radius: 15px;
 }
 
-.player-card a:hover {
-  font-size: 1.1rem;
+.ui.card.player-card a:hover {
+  font-size: 1.02rem;
 }
 
 .ui.card.player-card .content a {

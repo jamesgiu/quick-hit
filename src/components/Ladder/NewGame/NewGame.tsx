@@ -22,8 +22,8 @@ function NewGame(props: NewGameProps) : JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false)
     const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>()
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>()
-    const [winningPlayerScore, setWinningPlayerScore] = React.useState<number | undefined>(undefined)
-    const [losingPlayerScore, setLosingPlayerScore] = React.useState<number | undefined>(undefined)
+    const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>()
+    const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>()
 
     const sendCreateRequest =  (addAnother: boolean)  => {
         const onSuccess = () => {

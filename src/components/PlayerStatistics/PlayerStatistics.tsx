@@ -36,12 +36,14 @@ function PlayerStatistics(props: PlayerStatisticsProps) : JSX.Element {
                         <Icon name={player.icon} circular/>
                         <Header.Content>
                             <div>
-                                {player.name} <NewEditPlayer editingPlayer={player}
-                                                             customModalOpenElement={
-                                                                <Icon name={"pencil"}
-                                                                      size={"tiny"}
-                                                                      className={"edit-icon"}/>}
-                                                            onRequestMade={() => props.setForceRefresh(true)}/>
+                                {player.name}
+                                <NewEditPlayer editingPlayer={player}
+                                               customModalOpenElement={
+                                               <Icon name={"pencil"}
+                                                  size={"tiny"}
+                                                  className={"edit-icon"}/>
+                                               }
+                                               onRequestMade={() => props.setForceRefresh(true)}/>
                             </div>
                         </Header.Content>
                     </Header>
@@ -52,31 +54,32 @@ function PlayerStatistics(props: PlayerStatisticsProps) : JSX.Element {
                                   <Statistic label={"Max rating"} value={extraStats.maxELO} className={"maxELO"}/>
                               </Statistic.Group>
                              <Statistic.Group className={"statistics-group"}>
-                                 <Statistic label={"Victim"}
-                                            value={victim
-                                                   ? <PlayerCard player={victim}
-                                                                 winLoss={getRecordAgainstPlayer(player.id,
-                                                                                                 victim.id,
-                                                                                                 props.matches)}/>
-                                                   : <PlayerCard player={player}
-                                                                 winLoss={{wins: extraStats.wins, losses: extraStats.losses}}/>}
-                                            className={"victim"}/>
                                  <Statistic label={"Wins"} value={extraStats.wins} className={"wins"}/>
                                  <Statistic label={"Losses"} value={extraStats.losses} className={"losses"}/>
-                                 <Statistic label={"Nemesis"}
-                                            value={nemesis
-                                                   ? <PlayerCard player={nemesis}
-                                                                 winLoss={getRecordAgainstPlayer(player.id,
-                                                                                                 nemesis.id,
-                                                                                                 props.matches)}/>
-                                                   : <PlayerCard player={player}
-                                                                 winLoss={{wins: extraStats.wins, losses: extraStats.losses}}/>}
-                                            className={"nemesis"}/>
+                                 <Statistic label={"W/L ratio"}
+                                            value={`${Math.round(extraStats.wins / (extraStats.wins + extraStats.losses) * 100)}%`}/>
+                                 <Statistic label={"Games played"} value={extraStats.wins + extraStats.losses}/>
                             </Statistic.Group>
                             <Statistic.Group className={"statistics-group"}>
-                                <Statistic label={"W/L ratio"}
-                                           value={`${Math.round(extraStats.wins / (extraStats.wins + extraStats.losses) * 100)}%`}/>
-                                <Statistic label={"Games played"} value={extraStats.wins + extraStats.losses}/>
+                             <Statistic label={"Victim"}
+                                        value={victim
+                                            ? <PlayerCard player={victim}
+                                                          winLoss={getRecordAgainstPlayer(player.id,
+                                                              victim.id,
+                                                              props.matches)}/>
+                                            : <PlayerCard player={player}
+                                                          winLoss={{wins: extraStats.wins, losses: extraStats.losses}}/>}
+                                        className={"victim"}/>
+
+                             <Statistic label={"Nemesis"}
+                                        value={nemesis
+                                            ? <PlayerCard player={nemesis}
+                                                          winLoss={getRecordAgainstPlayer(player.id,
+                                                              nemesis.id,
+                                                              props.matches)}/>
+                                            : <PlayerCard player={player}
+                                                          winLoss={{wins: extraStats.wins, losses: extraStats.losses}}/>}
+                                        className={"nemesis"}/>
                             </Statistic.Group>
                         </div>
                     <RecentGames focusedPlayerId={player.id}/>
