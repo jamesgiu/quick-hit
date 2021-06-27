@@ -16,7 +16,7 @@ interface NewGameProps {
 }
 
 /**
- * QuickHit NewPlayer component.
+ * QuickHit NewGame component.
  */
 function NewGame(props: NewGameProps) : JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false)

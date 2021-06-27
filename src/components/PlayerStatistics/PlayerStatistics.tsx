@@ -6,6 +6,7 @@ import {TTDataPropsTypeCombined} from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
 import {getExtraPlayerStats, getPlayersMap, getRecordAgainstPlayer} from "../QHDataLoader/QHDataLoader";
 import PlayerCard from '../Ladder/PlayerCard/PlayerCard';
+import NewEditPlayer from '../Ladder/NewEditPlayer/NewEditPlayer';
 
 interface PlayerStatisticsParams {
     playerId: string
@@ -33,7 +34,16 @@ function PlayerStatistics(props: PlayerStatisticsProps) : JSX.Element {
                         <span>
                     <Header as={"h2"} icon>
                         <Icon name={player.icon} circular/>
-                        <Header.Content>{player.name}</Header.Content>
+                        <Header.Content>
+                            <div>
+                                {player.name} <NewEditPlayer editingPlayer={player}
+                                                             customModalOpenElement={
+                                                                <Icon name={"pencil"}
+                                                                      size={"tiny"}
+                                                                      className={"edit-icon"}/>}
+                                                            onRequestMade={() => props.setForceRefresh(true)}/>
+                            </div>
+                        </Header.Content>
                     </Header>
                       <div className={"player-stats-wrapper"}>
                               <Statistic.Group className={"statistics-group"}>

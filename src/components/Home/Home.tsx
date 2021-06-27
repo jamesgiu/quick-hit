@@ -3,7 +3,7 @@ import './Home.css';
 import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
 import {Link} from 'react-router-dom';
 import NewGame from "../Ladder/NewGame/NewGame";
-import NewPlayer from "../Ladder/NewPlayer/NewPlayer";
+import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import {TTDataPropsTypeCombined} from "../../containers/shared";
 import {DbHappyHour, DbPlayer} from "../../types/database/models";
@@ -56,7 +56,7 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
                             <Header.Content>Enter game</Header.Content>
                         </Header>
                     }/>
-                    <NewPlayer onNewPlayerAdded={refreshContent} customModalOpenElement={
+                    <NewEditPlayer onRequestMade={refreshContent} customModalOpenElement={
                         <Header as={"h3"} icon>
                             <Icon name='add user' circular/>
                             <Header.Content>Sign up</Header.Content>
