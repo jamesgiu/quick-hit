@@ -1,4 +1,4 @@
-import {DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../types/database/models";
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
@@ -36,11 +36,7 @@ export class QuickHitAPI {
             });
     }
 
-    public static addBadge(
-        badgeToAdd: DbBadge,
-        onSuccess: () => void,
-        onFailure: (errorString: string) => void
-    ): void {
+    public static addBadge(badgeToAdd: DbBadge, onSuccess: () => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(
             ApiActions.BADGE,
             HttpMethod.PATCH,

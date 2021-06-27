@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { makeErrorToast, makeRefreshToast } from "../Toast/Toast";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { Loader, Transition } from "semantic-ui-react";
-import {DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../../types/database/models";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
 import { ExtraPlayerStats, WinLoss } from "../../types/types";

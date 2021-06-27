@@ -5,7 +5,7 @@ import { dataInitialState, ttReducer } from "../../redux/reducers/TTReducer";
 import { authInitialState, authReducer } from "../../redux/reducers/AuthReducer";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import AchievementFeed from "./AchievementFeed";
+import AchievementFeed from "../../containers/AchievementFeed";
 
 it("renders and runs connect without crashing", () => {
     const reducers = combineReducers({

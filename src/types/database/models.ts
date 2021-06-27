@@ -31,18 +31,18 @@ export interface DbHappyHour {
 }
 
 export interface BadgeDesc {
-    icon: string,
-    text: string,
-    title: string,
-    key: string,
+    icon: string;
+    text: string;
+    title: string;
+    key: string;
 }
 
 export interface DbBadge extends BadgeDesc {
-    id: string,
-    date: string,
-    player_id: string,
+    id: string;
+    date: string;
+    player_id: string;
     /* Any non-earning player that helped trigger this achievement */
-    involved_player: string,
+    involved_player: string;
 }
 
 export function getTodaysDate(): string {

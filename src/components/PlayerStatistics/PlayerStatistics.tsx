@@ -1,6 +1,6 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import {Grid, Header, Icon, Statistic, Transition} from "semantic-ui-react";
+import { Grid, Header, Icon, Statistic, Transition } from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
@@ -100,13 +100,13 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                     className={"nemesis"}
                                 />
                             </Statistic.Group>
-                           </div>
+                        </div>
                         <Grid columns={2}>
                             <Grid.Column>
-                        <RecentGames focusedPlayerId={player.id} />
+                                <RecentGames focusedPlayerId={player.id} />
                             </Grid.Column>
-                                                     <Grid.Column>
-                                  <AchievementFeed/>
+                            <Grid.Column>
+                                <AchievementFeed />
                             </Grid.Column>
                         </Grid>
                     </span>

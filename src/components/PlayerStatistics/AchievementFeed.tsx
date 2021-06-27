@@ -1,9 +1,9 @@
 import React from "react";
 import "./AchievementsFeed.css";
-import {Feed, Header, Icon} from "semantic-ui-react";
+import { Feed, Header, Icon } from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
-import {DbBadge, DbPlayer} from "../../types/database/models";
+import { DbBadge, DbPlayer } from "../../types/database/models";
 
 export interface AchievementFeedProps {
     badges: DbBadge[];
@@ -27,17 +27,14 @@ function AchievementFeed(props: AchievementFeedProps): JSX.Element {
         props.badges.forEach((badge) => {
             const involvedPlayer = playersMap.get(badge.involved_player);
             events.push({
-                meta: (
-                    <div className={"event-content"}>
-                        {badge.title}
+                meta: <div className={"event-content"}>{badge.title}</div>,
+                date: (
+                    <div className={"event-date"}>
+                        {new Date(badge.date).toDateString()} during a match against:{" "}
+                        <Icon name={involvedPlayer?.icon} /> {involvedPlayer?.name}
                     </div>
                 ),
-                date: <div className={"event-date"}>{new Date(badge.date).toDateString()} during a match against: <Icon name={involvedPlayer?.icon}/> {involvedPlayer?.name}</div>,
-                content: (
-                    <div className={"event-summary"}>
-                        {badge.text}
-                    </div>
-                ),
+                content: <div className={"event-summary"}>{badge.text}</div>,
                 icon: badge.icon,
             });
         });
@@ -51,7 +48,7 @@ function AchievementFeed(props: AchievementFeedProps): JSX.Element {
                 <Icon name="trophy" circular />
                 <Header.Content>Achievements</Header.Content>
             </Header>
-            <Feed className={"achievements-feed"} events={getAchievements()}/>
+            <Feed className={"achievements-feed"} events={getAchievements()} />
         </div>
     );
 }

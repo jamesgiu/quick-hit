@@ -9,5 +9,5 @@ export enum ApiActions {
     PLAYERS = "player.json",
     MATCHES = "match.json",
     HAPPY_HOUR = "happyhour.json",
-    BADGE = "badge.json"
+    BADGE = "badge.json",
 }

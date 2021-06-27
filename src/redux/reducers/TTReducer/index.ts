@@ -5,7 +5,7 @@ import {
     SET_HAPPY_HOUR,
     SET_LOADING,
     SET_MATCHES,
-    SET_PLAYERS
+    SET_PLAYERS,
 } from "../../constants/TTConstants";
 import {
     SetBadgesAction,
@@ -31,7 +31,13 @@ export const dataInitialState: TTStoreState = {
 
 export function ttReducer(
     state: TTStoreState = dataInitialState,
-    action: SetMatchesAction | SetPlayersAction | SetLoadingAction | SetForceRefreshAction | SetHappyHourAction | SetBadgesAction
+    action:
+        | SetMatchesAction
+        | SetPlayersAction
+        | SetLoadingAction
+        | SetForceRefreshAction
+        | SetHappyHourAction
+        | SetBadgesAction
 ): TTStoreState {
     switch (action.type) {
         case SET_MATCHES:

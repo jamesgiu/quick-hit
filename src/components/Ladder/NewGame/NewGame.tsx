@@ -119,10 +119,9 @@ function NewGame(props: NewGameProps): JSX.Element {
                 if (props.onNewGameAdded) {
                     props.onNewGameAdded();
                 }
-
-            }, onError)
+            }, onError);
         }, onError);
-    }
+    };
 
     const renderPlayerOption = (player: DbPlayer) => {
         return {
