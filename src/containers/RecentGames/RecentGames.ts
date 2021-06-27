@@ -14,6 +14,7 @@ export function mapStateToProps(
         matches: store.ttData.matches,
         refresh: store.ttData.refresh,
         happyHour: store.ttData.happyHour,
+        badges: store.ttData.badges,
         focusedPlayerId: ownProps.focusedPlayerId,
     };
 }

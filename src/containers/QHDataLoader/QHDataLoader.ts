@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 import * as actions from "../../redux/actions/TTActions";
 import { connect } from "react-redux";
 import QHDataLoader from "../../components/QHDataLoader/QHDataLoader";
-import { DbHappyHour, DbMatch, DbPlayer } from "../../types/database/models";
+import {DbBadge, DbHappyHour, DbMatch, DbPlayer} from "../../types/database/models";
 import { mapTTDataToProps, TTRefreshDispatchType } from "../shared";
 
 export interface DataLoaderDispatchType extends TTRefreshDispatchType {
@@ -10,6 +10,7 @@ export interface DataLoaderDispatchType extends TTRefreshDispatchType {
     setPlayers: (newPlayers: DbPlayer[]) => void;
     setHappyHour: (newHappyHour: DbHappyHour) => void;
     setLoading: (newLoading: boolean) => void;
+    setBadges: (newBadges: DbBadge[]) => void;
 }
 
 export function mapDispatchToProps(
@@ -19,6 +20,7 @@ export function mapDispatchToProps(
         | actions.SetPlayersAction
         | actions.SetForceRefreshAction
         | actions.SetHappyHourAction
+        | actions.SetBadgesAction
     >
 ): DataLoaderDispatchType {
     return {
@@ -27,6 +29,7 @@ export function mapDispatchToProps(
         setHappyHour: (newHappyHour: DbHappyHour) => dispatch(actions.setHappyHour(newHappyHour)),
         setLoading: (newLoading: boolean) => dispatch(actions.setLoading(newLoading)),
         setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
+        setBadges: (newBadges: DbBadge[]) => dispatch(actions.setBadges(newBadges))
     };
 }
 

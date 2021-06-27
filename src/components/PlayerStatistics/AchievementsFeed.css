@@ -1,0 +1,18 @@
+.player-statistics .achievements .ui.icon.header {
+    float: left;
+    font-size: 1rem;
+}
+
+.player-statistics .achievements .event-content {
+    font-weight: bold;
+}
+
+.player-statistics .achievements .event {
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.player-statistics .achievements .event .label .icon {
+    color: green;
+    font-size: 1.8rem;
+}

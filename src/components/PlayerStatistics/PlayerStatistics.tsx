@@ -1,12 +1,13 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import { Header, Icon, Statistic, Transition } from "semantic-ui-react";
+import {Grid, Header, Icon, Statistic, Transition} from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
 import { getExtraPlayerStats, getPlayersMap, getRecordAgainstPlayer } from "../QHDataLoader/QHDataLoader";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
+import AchievementFeed from "../../containers/AchievementFeed";
 
 interface PlayerStatisticsParams {
     playerId: string;
@@ -99,8 +100,15 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                     className={"nemesis"}
                                 />
                             </Statistic.Group>
-                        </div>
+                           </div>
+                        <Grid columns={2}>
+                            <Grid.Column>
                         <RecentGames focusedPlayerId={player.id} />
+                            </Grid.Column>
+                                                     <Grid.Column>
+                                  <AchievementFeed/>
+                            </Grid.Column>
+                        </Grid>
                     </span>
                 )}
             </Transition>

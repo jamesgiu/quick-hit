@@ -1,11 +1,12 @@
 import { Button, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import { DbHappyHour, DbMatch, DbPlayer } from "../../../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer } from "../../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
+import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
 
 interface NewGameProps {
     players: DbPlayer[];
@@ -28,17 +29,7 @@ function NewGame(props: NewGameProps): JSX.Element {
     const sendCreateRequest = (addAnother: boolean) => {
         const onSuccess = () => {
             makeSuccessToast("Game added!", "Back to work?");
-            if (!addAnother) {
-                setModalOpen(false);
-            }
-            setWinningPlayer(undefined);
-            setLosingPlayer(undefined);
-            setWinningPlayerScore(undefined);
-            setLosingPlayerScore(undefined);
-
-            if (props.onNewGameAdded) {
-                props.onNewGameAdded();
-            }
+            checkForAchievementTriggers(addAnother);
         };
 
         const onError = (errorMsg: string) => {
@@ -102,6 +93,36 @@ function NewGame(props: NewGameProps): JSX.Element {
 
         QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
     };
+
+    const checkForAchievementTriggers = (addAnother: boolean) => {
+        if (!(winningPlayer && losingPlayer)) {
+            return;
+        }
+
+        const onError = (errorMsg: string) => {
+            makeErrorToast("Could not calculate achievements!", errorMsg);
+        };
+
+        // After new match has been added, fetch the matches...
+        QuickHitAPI.getMatches((matches: DbMatch[]) => {
+            QuickHitAPI.getBadges((badges: DbBadge[]) => {
+                checkForTriggersAfterAMatch(winningPlayer, losingPlayer, badges, matches, onError);
+
+                if (!addAnother) {
+                    setModalOpen(false);
+                }
+                setWinningPlayer(undefined);
+                setLosingPlayer(undefined);
+                setWinningPlayerScore(undefined);
+                setLosingPlayerScore(undefined);
+
+                if (props.onNewGameAdded) {
+                    props.onNewGameAdded();
+                }
+
+            }, onError)
+        }, onError);
+    }
 
     const renderPlayerOption = (player: DbPlayer) => {
         return {

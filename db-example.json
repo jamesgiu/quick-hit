@@ -34,5 +34,17 @@
       "hourStart": 12,
       "multiplier": 4
     }
+  },
+  "badge": {
+    "3585e845-6851-4f7b-b5c2-8c22bd19e7b8": {
+      "date": "2021-06-27T13:49:47.287Z",
+      "icon": "tint",
+      "id": "3585e845-6851-4f7b-b5c2-8c22bd19e7b8",
+      "involved_player": "a78cfbf1-725f-44cb-a5b2-958801c1598f",
+      "key": "fatality",
+      "player_id": "685acf3f-4736-48e2-8184-a7f94381b8bc",
+      "text": "Win a game without losing a single point",
+      "title": "FATALITY!"
+    }
   }
 }

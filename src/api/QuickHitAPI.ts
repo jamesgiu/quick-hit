@@ -1,4 +1,4 @@
-import { DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../types/database/models";
+import {DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate} from "../types/database/models";
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
@@ -20,6 +20,34 @@ export class QuickHitAPI {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCHES, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static getBadges(onSuccess: (badges: DbBadge[]) => void, onFailure: (errorString: string) => void): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.BADGE, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(Object.values(response.data));
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static addBadge(
+        badgeToAdd: DbBadge,
+        onSuccess: () => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.BADGE,
+            HttpMethod.PATCH,
+            `{"${badgeToAdd.id}" : ${JSON.stringify(badgeToAdd)}}`
+        )
+            .then(() => {
+                onSuccess();
             })
             .catch((error: AxiosError) => {
                 onFailure(error.message);

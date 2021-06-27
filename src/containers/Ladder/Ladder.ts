@@ -20,6 +20,7 @@ export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & View
         matches: store.ttData.matches,
         refresh: store.ttData.refresh,
         happyHour: store.ttData.happyHour,
+        badges: store.ttData.badges,
         hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
         showCards: store.viewStore.showCards,
     };
