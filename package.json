@@ -40,6 +40,8 @@
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "style": "prettier --check src/",
+    "style:fix", "prettier --write src/",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
