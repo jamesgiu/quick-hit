@@ -1,35 +1,35 @@
 .event-content {
-  color: white;
+    color: white;
 }
 
 .event-date {
-  color: darkorange;
+    color: darkorange;
 }
 
 .event-icon {
-  color: white;
+    color: white;
 }
 
 .recent-games .games-feed .event .label i.icon {
-  color: orange;
-  margin-top: 20%;
-  font-size: 2rem;
+    color: orange;
+    margin-top: 20%;
+    font-size: 2rem;
 }
 
 .elo-gain {
-  color: green;
-  padding: 2px;
-  font-weight: 500;
+    color: green;
+    padding: 2px;
+    font-weight: 500;
 }
 
 .elo-loss {
-  color: rgba(255, 50, 0, 1);
-  padding: 2px;
-  font-weight: 500;
+    color: rgba(255, 50, 0, 1);
+    padding: 2px;
+    font-weight: 500;
 }
 
 .happy-hour {
-  padding: 2px;
-  font-weight: 500;
-  color: orange;
+    padding: 2px;
+    font-weight: 500;
+    color: orange;
 }

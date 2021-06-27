@@ -1,31 +1,31 @@
 {
-  "match" : {
-    "f9c0fcf2-2e7f-48c3-822f-c45f32072abe" : {
-      "date" : "2021-06-01T03:08:15.037Z",
-      "id" : "f9c0fcf2-2e7f-48c3-822f-c45f32072abe",
-      "loser_new_elo" : 1185,
-      "losing_player_id" : "f0e6e38f-2914-490b-a595-a4567d3266d8",
-      "losing_player_original_elo" : 1192,
-      "losing_player_score" : 8,
-      "winner_new_elo" : 1209,
-      "winning_player_id" : "f0e6e38f-2914-490b-a595-a4567d3266d7",
-      "winning_player_original_elo" : 1202,
-      "winning_player_score" : 11,
+  "match": {
+    "f9c0fcf2-2e7f-48c3-822f-c45f32072abe": {
+      "date": "2021-06-01T03:08:15.037Z",
+      "id": "f9c0fcf2-2e7f-48c3-822f-c45f32072abe",
+      "loser_new_elo": 1185,
+      "losing_player_id": "f0e6e38f-2914-490b-a595-a4567d3266d8",
+      "losing_player_original_elo": 1192,
+      "losing_player_score": 8,
+      "winner_new_elo": 1209,
+      "winning_player_id": "f0e6e38f-2914-490b-a595-a4567d3266d7",
+      "winning_player_original_elo": 1202,
+      "winning_player_score": 11,
       "happy_hour": false
     }
   },
-  "player" : {
-    "f0e6e38f-2914-490b-a595-a4567d3266d8" : {
-      "elo" : 1185,
-      "icon" : "github alternate",
-      "id" : "f0e6e38f-2914-490b-a595-a4567d3266d8",
-      "name" : "test"
+  "player": {
+    "f0e6e38f-2914-490b-a595-a4567d3266d8": {
+      "elo": 1185,
+      "icon": "github alternate",
+      "id": "f0e6e38f-2914-490b-a595-a4567d3266d8",
+      "name": "test"
     },
-    "f0e6e38f-2914-490b-a595-a4567d3266d7" : {
-      "elo" : 1209,
-      "icon" : "blind",
-      "id" : "f0e6e38f-2914-490b-a595-a4567d3266d7",
-      "name" : "test 2"
+    "f0e6e38f-2914-490b-a595-a4567d3266d7": {
+      "elo": 1209,
+      "icon": "blind",
+      "id": "f0e6e38f-2914-490b-a595-a4567d3266d7",
+      "name": "test 2"
     }
   },
   "happyhour": {

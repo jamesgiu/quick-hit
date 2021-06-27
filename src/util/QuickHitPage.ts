@@ -1,5 +1,5 @@
-export function BASE_PATH() : string {
-    return process.env.REACT_APP_QH_BASE_PATH ?? ""
+export function BASE_PATH(): string {
+    return process.env.REACT_APP_QH_BASE_PATH ?? "";
 }
 
 /**
@@ -10,5 +10,5 @@ export enum QuickHitPage {
     LADDER = "/ladder",
     RECENT_GAMES = "/recent",
     STATISTICS = "/player/:playerId",
-    NOT_FOUND = "/404"
+    NOT_FOUND = "/404",
 }

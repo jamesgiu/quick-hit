@@ -1,64 +1,64 @@
 .player-statistics .recent-games .ui.icon.header {
-  float: left;
-  font-size: 1rem;
+    float: left;
+    font-size: 1rem;
 }
 
 .player-statistics .statistics-group .ui.statistic .value {
-  color: orange;
+    color: orange;
 }
 
 .player-statistics .statistics-group .ui.statistic.losses .value,
 .player-statistics .statistics-group .ui.statistic.minELO .value {
-  color: grey;
+    color: grey;
 }
 
 .player-statistics .statistics-group .ui.statistic .label,
 .player-statistics .statistics-group .ui.statistic.maxELO .value {
-  color: darkorange;
+    color: darkorange;
 }
 
 .player-statistics .statistics-group {
-  display: block;
-  margin: auto;
-  position: relative;
-  right: 17px;
+    display: block;
+    margin: auto;
+    position: relative;
+    right: 17px;
 }
 
 .player-statistics .statistics-group .ui.statistic.wins,
 .player-statistics .statistics-group .ui.statistic.losses {
-  padding: 5px;
+    padding: 5px;
 }
 
 .player-statistics .player-stats-wrapper {
-  margin: auto;
-  font-size: 0.8rem;
-  width: 50%;
+    margin: auto;
+    font-size: 0.8rem;
+    width: 50%;
 }
 
 .player-statistics .pencil.edit-icon.icon {
-  transition: 0.5s;
-  display: inline-block;
-  font-size: 0.75em;
-  padding: 5px;
+    transition: 0.5s;
+    display: inline-block;
+    font-size: 0.75em;
+    padding: 5px;
 }
 
 .player-statistics .pencil.edit-icon.icon:hover {
-  transition: 0.5s;
-  font-size: 0.9em;
-  cursor: pointer;
+    transition: 0.5s;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
 .player-statistics .statistics-group .victim .card .icon {
-  font-size: 2rem;
-  color: green;
+    font-size: 2rem;
+    color: green;
 }
 
 .player-statistics .statistics-group .nemesis .card {
-  background-color: indianred;
-  font-weight: bolder;
+    background-color: indianred;
+    font-weight: bolder;
 }
 
 .player-statistics .statistics-group .nemesis .card .icon {
-  font-size: 2rem;
-  color: red;
+    font-size: 2rem;
+    color: red;
 }

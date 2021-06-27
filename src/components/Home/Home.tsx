@@ -1,38 +1,39 @@
-import React from 'react';
-import './Home.css';
-import {ButtonGroup, Header, Icon, Transition} from "semantic-ui-react";
-import {Link} from 'react-router-dom';
+import React from "react";
+import "./Home.css";
+import { ButtonGroup, Header, Icon, Transition } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import NewGame from "../Ladder/NewGame/NewGame";
 import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
-import {TTDataPropsTypeCombined} from "../../containers/shared";
-import {DbHappyHour, DbPlayer} from "../../types/database/models";
-import {BASE_PATH, QuickHitPage} from "../../util/QuickHitPage";
+import { TTDataPropsTypeCombined } from "../../containers/shared";
+import { DbHappyHour, DbPlayer } from "../../types/database/models";
+import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 
 /**
  * QuickHit KeyPrompt page.
  */
-function Home(props: TTDataPropsTypeCombined) : JSX.Element {
+function Home(props: TTDataPropsTypeCombined): JSX.Element {
     const getCurrentChampion = (): DbPlayer => {
         const players = props.players;
         players.sort((player1, player2) => {
-            return player2.elo - player1.elo
+            return player2.elo - player1.elo;
         });
 
         return players[0];
-    }
+    };
 
     const refreshContent = () => {
         // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
         props.setForceRefresh(true);
-    }
+    };
 
     return (
         <div className="home">
             <Transition transitionOnMount={true}>
                 <Header as={"h2"} icon inverted>
-                    <Icon name='table tennis' circular/>
-                    Welcome to <Icon name={"chevron right"} size={"tiny"}/>Quick
+                    <Icon name="table tennis" circular />
+                    Welcome to <Icon name={"chevron right"} size={"tiny"} />
+                    Quick
                     <span className={"header-hit"}>HIT</span>
                 </Header>
             </Transition>
@@ -40,36 +41,42 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
                 <ButtonGroup horizontal className={"home-menu-buttons"}>
                     <Header as={"h3"} icon>
                         <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}>
-                            <Icon name='trophy' circular/>
+                            <Icon name="trophy" circular />
                             <Header.Content>Ladder</Header.Content>
                         </Link>
                     </Header>
                     <Header as={"h3"} icon>
                         <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}>
-                            <Icon name='history' circular/>
+                            <Icon name="history" circular />
                             <Header.Content>Recent games</Header.Content>
                         </Link>
                     </Header>
-                    <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour} customModalOpenElement={
-                        <Header as={"h3"} icon>
-                            <Icon name='plus' circular/>
-                            <Header.Content>Enter game</Header.Content>
-                        </Header>
-                    }/>
-                    <NewEditPlayer onRequestMade={refreshContent} customModalOpenElement={
-                        <Header as={"h3"} icon>
-                            <Icon name='add user' circular/>
-                            <Header.Content>Sign up</Header.Content>
-                        </Header>
-                    }/>
+                    <NewGame
+                        players={props.players}
+                        onNewGameAdded={refreshContent}
+                        happyHour={props.happyHour}
+                        customModalOpenElement={
+                            <Header as={"h3"} icon>
+                                <Icon name="plus" circular />
+                                <Header.Content>Enter game</Header.Content>
+                            </Header>
+                        }
+                    />
+                    <NewEditPlayer
+                        onRequestMade={refreshContent}
+                        customModalOpenElement={
+                            <Header as={"h3"} icon>
+                                <Icon name="add user" circular />
+                                <Header.Content>Sign up</Header.Content>
+                            </Header>
+                        }
+                    />
                 </ButtonGroup>
             </Transition>
             <Transition visible={!props.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
                 <div className={"champion-area"}>
                     <Header as={"h4"} inverted>
-                        {props.players.length > 0 &&
-                        <PlayerCard player={getCurrentChampion()}/>
-                        }
+                        {props.players.length > 0 && <PlayerCard player={getCurrentChampion()} />}
                     </Header>
                     <Header.Subheader>
                         is the current <span className={"champion-text"}> champion </span>
@@ -78,9 +85,7 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
             </Transition>
             <Transition visible={!props.loading} animation={"fade"} duration={500} unmountOnHide={true}>
                 <span className={"happy-hour"}>
-                    <Header>
-                        {props.happyHour?.multiplier}x happy hour!
-                    </Header>
+                    <Header>{props.happyHour?.multiplier}x happy hour!</Header>
                     <Header.Subheader>
                         Today's happy hour is starting at {renderDateString(props.happyHour)}
                     </Header.Subheader>
@@ -90,11 +95,11 @@ function Home(props: TTDataPropsTypeCombined) : JSX.Element {
     );
 }
 
-const renderDateString = (happyHour: DbHappyHour) : string => {
+const renderDateString = (happyHour: DbHappyHour): string => {
     const date = new Date();
     date.setHours(happyHour.hourStart, 0, 0);
 
     return date.toLocaleTimeString();
-}
+};
 
 export default Home;

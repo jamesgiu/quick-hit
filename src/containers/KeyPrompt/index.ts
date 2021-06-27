@@ -1,1 +1,1 @@
-export {default} from "./KeyPrompt";
+export { default } from "./KeyPrompt";

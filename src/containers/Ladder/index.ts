@@ -1,1 +1,1 @@
-export {default} from "./Ladder";
+export { default } from "./Ladder";

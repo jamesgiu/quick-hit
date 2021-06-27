@@ -1,1 +1,1 @@
-export {default} from "./QHDataLoader";
+export { default } from "./QHDataLoader";

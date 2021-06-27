@@ -1,19 +1,17 @@
-import React from 'react';
+import React from "react";
 import "./Toast.css";
-import {SemanticToastContainer, toast, ToastOptions} from 'react-semantic-toasts';
+import { SemanticToastContainer, toast, ToastOptions } from "react-semantic-toasts";
 
 const TOAST_DEFAULT_OPTS = {
     animation: "bounce",
-    time: 30000
+    time: 30000,
 } as ToastOptions;
 
 /**
  * QuickHit Toast
  */
-function Toaster() : JSX.Element {
-    return (
-        <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"}/>
-    );
+function Toaster(): JSX.Element {
+    return <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"} />;
 }
 
 export const makeSuccessToast = (title: string, message: string): void => {
@@ -22,9 +20,9 @@ export const makeSuccessToast = (title: string, message: string): void => {
         title: title,
         description: message,
         type: "success",
-        icon: "checkmark"
+        icon: "checkmark",
     });
-}
+};
 
 export const makeErrorToast = (title: string, message: string): void => {
     toast({
@@ -32,9 +30,9 @@ export const makeErrorToast = (title: string, message: string): void => {
         title: title,
         description: message,
         type: "error",
-        icon: "warning"
+        icon: "warning",
     });
-}
+};
 
 export const makeRefreshToast = (): void => {
     toast({
@@ -42,8 +40,8 @@ export const makeRefreshToast = (): void => {
         title: "New matches have been added",
         description: "Please refresh the application.",
         type: "error",
-        icon: "warning"
+        icon: "warning",
     });
-}
+};
 
 export default Toaster;

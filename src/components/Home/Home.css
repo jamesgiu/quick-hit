@@ -1,57 +1,57 @@
 .home-menu-buttons .ui.icon.header {
-  padding: 30px;
-  transition: font-size 0.5s;
+    padding: 30px;
+    transition: font-size 0.5s;
 }
 
 .home-menu-buttons .ui.icon.header:hover {
-  cursor: pointer;
-  font-size: 1.42rem;
-  height: auto;
+    cursor: pointer;
+    font-size: 1.42rem;
+    height: auto;
 }
 
 .home-menu-buttons {
-  padding-bottom: 10%;
+    padding-bottom: 10%;
 }
 
 .home .champion-area i {
-  font-size: 2rem;
-  margin: auto;
+    font-size: 2rem;
+    margin: auto;
 }
 
 .home .champion-area {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  color: white;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    color: white;
 }
 
 .home .champion-area .player-card {
-  width: 80px;
-  border-radius: 30px;
-  margin: auto;
-  box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+    width: 80px;
+    border-radius: 30px;
+    margin: auto;
+    box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
 }
 
 .home .champion-area .player-card i {
-  width: 41%;
-  margin: auto;
+    width: 41%;
+    margin: auto;
 }
 
 .home .champion-area .champion-text {
-  color: orangered;
+    color: orangered;
 }
 
 .home .happy-hour {
-  width: 25vh;
-  border-radius: 10px;
-  padding: 5px;
-  margin: auto;
-  background-color: #0f0f10;
-  position: absolute;
-  bottom: 5vh;
-  box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
+    width: 25vh;
+    border-radius: 10px;
+    padding: 5px;
+    margin: auto;
+    background-color: #0f0f10;
+    position: absolute;
+    bottom: 5vh;
+    box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
 }
 
 .home .happy-hour .header {
-  color: darkorange;
+    color: darkorange;
 }
