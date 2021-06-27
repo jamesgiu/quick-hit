@@ -106,7 +106,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                 <RecentGames focusedPlayerId={player.id} />
                             </Grid.Column>
                             <Grid.Column>
-                                <AchievementFeed />
+                                <AchievementFeed focusedPlayerId={player.id} />
                             </Grid.Column>
                         </Grid>
                     </span>

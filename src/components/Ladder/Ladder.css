@@ -1,89 +1,89 @@
 .players .header .content {
-    color: white;
+  color: white;
 }
 
 .players .player-cell:hover {
-    background-color: rgba(20, 24, 38, 0.2);
+  background-color: rgba(20, 24, 38, 0.2);
 }
 
 .players .player-row span {
-    display: block;
+  display: block;
 }
 
 .horizontal .card {
-    display: inline-flex;
-    margin-left: 5px;
-    margin-right: 5px;
-    font-size: 1rem;
+  display: inline-flex;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 1rem;
 }
 
 .players-area .card:first-child {
-    background-color: goldenrod;
-    width: 25vh;
+  background-color: goldenrod;
+  width: 25vh;
 }
 
 .players-area .card:nth-child(2) {
-    background-color: silver;
-    width: 20vh;
+  background-color: silver;
+  width: 20vh;
 }
 
 .players-area .card:nth-child(3) {
-    background-color: sandybrown;
-    width: 15vh;
+  background-color: sandybrown;
+  width: 15vh;
 }
 
 .players-area .card:last-child {
-    background-color: #282c34;
-    width: 13vh;
+  background-color: #282c34;
+  width: 13vh;
 }
 
 .new-buttons {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .players-area .ui.table th {
-    background-color: rgba(75, 80, 85, 1);
-    color: orange;
-    border-bottom: 1px solid orange;
+  background-color: rgba(75, 80, 85, 1);
+  color: orange;
+  border-bottom: 1px solid orange;
 }
 
 .players-area .ui.table tr {
-    background-color: rgba(65, 70, 75, 1);
-    color: white;
+  background-color: rgba(65, 70, 75, 1);
+  color: white;
 }
 
 .players-area .ui.table td a {
-    color: inherit;
+  color: inherit;
 }
 
 .players-area .ui.table {
-    border: 1px solid orange;
-    text-align: center;
-    min-width: 300px;
-    max-width: 30vw;
-    margin: auto;
+  border: 1px solid orange;
+  text-align: center;
+  min-width: 300px;
+  max-width: 30vw;
+  margin: auto;
 }
 
 .players-area .ui.table tr:first-child {
-    background-color: goldenrod;
-    color: black;
+  background-color: goldenrod;
+  color: black;
 }
 
 .players-area .ui.table tr:nth-child(2) {
-    background-color: silver;
-    color: black;
+  background-color: silver;
+  color: black;
 }
 
 .players-area .ui.table tr:nth-child(3) {
-    background-color: sandybrown;
-    color: black;
+  background-color: sandybrown;
+  color: black;
 }
 
 .players-area .ui.table tr:last-child {
-    background-color: black;
-    color: red;
+  background-color: black;
+  color: red;
 }
 
 .players .toggles span {
-    padding: 10px;
+  padding: 10px;
 }

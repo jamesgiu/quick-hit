@@ -1,20 +1,20 @@
 .player-statistics .achievements .ui.icon.header {
-    float: left;
-    font-size: 1.6rem;
+  float: left;
+  font-size: 1.6rem;
 }
 
 .player-statistics .achievements .event-content {
-    font-weight: bold;
-    color: orangered;
+  font-weight: bold;
+  color: orangered;
 }
 
 .player-statistics .achievements .event {
-    border-radius: 20px;
-    margin: 5px;
+  border-radius: 20px;
+  margin: 5px;
 }
 
 .player-statistics .achievements .event .label .icon {
-    color: green;
-    font-size: 2rem;
-    margin-top: 20%;
+  color: green;
+  font-size: 2rem;
+  margin-top: 20%;
 }

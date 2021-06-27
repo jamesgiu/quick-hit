@@ -19,7 +19,7 @@ export enum Achievement {
 export const FATALITY_BADGE: BadgeDesc = {
     icon: "tint",
     key: Achievement.FATALITY,
-    text: "Win a game without losing a single point",
+    text: "Win a game to 11 or more without losing a single point",
     title: "FATALITY!",
 };
 
@@ -61,7 +61,7 @@ export const UNSTOPPABLE_BADGE: BadgeDesc = {
 export const HELPLESS_BADGE: BadgeDesc = {
     icon: "bed",
     key: Achievement.HELPLESS,
-    text: "Lose a game without winning a point",
+    text: "Lose a game to 11 or more without winning a point",
     title: "Helpless",
 };
 
@@ -143,7 +143,7 @@ export const checkForFatality = (matches: DbMatch[], player: DbPlayer): boolean 
         return match.winning_player_id == player.id;
     });
     const matchesWonWithoutLosingAPoint = matchesInvolvingPlayerAsWinner.filter((match) => {
-        return match.losing_player_score == 0;
+        return match.losing_player_score == 0 && match.winning_player_score >= 11;
     });
 
     // If they have any matches won without losing a point, award achievement.
@@ -156,7 +156,7 @@ export const checkForHelpless = (matches: DbMatch[], player: DbPlayer): boolean 
         return match.losing_player_id == player.id;
     });
     const matchesLostWithoutEarningAPoint = matchesInvolvingPlayerAsLoser.filter((match) => {
-        return match.losing_player_score == 0;
+        return match.losing_player_score == 0 && match.winning_player_score >= 11;
     });
 
     // If they have any matches lost without winning a point, award achievement.
