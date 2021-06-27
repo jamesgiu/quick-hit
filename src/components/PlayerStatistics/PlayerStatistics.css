@@ -48,6 +48,11 @@
     cursor: pointer;
 }
 
+.player-statistics .statistics-group .victim .card {
+    background-color: darkseagreen;
+    font-weight: bolder;
+}
+
 .player-statistics .statistics-group .victim .card .icon {
     font-size: 2rem;
     color: green;

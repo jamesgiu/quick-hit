@@ -1,6 +1,6 @@
 import React from "react";
 import "./AchievementsFeed.css";
-import { Feed, Header, Icon } from "semantic-ui-react";
+import {Divider, Feed, Header, Icon} from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import { DbBadge, DbPlayer } from "../../types/database/models";
@@ -27,14 +27,17 @@ function AchievementFeed(props: AchievementFeedProps): JSX.Element {
         props.badges.forEach((badge) => {
             const involvedPlayer = playersMap.get(badge.involved_player);
             events.push({
-                meta: <div className={"event-content"}>{badge.title}</div>,
+                meta: <div className={"event-summary"}>
+                    {badge.text}
+                    <Divider />
+                </div>,
                 date: (
                     <div className={"event-date"}>
                         {new Date(badge.date).toDateString()} during a match against:{" "}
                         <Icon name={involvedPlayer?.icon} /> {involvedPlayer?.name}
                     </div>
                 ),
-                content: <div className={"event-summary"}>{badge.text}</div>,
+                content: <div className={"event-content"}>{badge.title}</div>,
                 icon: badge.icon,
             });
         });
