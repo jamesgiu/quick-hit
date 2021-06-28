@@ -96,7 +96,7 @@ export const SHOULD_HAVE_PUT_MONEY_ON_IT_BADGE: BadgeDesc = {
 export const checkForClutchPerformer = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
     const matchesInvolvingPlayerAsWinner = matches.filter((match) => {
-        return match.winning_player_id == player.id;
+        return match.winning_player_id === player.id;
     });
     const matchesThatWereWonBy2PointsOrLess = matchesInvolvingPlayerAsWinner.filter((match) => {
         return match.winning_player_score - match.losing_player_score <= 2;
@@ -109,7 +109,7 @@ export const checkForClutchPerformer = (matches: DbMatch[], player: DbPlayer): b
 export const checkForHeartBreaker = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the loser is this player
     const matchesInvolvingPlayerAsLoser = matches.filter((match) => {
-        return match.losing_player_id == player.id;
+        return match.losing_player_id === player.id;
     });
     const matchesThatWereLostBy2PointsOrLess = matchesInvolvingPlayerAsLoser.filter((match) => {
         return match.winning_player_score - match.losing_player_score <= 2;
@@ -122,7 +122,7 @@ export const checkForHeartBreaker = (matches: DbMatch[], player: DbPlayer): bool
 export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: number): boolean => {
     let winsInARowNeeded = count;
     const matchesInvolvingPlayer = matches.filter((match) => {
-        return match.winning_player_id == player.id || match.losing_player_id == player.id;
+        return match.winning_player_id === player.id || match.losing_player_id === player.id;
     });
 
     matchesInvolvingPlayer.forEach((match: DbMatch) => {
@@ -140,10 +140,10 @@ export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: 
 export const checkForFatality = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
     const matchesInvolvingPlayerAsWinner = matches.filter((match) => {
-        return match.winning_player_id == player.id;
+        return match.winning_player_id === player.id;
     });
     const matchesWonWithoutLosingAPoint = matchesInvolvingPlayerAsWinner.filter((match) => {
-        return match.losing_player_score == 0 && match.winning_player_score >= 11;
+        return match.losing_player_score === 0 && match.winning_player_score >= 11;
     });
 
     // If they have any matches won without losing a point, award achievement.
@@ -153,10 +153,11 @@ export const checkForFatality = (matches: DbMatch[], player: DbPlayer): boolean 
 export const checkForHelpless = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the loser is this player
     const matchesInvolvingPlayerAsLoser = matches.filter((match) => {
-        return match.losing_player_id == player.id;
+        return match.losing_player_id === player.id;
     });
+
     const matchesLostWithoutEarningAPoint = matchesInvolvingPlayerAsLoser.filter((match) => {
-        return match.losing_player_score == 0 && match.winning_player_score >= 11;
+        return match.losing_player_score === 0 && match.winning_player_score >= 11;
     });
 
     // If they have any matches lost without winning a point, award achievement.
@@ -166,7 +167,7 @@ export const checkForHelpless = (matches: DbMatch[], player: DbPlayer): boolean 
 export const checkForSuperior = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
     const matchesInvolvingPlayerAsWinner = matches.filter((match) => {
-        return match.winning_player_id == player.id;
+        return match.winning_player_id === player.id;
     });
     const matchesInvolving1300ELORank = matchesInvolvingPlayerAsWinner.filter((match) => {
         return match.winner_new_elo >= 1300;
@@ -178,10 +179,10 @@ export const checkForSuperior = (matches: DbMatch[], player: DbPlayer): boolean 
 export const checkForCellarDweller = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the loser is this player
     const matchesInvolvingPlayerAsLoser = matches.filter((match) => {
-        return match.losing_player_id == player.id;
+        return match.losing_player_id === player.id;
     });
     const matchesInvolving1100ELORank = matchesInvolvingPlayerAsLoser.filter((match) => {
-        return match.loser_new_elo >= 1100;
+        return match.loser_new_elo <= 1100;
     });
 
     return matchesInvolving1100ELORank.length > 0;
@@ -190,7 +191,7 @@ export const checkForCellarDweller = (matches: DbMatch[], player: DbPlayer): boo
 export const checkForALittleEmbarrassing = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the loser is this player
     const matchesInvolvingPlayerAsLoser = matches.filter((match) => {
-        return match.losing_player_id == player.id;
+        return match.losing_player_id === player.id;
     });
     const matchesInvolvingALossToRelativeScrubOpponent = matchesInvolvingPlayerAsLoser.filter((match) => {
         return match.losing_player_original_elo - match.winning_player_original_elo >= 200;
@@ -202,7 +203,7 @@ export const checkForALittleEmbarrassing = (matches: DbMatch[], player: DbPlayer
 export const checkForShouldHavePutMoneyOnIt = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
     const matchesInvolvingPlayerAsWinner = matches.filter((match) => {
-        return match.winning_player_id == player.id;
+        return match.winning_player_id === player.id;
     });
     const matchesInvolvingLowOddsWin = matchesInvolvingPlayerAsWinner.filter((match) => {
         return match.losing_player_original_elo - match.winning_player_original_elo >= 200;
@@ -342,7 +343,7 @@ export const checkForTriggersAfterAMatch = (
     if (!loserBadgeKeys.includes(Achievement.HELPLESS)) {
         if (checkForHelpless(matches, losingPlayer)) {
             QuickHitAPI.addBadge(
-                decorateAchievementForUpload(HELPLESS_BADGE, winningPlayer, losingPlayer),
+                decorateAchievementForUpload(HELPLESS_BADGE, losingPlayer, winningPlayer),
                 () => {
                     return;
                 },
@@ -354,7 +355,7 @@ export const checkForTriggersAfterAMatch = (
     if (!loserBadgeKeys.includes(Achievement.HEART_BREAKER)) {
         if (checkForHeartBreaker(matches, losingPlayer)) {
             QuickHitAPI.addBadge(
-                decorateAchievementForUpload(HEART_BREAKER_BADGE, winningPlayer, losingPlayer),
+                decorateAchievementForUpload(HEART_BREAKER_BADGE, losingPlayer, winningPlayer),
                 () => {
                     return;
                 },
@@ -366,7 +367,7 @@ export const checkForTriggersAfterAMatch = (
     if (!loserBadgeKeys.includes(Achievement.CELLAR_DWELLAR)) {
         if (checkForCellarDweller(matches, losingPlayer)) {
             QuickHitAPI.addBadge(
-                decorateAchievementForUpload(CELLAR_DWELLAR_BADGE, winningPlayer, losingPlayer),
+                decorateAchievementForUpload(CELLAR_DWELLAR_BADGE, losingPlayer, winningPlayer),
                 () => {
                     return;
                 },

@@ -78,7 +78,6 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     const getPlayers = () => {
         const onSuccess = (players: DbPlayer[]): void => {
             props.setPlayers(players);
-            props.setLoading(false);
         };
 
         const onFailure = (error: string): void => {
@@ -108,6 +107,12 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         getMatches();
         getPlayers();
     };
+
+    useEffect(() => {
+        if (intervalRef.current) {
+            props.setLoading(false);
+        }
+    }, [props.players, props.matches, props.badges, props.happyHour]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // On component mount.
     useEffect(() => {
