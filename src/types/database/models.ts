@@ -45,6 +45,22 @@ export interface DbBadge extends BadgeDesc {
     involved_player: string;
 }
 
+export interface DbTournament {
+    id: string;
+    name: string;
+    start_date: string;
+    end_date?: string;
+    matches: DbTournamentMatch[];
+}
+
+export interface DbTournamentMatch {
+    match_number: number;
+    home_player_id: string;
+    away_player_id: string;
+    home_score?: number;
+    away_score?: number;
+}
+
 export function getTodaysDate(): string {
     // yyyy-mm-dd
     return new Date().toLocaleDateString().replace(/\//g, "-");

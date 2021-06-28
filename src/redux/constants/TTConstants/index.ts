@@ -15,3 +15,6 @@ export type SET_HAPPY_HOUR_TYPE = typeof SET_HAPPY_HOUR;
 
 export const SET_BADGES = "SET_BADGES";
 export type SET_BADGES_TYPE = typeof SET_BADGES;
+
+export const SET_TOURNAMENTS = "SET_TOURNAMENTS";
+export type SET_TOURNAMENTS_TYPE = typeof SET_TOURNAMENTS;
