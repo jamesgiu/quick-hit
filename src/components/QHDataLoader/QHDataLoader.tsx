@@ -119,8 +119,9 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         getHappyHourOrSetIfNotPresent();
         getBadges();
         getMatches();
-        getPlayers();
         getTournaments();
+        getPlayers();
+        setPolling(false);
     };
 
     // On component mount.

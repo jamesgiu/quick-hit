@@ -1,0 +1,177 @@
+.tournament-container {
+    border: 1px solid darkorange;
+}
+
+.tournament-headers {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom: 1px solid darkorange;
+  }
+
+.tournament-headers h3 {
+    width: 25%;
+    text-align:center;
+    font-weight: 400;
+    border-right: 1px dashed #ccc;
+    margin: 0;
+    padding:1rem;
+  }
+  
+  .tournament-brackets {
+    display: flex;
+    flex-direction: row; 
+    list-style-type: none;
+    background: #fdfdfd;
+  }
+  
+  .bracket {
+    padding-left: 0;
+    display: flex;
+    margin: 0;
+    padding: 30px 0;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-around;
+    list-style-type: none;
+    border-right: 1px dashed #ccc;
+    flex: 1;
+    background-color: rgba(30, 30, 30, 1);;
+  }
+  
+  .team-item {
+    background-color: rgba(53, 54, 58, 1);
+    padding: .5rem;
+    display: block;
+    margin: .5rem 10px;
+    position: relative;
+    line-height: 2;
+    text-align: center;
+    border: 1px solid darkorange;
+  }
+  
+  .team-item:after {
+    content:'';
+    border-color: darkorange;
+    border-width: 2px;
+    position: absolute;
+    display: block;
+    width: 10px;
+    right: -11px;
+  }
+  
+  .team-item:nth-of-type(odd):after {
+    border-right-style: solid;
+    border-top-style: solid;
+    height: 100%;
+    top: 50%;
+  }
+  
+  .team-item:nth-of-type(even):after {
+    border-right-style: solid;
+    border-bottom-style: solid;
+    height: 100%;
+    top: -50%;
+  }
+  
+  .team-item:before {
+    content:'';
+    border-top: 2px solid darkorange;
+    position: absolute;
+    height: 2px;
+    width: 10px;
+    left: -10px;
+    top: 50%;
+  }
+  
+  .bracket-2 .team-item:nth-of-type(even):after {
+      height: 200%;
+      top: -150%;
+    }
+
+.bracket-2 .team-item:nth-of-type(odd):after {
+    height: 200%;
+    top: 50%;
+  }
+  
+  .bracket-3 .team-item:nth-of-type(even):after {
+      height: 350%;
+      top: -300%;
+    }
+
+  .bracket-3 .team-item:nth-of-type(odd):after {
+    height: 350%;
+    top: 50%;
+  }
+  
+  .bracket-4 .team-item:nth-of-type(odd):after {
+      height: 700%;
+      top: 50%;
+    }
+
+.bracket-4 .team-item:nth-of-type(even):after {
+    height: 700%;
+    top: -650%;
+}
+  
+  .bracket:first-of-type  .team-item:before {
+      display: none;
+    }
+  
+  .bracket-4 .team-item:after {
+      display: none;
+    }
+  
+  .bracket:last-of-type .team-item:before,
+  .bracket:last-of-type .team-item:after {
+      display: none;
+    }
+  
+  .team-item .vs,
+  .team-item .clickable-vs {
+    display: table;
+    background-color: black;
+    color: orange;
+    font-size: .8rem;
+    padding: 0 .6rem;
+    margin: 0 auto;
+  }
+
+  .team-item .vs:hover {
+    cursor: not-allowed;
+  }
+
+  .team-item .clickable-vs:hover {
+    transition: 0.3s;
+    cursor: pointer;
+    background-color: orange;
+    color: black;
+  }
+
+.new-tournament-button {
+    color: darkorange !important;
+    background-color: #1b1c1d !important;
+    border: 1px solid darkorange !important;
+}
+
+.new-tournament-button:hover {
+    background-color: rgba(50, 50, 50, 1) !important;
+}
+
+.qualified-player {
+    color: green;
+}
+
+.eliminated-player {
+    color: red;
+}
+
+.tournament-score-input {
+  width: 47%;
+  margin: auto 10px;
+}
+
+.confirm-score-button {
+  margin: 10px 10px !important;
+}
