@@ -19,6 +19,7 @@ const persistConfig = {
 const authConfig = {
     key: "authStore",
     storage,
+    //FIXME We want to get a new token on each refresh for now.
     blacklist: ["token"],
 };
 
