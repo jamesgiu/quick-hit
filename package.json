@@ -73,6 +73,7 @@
   "devDependencies": {
     "@types/react-router": "^5.1.13",
     "@types/react-router-dom": "^5.1.7",
+    "@types/redux-persist": "^4.3.1",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
