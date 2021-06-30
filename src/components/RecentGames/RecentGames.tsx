@@ -46,11 +46,14 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                 meta: (
                     <div className={"event-content"}>
                         {winningPlayer.name} ({match.winning_player_original_elo}
-                        <span className={"elo-gain"}>+{match.winner_new_elo - match.winning_player_original_elo}</span>)
-                        defeated {losingPlayer.name} ({match.losing_player_original_elo}
+                        <span className={"elo-gain"}>
+                            +{match.winner_new_elo - match.winning_player_original_elo}={match.winner_new_elo}
+                        </span>
+                        ) defeated {losingPlayer.name} ({match.losing_player_original_elo}
                         <span className={"elo-loss"}>
-                            -{match.losing_player_original_elo - match.loser_new_elo}
-                        </span>) <ReactTimeAgo date={new Date(match.date)} />
+                            -{match.losing_player_original_elo - match.loser_new_elo}={match.loser_new_elo}
+                        </span>
+                        ) <ReactTimeAgo date={new Date(match.date)} />
                         ...
                         <Divider />
                     </div>
