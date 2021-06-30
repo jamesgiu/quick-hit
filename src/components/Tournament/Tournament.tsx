@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Icon, Input, List, Modal } from "semantic-ui-react";
+import { Button, Form, Icon, Input, List, Message, Modal } from "semantic-ui-react";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DbMatch, DbPlayer, DbTournament, DbTournamentMatch, getTodaysDate } from "../../types/database/models";
@@ -8,12 +8,16 @@ import { v4 as uuidv4 } from "uuid";
 import "./Tournament.css";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 
-// Make VS show as score if match is finished
-// Add start new tournament down the bottom if the tournament is finished, showing the players who would be in it.
-// Fix CSS making the lines connecting the matches not look right.
-// Allow to enter game scores.
-// Add warning to play to 21 and win by 2.
 // Add strikethrough to game losers.
+// Looks like the match is updated on the UI even if the request fails.
+// Make sure new tournament form validation works.
+// Add player rank in brackets next to game name.
+// Add past tournaments.
+// Add tournament title to top of page.
+
+// DO LAST:
+// Pull in main.
+// Run linter.
 
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
@@ -36,16 +40,16 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             "away_player_id": players[7].id
         }, {
             "match_number": 1,
+            "home_player_id": players[3].id,
+            "away_player_id": players[4].id
+        }, {
+            "match_number": 2,
             "home_player_id": players[1].id,
             "away_player_id": players[6].id
         }, {
-            "match_number": 2,
+            "match_number": 3,
             "home_player_id": players[2].id,
             "away_player_id": players[5].id
-        }, {
-            "match_number": 3,
-            "home_player_id": players[3].id,
-            "away_player_id": players[4].id
         });
     
         const startDateWrongFormat = getTodaysDate();
@@ -70,8 +74,11 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         return (
         <div>
             {match ? playersMap.get(match.home_player_id)?.name : ""} 
-            <span className={match && match.home_score === undefined ? "clickable-vs" : "vs"}>
-                {match
+            <span className={match &&
+                             match.home_player_id &&
+                             match.away_player_id &&
+                             match.home_score === undefined ? "clickable-vs" : "vs"}>
+                {match && match.home_player_id && match.away_player_id
                 ? match.home_score !== undefined
                   ? <span>{match.home_score}-{match.away_score}</span>
                   : <span onClick={() => openGameEntryModal(match)}>VS</span>
@@ -101,10 +108,12 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
         const onError = (errorMsg: string) => {
             makeErrorToast("Game not entered!", errorMsg);
+            props.setForceRefresh(true);
         };
 
         if (homePlayerEnteringScore === awayPlayerEnteringScore) {
             makeErrorToast("Come on man", "Winning player score must be higher than losing player score");
+            props.setForceRefresh(true);
             return;
         }
 
@@ -163,58 +172,96 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             }
         }
     };
+
+    const getWinner = (): JSX.Element => {
+        const finalMatch = sortedTournaments[0].matches[6];
+
+        if (finalMatch && finalMatch.home_score !== undefined && finalMatch.away_score !== undefined) {
+            const homeWon = finalMatch.home_score > finalMatch.away_score;
+            return (
+                <span>
+                    <Icon name={playersMap.get(homeWon ? finalMatch.home_player_id : finalMatch.away_player_id)?.icon}/> 
+                    {playersMap.get(homeWon ? finalMatch.home_player_id : finalMatch.away_player_id)?.name}
+                </span>
+            );
+        } else {
+            return <span>Who will it be?</span>;
+        }
+    };
     
 
     return (
         <div>
         {sortedTournaments.length > 0
             ?
-        <div className="tournament-container">
-            <div className="tournament-headers">
-                <h3>Quarter-Finals</h3>
-                <h3>Semi-Finals</h3>
-                <h3>Final</h3>
-                <h3>Winner <Icon name="trophy"/></h3>
-            </div>
+        <div>
+            <Message id={"rules-msg"}
+                     icon={"warning sign"}
+                     header={"Remember the tournament rules!"}
+                     content={"Play to 21, and you must win by 2!"}/>
+            <div className="tournament-container">
+                <div className="tournament-headers">
+                    <h3>Quarter-Finals</h3>
+                    <h3>Semi-Finals</h3>
+                    <h3>Final</h3>
+                    <h3>Winner <Icon name="trophy"/></h3>
+                </div>
 
-            <div className="tournament-brackets">
-                <ul className="bracket bracket-2">
-                <li className="team-item" key={0}>
-                    {getTeamItem(sortedTournaments[0].matches[0], playersMap)}
-                </li>
-                <li className="team-item" key={1}>
-                    {getTeamItem(sortedTournaments[0].matches[1], playersMap)}
-                </li>
-                <li className="team-item" key={2}>
-                    {getTeamItem(sortedTournaments[0].matches[2], playersMap)}
-                </li>
-                <li className="team-item" key={3}>
-                    {getTeamItem(sortedTournaments[0].matches[3], playersMap)}
-                </li>
-                </ul>  
-                <ul className="bracket bracket-3">
-                <li className="team-item" key={4}>
-                    {getTeamItem(sortedTournaments[0].matches[4], playersMap)}
-                </li>
-                <li className="team-item" key={5}>
-                    {getTeamItem(sortedTournaments[0].matches[5], playersMap)}
-                </li>
-                </ul>  
-                <ul className="bracket bracket-4">
-                <li className="team-item" key={6}>
-                    {getTeamItem(sortedTournaments[0].matches[6], playersMap)}
-                </li>
-                </ul>  
+                <div className="tournament-brackets">
+                    <ul className="bracket bracket-2">
+                    <li className="team-item" key={0}>
+                        {getTeamItem(sortedTournaments[0].matches[0], playersMap)}
+                    </li>
+                    <li className="team-item" key={1}>
+                        {getTeamItem(sortedTournaments[0].matches[1], playersMap)}
+                    </li>
+                    <li className="team-item" key={2}>
+                        {getTeamItem(sortedTournaments[0].matches[2], playersMap)}
+                    </li>
+                    <li className="team-item" key={3}>
+                        {getTeamItem(sortedTournaments[0].matches[3], playersMap)}
+                    </li>
+                    </ul>  
+                    <ul className="bracket bracket-3">
+                    <li className="team-item" key={4}>
+                        {getTeamItem(sortedTournaments[0].matches[4], playersMap)}
+                    </li>
+                    <li className="team-item" key={5}>
+                        {getTeamItem(sortedTournaments[0].matches[5], playersMap)}
+                    </li>
+                    </ul>  
+                    <ul className="bracket bracket-4">
+                    <li className="team-item" key={6}>
+                        {getTeamItem(sortedTournaments[0].matches[6], playersMap)}
+                    </li>
+                    </ul>  
 
-                <ul className="bracket bracket-5">
-                <li className="team-item">European Champions</li>
-                </ul>  
+                    <ul className="bracket bracket-5">
+                    <li className="team-item">
+                        {getWinner()}
+                    </li>
+                    </ul>  
+                </div>
             </div>
         </div>
             : <Button onClick={() => openNewTournamentModal(true)}
                       className={"new-tournament-button"}>
                 Start new tournament!
               </Button>
+        }
+        {sortedTournaments.length > 0 && 
+         sortedTournaments[0].matches[6] &&
+         sortedTournaments[0].matches[6].home_score !== undefined
+            ? <div>
+                <div className={"congrats-div"}>
+                    Congratulations {getWinner()}!
+                </div>
+                <Button onClick={() => openNewTournamentModal(true)}
+                      className={"new-tournament-button"}>
+                    Start new tournament?
+                </Button>
+              </div>
+            : <span/>
         }
         {newTournamentModalOpen
         ? <Modal
@@ -225,18 +272,22 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 Start new tournament <Icon name={"trophy"}/>
             </Modal.Header>
             <Modal.Content>
-                <Input label={"Tournament name"} onChange={(event, data) => setNewTournamentName(data.value)}></Input>
-                <div>Current ladder positions:</div>
-                <List ordered>
-                    {getLadderListItems(sortedPlayers)}
-                </List>
-                <Button onClick={() => {
-                    startNewTournament(sortedPlayers.slice(0, 8), newTournamentName);
-                    openNewTournamentModal(false);
-                    props.setForceRefresh(true);
-                }}>
-                    Start tournament with these top 8 players
-                </Button>
+                <Form onSubmit={() => {
+                        startNewTournament(sortedPlayers.slice(0, 8), newTournamentName);
+                        openNewTournamentModal(false);
+                        props.setForceRefresh(true);
+                    }}>
+                    <Form.Input label={"Tournament name"}
+                                onChange={(event, data) => setNewTournamentName(data.value)}
+                                required/>
+                    <div>Current ladder positions:</div>
+                    <List ordered>
+                        {getLadderListItems(sortedPlayers)}
+                    </List>
+                    <Form.Button disabled={!newTournamentName}>
+                        Start tournament with these top 8 players
+                    </Form.Button>
+                </Form>
             </Modal.Content>
         </Modal>
         : <span></span>}
@@ -249,19 +300,28 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 Enter tournament game
             </Modal.Header>
             <Modal.Content>
-                <Input className={"tournament-score-input"}
-                       label={homePlayerEntering + "'s score"}
-                       type={"number"}
-                       min={0}
-                       value={homePlayerEnteringScore}
-                       onChange={(event, data) => setHomePlayerEnteringScore(parseInt(data.value))}/>
-                <Input className={"tournament-score-input"}
-                       label={awayPlayerEntering + "'s score"}
-                       type={"number"}
-                       min={0}
-                       value={awayPlayerEnteringScore}
-                       onChange={(event, data) => setAwayPlayerEnteringScore(parseInt(data.value))}/>
-                <Button className={"confirm-score-button"} onClick={updateMatchAndTournament}>Confirm score</Button>
+                <Form onSubmit={updateMatchAndTournament}>
+                    <Form.Group widths="equal">
+                        <Form.Input className={"tournament-score-input"}
+                                    label={homePlayerEntering + "'s score"}
+                                    type={"number"}
+                                    min={0}
+                                    value={homePlayerEnteringScore}
+                                    onChange={(event, data) => setHomePlayerEnteringScore(parseInt(data.value))}
+                                    required/>
+                        <Form.Input className={"tournament-score-input"}
+                                    label={awayPlayerEntering + "'s score"}
+                                    type={"number"}
+                                    min={0}
+                                    value={awayPlayerEnteringScore}
+                                    onChange={(event, data) => setAwayPlayerEnteringScore(parseInt(data.value))}
+                                    required/>
+                    </Form.Group>
+                    <Form.Button className={"confirm-score-button"}
+                                disabled={homePlayerEnteringScore === undefined || awayPlayerEnteringScore === undefined}>
+                        Confirm score
+                    </Form.Button>
+                </Form>
             </Modal.Content>
         </Modal>
         : <span></span>}

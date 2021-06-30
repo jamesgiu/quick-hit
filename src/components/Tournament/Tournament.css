@@ -85,23 +85,13 @@
     top: 50%;
   }
   
-  .bracket-2 .team-item:nth-of-type(even):after {
-      height: 200%;
-      top: -150%;
-    }
-
-.bracket-2 .team-item:nth-of-type(odd):after {
-    height: 200%;
-    top: 50%;
-  }
-  
   .bracket-3 .team-item:nth-of-type(even):after {
       height: 350%;
       top: -300%;
     }
 
   .bracket-3 .team-item:nth-of-type(odd):after {
-    height: 350%;
+    height: 300%;
     top: 50%;
   }
   
@@ -174,4 +164,23 @@
 
 .confirm-score-button {
   margin: 10px 10px !important;
+}
+
+.congrats-div {
+  font-size: x-large;
+  margin: 20px auto;
+  padding: 10px;
+  width: 40%;
+  border: 1px solid orange;
+  background-color: black;
+  color: darkorange;
+  border-radius: 5px;
+}
+
+#rules-msg {
+  width: 30%;
+  margin: 15px auto;
+  background-color: black;
+  color: darkorange;
+  border: 1px solid darkorange;
 }
