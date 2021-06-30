@@ -34,7 +34,8 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                 // No happy hour generated for today, generate one
                 const newHappyHour: DbHappyHour = {
                     date: getTodaysDate(),
-                    hourStart: randomIntFromInterval(9, 16),
+                    // Force set the happy hour to either be 12 or 16 (lunch time or 4pm).
+                    hourStart: randomIntFromInterval(0, 1) === 0 ? 12 : 16,
                     multiplier: randomIntFromInterval(2, 6),
                 };
 

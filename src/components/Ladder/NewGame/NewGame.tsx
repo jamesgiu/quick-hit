@@ -7,6 +7,7 @@ import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
+import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
 
 interface NewGameProps {
     players: DbPlayer[];
@@ -50,48 +51,58 @@ function NewGame(props: NewGameProps): JSX.Element {
             return;
         }
 
-        let kFactor = 15;
-        let happyHour = false;
+        // Getting the latest players from the DB to ensure up to date ELO.
+        QuickHitAPI.getPlayers((players: DbPlayer[]) => {
+            const playersMap = getPlayersMap(players);
 
-        // If it is currently a happy hour.
-        if (
-            new Date().getHours() <= props.happyHour.hourStart &&
-            new Date().getHours() >= props.happyHour.hourStart - 1
-        ) {
-            kFactor = 15 * props.happyHour.multiplier;
-            happyHour = true;
-        }
+            let kFactor = 15;
+            let happyHour = false;
 
-        const elo = new EloRank(kFactor);
-        const winnerElo = winningPlayer.elo;
-        const loserElo = losingPlayer.elo;
+            // If it is currently a happy hour.
+            if (
+                new Date().getHours() >= props.happyHour.hourStart &&
+                new Date().getHours() <= props.happyHour.hourStart + 1
+            ) {
+                kFactor = 15 * props.happyHour.multiplier;
+                happyHour = true;
+            }
 
-        //Gets expected score for first parameter
-        const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
-        const losingPlayerExpectedScore = elo.getExpected(loserElo, winnerElo);
+            const elo = new EloRank(kFactor);
+            const winnerElo = playersMap.get(winningPlayer.id)?.elo;
+            const loserElo = playersMap.get(losingPlayer.id)?.elo;
 
-        //update score, 1 if won 0 if lost
-        const winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
-        const loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
+            if (!(winnerElo && loserElo)) {
+                onError("Could not get latest player data!");
+                return;
+            }
 
-        const matchToAdd: DbMatch = {
-            id: uuidv4(),
-            date: new Date().toISOString(),
-            winning_player_id: winningPlayer.id,
-            winning_player_score: winningPlayerScore,
-            winning_player_original_elo: winnerElo,
-            losing_player_id: losingPlayer.id,
-            losing_player_score: losingPlayerScore,
-            losing_player_original_elo: loserElo,
-            winner_new_elo: winnerNewElo,
-            loser_new_elo: loserNewElo,
-            happy_hour: happyHour,
-        };
-        // Assigning new elo values to player object, then PATCHING.
-        winningPlayer.elo = winnerNewElo;
-        losingPlayer.elo = loserNewElo;
+            // Gets expected score for first parameter
+            const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
+            const losingPlayerExpectedScore = elo.getExpected(loserElo, winnerElo);
 
-        QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
+            // update score, 1 if won 0 if lost
+            const winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
+            const loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
+
+            const matchToAdd: DbMatch = {
+                id: uuidv4(),
+                date: new Date().toISOString(),
+                winning_player_id: winningPlayer.id,
+                winning_player_score: winningPlayerScore,
+                winning_player_original_elo: winnerElo,
+                losing_player_id: losingPlayer.id,
+                losing_player_score: losingPlayerScore,
+                losing_player_original_elo: loserElo,
+                winner_new_elo: winnerNewElo,
+                loser_new_elo: loserNewElo,
+                happy_hour: happyHour,
+            };
+            // Assigning new elo values to player object, then PATCHING.
+            winningPlayer.elo = winnerNewElo;
+            losingPlayer.elo = loserNewElo;
+
+            QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
+        }, onError);
     };
 
     const checkForAchievementTriggers = (addAnother: boolean) => {
@@ -103,7 +114,7 @@ function NewGame(props: NewGameProps): JSX.Element {
             makeErrorToast("Could not calculate achievements!", errorMsg);
         };
 
-        // After new match has been added, fetch the matches...
+        // After new match has been added, fetch the matches and badges...
         QuickHitAPI.getMatches((matches: DbMatch[]) => {
             QuickHitAPI.getBadges((badges: DbBadge[]) => {
                 checkForTriggersAfterAMatch(winningPlayer, losingPlayer, badges, matches, onError);
