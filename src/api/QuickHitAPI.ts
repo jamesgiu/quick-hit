@@ -2,6 +2,7 @@ import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../types
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
+import { setToken } from "../redux/actions/AuthActions";
 const FB_URL = process.env.REACT_APP_FB_URL;
 const FB_API_KEY = process.env.REACT_APP_FB_API_KEY;
 
@@ -137,29 +138,49 @@ export class QuickHitAPI {
     }
 
     private static makeAxiosRequest(uri: string, method: HttpMethod, data?: string): AxiosPromise {
-        return this.authenticateToFirebase().then((response) => {
-            const idToken = response.data.idToken;
-
+        return this.authenticateToFirebase().then((token: string) => {
             return axios({
                 method: method,
                 baseURL: FB_URL,
-                url: `${uri}?auth=${idToken}`.replaceAll("&?", "&"),
+                url: `${uri}?auth=${token}`.replaceAll("&?", "&"),
                 data: data,
                 headers: { "Content-Type": "application/json" },
             });
         });
     }
 
-    private static authenticateToFirebase(): AxiosPromise {
-        return axios({
-            method: HttpMethod.POST,
-            baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FB_API_KEY}`,
-            data: {
-                email: process.env.REACT_APP_FB_SRV_ACC_NAME,
-                password: store.getState().authStore.authKey,
-                returnSecureToken: true,
-            },
-            headers: { "Content-Type": "application/json" },
-        });
+    //FIXME
+    //Because we only store a string here, we don't store the expiresIn, but currently it's an hour.
+    //It will get a new token on each refresh - so you'd have to be using QuickHit for over an hour before getting
+    //prompted to refresh.
+    private static async authenticateToFirebase(): Promise<string> {
+        const getToken = (): Promise<string> => {
+            // Check Redux store for existing token
+            const token = store.getState().authStore.token;
+            // If there wasn't one, get a new one and set it.
+            if (!token) {
+                return axios({
+                    method: HttpMethod.POST,
+                    baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FB_API_KEY}`,
+                    data: {
+                        email: process.env.REACT_APP_FB_SRV_ACC_NAME,
+                        password: store.getState().authStore.authKey,
+                        returnSecureToken: true,
+                    },
+                    headers: { "Content-Type": "application/json" },
+                }).then((response) => {
+                    const token = response.data.idToken;
+                    store.dispatch(setToken(token));
+                    return new Promise<string>((resolve) => {
+                        resolve(token);
+                    });
+                });
+            }
+            return new Promise<string>((resolve) => {
+                resolve(token);
+            });
+        };
+
+        return getToken();
     }
 }
