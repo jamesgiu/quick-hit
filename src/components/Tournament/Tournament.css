@@ -84,27 +84,12 @@
     left: -10px;
     top: 50%;
   }
-  
-  .bracket-3 .team-item:nth-of-type(even):after {
-      height: 350%;
-      top: -300%;
-    }
 
   .bracket-3 .team-item:nth-of-type(odd):after {
-    height: 300%;
+    height: 200%;
     top: 50%;
   }
-  
-  .bracket-4 .team-item:nth-of-type(odd):after {
-      height: 700%;
-      top: 50%;
-    }
 
-.bracket-4 .team-item:nth-of-type(even):after {
-    height: 700%;
-    top: -650%;
-}
-  
   .bracket:first-of-type  .team-item:before {
       display: none;
     }
@@ -178,9 +163,46 @@
 }
 
 #rules-msg {
-  width: 30%;
+  width: 40%;
   margin: 15px auto;
   background-color: black;
   color: darkorange;
   border: 1px solid darkorange;
+  overflow-x: scroll;
+}
+
+.match-loser {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  text-decoration-thickness: 2px;
+}
+
+.tournament-details .ui.header,
+.tournament-details .ui.header .sub.header {
+  color: white;
+  text-align: left;
+}
+
+.tournament-details .ui.header {
+  margin: 10px 0;
+}
+
+.tournament-name-input {
+  width: 40%;
+  display: inline-flex;
+}
+
+#new-tournament-ladder-table {
+  text-align: center;
+}
+
+#new-tournament-ladder-scroller {
+  width: 50%;
+  float: right;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+#new-tournament-btn {
+  display: inline;
 }
