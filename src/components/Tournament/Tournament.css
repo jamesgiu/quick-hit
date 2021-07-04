@@ -109,7 +109,6 @@
     background-color: black;
     color: orange;
     font-size: .8rem;
-    padding: 0 .6rem;
     margin: 0 auto;
   }
 
@@ -205,4 +204,39 @@
 
 #new-tournament-btn {
   display: inline;
+}
+
+.enter-game-score-vs {
+  padding: 0.6rem;
+}
+
+#past-tournaments-button,
+#past-tournaments-modal .header,
+#second-past-tournaments-modal .header {
+  background: linear-gradient(172deg, #24002D 0%, #EA43ED 22%, #E44CEF 26%, #140109 29%, #FF51F9 30%, #E147F5 35%, #D12FEE 39%, #BB11E6 43%, #A701DF 48%, #140109 51%, #9700DB 52%, #E839E6 53%, #7B00C7 61%, #7200C0 65%, #140109 70%, #6501BD 71%, #E839E6 72%, #6700B3 78%, #6302A9 83%, #140109 85%, #370381 100%);
+  color: orange;
+  border: 2px solid darkorange;
+}
+
+#past-tournaments-modal .content {
+  background-image: url('past-tournaments-background.gif');
+  background-size: 100% 100%;
+  height: 75vh;
+  border: 2px solid darkorange;
+}
+
+#second-past-tournaments-modal .content {
+  height: 80vh;
+  border: 2px solid darkorange;
+  background-color: rgba(53, 54, 58, 1);
+  color: white;
+}
+
+#past-tournaments-modal .ui.table {
+  opacity: 80%;
+  text-align: center;
+}
+
+.past-tournament-expand {
+  padding: 10px 0;
 }
