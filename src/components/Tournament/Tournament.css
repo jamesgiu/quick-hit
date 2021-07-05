@@ -141,15 +141,6 @@
     color: red;
 }
 
-.tournament-score-input {
-  width: 47%;
-  margin: auto 10px;
-}
-
-.confirm-score-button {
-  margin: 10px 10px !important;
-}
-
 .congrats-div {
   font-size: x-large;
   margin: 20px auto;
@@ -186,26 +177,6 @@
   margin: 10px 0;
 }
 
-.tournament-name-input {
-  width: 40%;
-  display: inline-flex;
-}
-
-#new-tournament-ladder-table {
-  text-align: center;
-}
-
-#new-tournament-ladder-scroller {
-  width: 50%;
-  float: right;
-  max-height: 400px;
-  overflow-y: scroll;
-}
-
-#new-tournament-btn {
-  display: inline;
-}
-
 .enter-game-score-vs {
   padding: 0.6rem;
 }
@@ -219,7 +190,7 @@
 }
 
 #past-tournaments-modal .content {
-  background-image: url('past-tournaments-background.gif');
+  background-image: url('assets/past-tournaments-background.gif');
   background-size: 100% 100%;
   height: 75vh;
   border: 2px solid darkorange;
