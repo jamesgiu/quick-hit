@@ -34,7 +34,8 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                 // No happy hour generated for today, generate one
                 const newHappyHour: DbHappyHour = {
                     date: getTodaysDate(),
-                    hourStart: randomIntFromInterval(9, 16),
+                    // Force set the happy hour to either be 12 or 16 (lunch time or 4pm).
+                    hourStart: randomIntFromInterval(0, 1) === 0 ? 12 : 16,
                     multiplier: randomIntFromInterval(2, 6),
                 };
 
@@ -78,7 +79,6 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     const getPlayers = () => {
         const onSuccess = (players: DbPlayer[]): void => {
             props.setPlayers(players);
-            props.setLoading(false);
         };
 
         const onFailure = (error: string): void => {
@@ -123,6 +123,12 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         getPlayers();
         setPolling(false);
     };
+
+    useEffect(() => {
+        if (intervalRef.current) {
+            props.setLoading(false);
+        }
+    }, [props.players, props.matches, props.badges, props.happyHour]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // On component mount.
     useEffect(() => {
