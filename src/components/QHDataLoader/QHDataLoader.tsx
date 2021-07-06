@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { makeErrorToast, makeRefreshToast } from "../Toast/Toast";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { Loader, Transition } from "semantic-ui-react";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament, getTodaysDate } from "../../types/database/models";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
 import { ExtraPlayerStats, WinLoss } from "../../types/types";
@@ -102,10 +102,24 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getBadges(onSuccess, onFailure);
     };
 
+    const getTournaments = () => {
+        const onSuccess = (tournaments: DbTournament[]): void => {
+            props.setTournaments(tournaments);
+        };
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get tournaments", error);
+            props.setLoading(false);
+        };
+
+        QuickHitAPI.getTournaments(onSuccess, onFailure);
+    };
+
     const getData = () => {
         getHappyHourOrSetIfNotPresent();
         getBadges();
         getMatches();
+        getTournaments();
         getPlayers();
     };
 

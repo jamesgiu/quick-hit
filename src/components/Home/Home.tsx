@@ -41,8 +41,14 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                 <ButtonGroup horizontal className={"home-menu-buttons"}>
                     <Header as={"h3"} icon>
                         <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}>
-                            <Icon name="trophy" circular />
+                            <Icon name="list" circular />
                             <Header.Content>Ladder</Header.Content>
+                        </Link>
+                    </Header>
+                    <Header as={"h3"} icon>
+                        <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`}>
+                            <Icon name="trophy" circular />
+                            <Header.Content>Tournament</Header.Content>
                         </Link>
                     </Header>
                     <Header as={"h3"} icon>
