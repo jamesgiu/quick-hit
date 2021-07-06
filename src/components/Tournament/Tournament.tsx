@@ -23,8 +23,9 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
 
     // We have to sort the retrieved players and tournaments because using the Firebase REST API's query parameters does
-    // not guarantee order.
-    const sortedPlayers = props.players.sort((p1, p2) => p2.elo - p1.elo);
+    // not guarantee order. Make sure to filter out players who have never played a game, too.
+    const sortedPlayers = props.players.sort((p1, p2) => p2.elo - p1.elo)
+                                       .filter((player) => props.matches.some((match) => match.winning_player_id === player.id || match.losing_player_id === player.id));
     const sortedTournaments = props.tournaments.sort((t1, t2) => t2.start_date.localeCompare(t1.start_date));
     const playersMap = getPlayersMap(props.players);
 
