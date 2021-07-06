@@ -7,8 +7,6 @@ import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 
-// Remove !importants from Tournament.css.
-// Remove non-null assertions.
 // Run prettier.
 // Do run-through test.
 // Look through code for anything named oddly.
@@ -198,10 +196,12 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div className={"congrats-div"}>
                     Congratulations {getWinner(sortedTournaments[0])}!
                 </div>
-                <Button onClick={() => openNewTournamentModal(true)}
-                      className={"new-tournament-button"}>
-                    Start new tournament?
-                </Button>
+                <div className={"new-tournament-div"}>
+                    <Button onClick={() => openNewTournamentModal(true)}
+                        className={"new-tournament-button"}>
+                        Start new tournament?
+                    </Button>
+                </div>
               </div>
             : <span/>
         }
@@ -225,7 +225,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <Icon name={"backward"}/>View past tournaments
             </Button>
         </div>
-            : <div>{!props.loading
+            : <div className={"new-tournament-div"}>{!props.loading
                 ?
                 <Button onClick={() => openNewTournamentModal(true)}
                         className={"new-tournament-button"}>
@@ -238,7 +238,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         <EnterTournamentGame onClose={onEnterTournamentGameClose}
                              isOpen={enterGameModalOpen}
                              refresh={() => props.setForceRefresh(true)}
-                             matchEntering={matchEntering!}
+                             matchEntering={matchEntering}
                              currentTournament={sortedTournaments[0]}
                              homePlayerEntering={homePlayerEntering}
                              awayPlayerEntering={awayPlayerEntering}/>

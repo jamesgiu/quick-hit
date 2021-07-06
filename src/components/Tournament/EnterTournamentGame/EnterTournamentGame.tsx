@@ -10,7 +10,7 @@ interface EnterTournamentGameProps {
     onClose: () => void;
     isOpen: boolean;
     refresh: () => void;
-    matchEntering: DbTournamentMatch;
+    matchEntering: DbTournamentMatch | undefined;
     currentTournament: DbTournament;
     homePlayerEntering: string;
     awayPlayerEntering: string;
@@ -39,6 +39,17 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
 
         setConfirmingMatchScore(true);
 
+        if (!props.matchEntering) {
+            makeErrorToast("Come on man", "You've got to be entering a score");
+            return;
+        }
+
+        if (!homePlayerEnteringScore || !awayPlayerEnteringScore) {
+            makeErrorToast("Come on man", "You've got to enter a score");
+            props.refresh();
+            return;
+        }
+
         if (homePlayerEnteringScore === awayPlayerEnteringScore) {
             makeErrorToast("Come on man", "Winning player score must be higher than losing player score");
             props.refresh();
@@ -48,7 +59,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         props.matchEntering.home_score = homePlayerEnteringScore;
         props.matchEntering.away_score = awayPlayerEnteringScore;
 
-        const homeWon = homePlayerEnteringScore! > awayPlayerEnteringScore!;
+        const homeWon = homePlayerEnteringScore > awayPlayerEnteringScore;
         const matchWinnerId = homeWon ? props.matchEntering.home_player_id : props.matchEntering.away_player_id;
 
         switch (props.matchEntering.match_number) {
