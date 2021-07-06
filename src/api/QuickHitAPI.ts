@@ -37,7 +37,10 @@ export class QuickHitAPI {
             });
     }
 
-    public static getTournaments(onSuccess: (tournaments: DbTournament[]) => void, onFailure: (errorString: string) => void): void {
+    public static getTournaments(
+        onSuccess: (tournaments: DbTournament[]) => void,
+        onFailure: (errorString: string) => void
+    ): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.TOURNAMENT, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(response.data ? Object.values(response.data) : []);
@@ -147,9 +150,11 @@ export class QuickHitAPI {
             });
     }
 
-    public static addUpdateTournament(tournamentToAdd: DbTournament,
-                                      onSuccess: () => void,
-                                      onFailure: (errorString: string) => void): void {
+    public static addUpdateTournament(
+        tournamentToAdd: DbTournament,
+        onSuccess: () => void,
+        onFailure: (errorString: string) => void
+    ): void {
         QuickHitAPI.makeAxiosRequest(
             ApiActions.TOURNAMENT,
             HttpMethod.PATCH,

@@ -89,9 +89,11 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         QuickHitAPI.addUpdateTournament(props.currentTournament, onSuccess, onError);
     };
 
-    const updateFutureTournamentMatch = (futureMatchIndex: number,
-                                         previousMatchWinnerId: string, 
-                                         winnerWillBeHome: boolean) => {
+    const updateFutureTournamentMatch = (
+        futureMatchIndex: number,
+        previousMatchWinnerId: string,
+        winnerWillBeHome: boolean
+    ) => {
         if (props.currentTournament.matches[futureMatchIndex]) {
             if (winnerWillBeHome) {
                 props.currentTournament.matches[futureMatchIndex].home_player_id = previousMatchWinnerId;
@@ -103,53 +105,53 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 props.currentTournament.matches[futureMatchIndex] = {
                     match_number: futureMatchIndex,
                     home_player_id: previousMatchWinnerId,
-                    away_player_id: ""
+                    away_player_id: "",
                 };
             } else {
                 props.currentTournament.matches[futureMatchIndex] = {
                     match_number: futureMatchIndex,
                     home_player_id: "",
-                    away_player_id: previousMatchWinnerId
+                    away_player_id: previousMatchWinnerId,
                 };
             }
         }
     };
 
     return (
-        <Modal
-            onClose={props.onClose}
-            open={props.isOpen}
-            >
-            <Modal.Header>
-                Enter tournament game
-            </Modal.Header>
+        <Modal onClose={props.onClose} open={props.isOpen}>
+            <Modal.Header>Enter tournament game</Modal.Header>
             <Modal.Content>
                 <Form onSubmit={updateMatchAndTournament}>
                     <Form.Group widths="equal">
-                        <Form.Input className={"tournament-score-input"}
-                                    label={props.homePlayerEntering + "'s score"}
-                                    type={"number"}
-                                    min={0}
-                                    value={homePlayerEnteringScore}
-                                    onChange={(event, data) => setHomePlayerEnteringScore(parseInt(data.value))}
-                                    required/>
-                        <Form.Input className={"tournament-score-input"}
-                                    label={props.awayPlayerEntering + "'s score"}
-                                    type={"number"}
-                                    min={0}
-                                    value={awayPlayerEnteringScore}
-                                    onChange={(event, data) => setAwayPlayerEnteringScore(parseInt(data.value))}
-                                    required/>
+                        <Form.Input
+                            className={"tournament-score-input"}
+                            label={props.homePlayerEntering + "'s score"}
+                            type={"number"}
+                            min={0}
+                            value={homePlayerEnteringScore}
+                            onChange={(event, data) => setHomePlayerEnteringScore(parseInt(data.value))}
+                            required
+                        />
+                        <Form.Input
+                            className={"tournament-score-input"}
+                            label={props.awayPlayerEntering + "'s score"}
+                            type={"number"}
+                            min={0}
+                            value={awayPlayerEnteringScore}
+                            onChange={(event, data) => setAwayPlayerEnteringScore(parseInt(data.value))}
+                            required
+                        />
                     </Form.Group>
-                    <Form.Button className={"confirm-score-button"}
-                                 disabled={homePlayerEnteringScore === undefined ||
-                                           awayPlayerEnteringScore === undefined ||
-                                           confirmingMatchScore}>
-                        {`Confirm score  `}
-                        {confirmingMatchScore
-                        ? <Icon loading name={"spinner"}/>
-                        : <span/>
+                    <Form.Button
+                        className={"confirm-score-button"}
+                        disabled={
+                            homePlayerEnteringScore === undefined ||
+                            awayPlayerEnteringScore === undefined ||
+                            confirmingMatchScore
                         }
+                    >
+                        {`Confirm score  `}
+                        {confirmingMatchScore ? <Icon loading name={"spinner"} /> : <span />}
                     </Form.Button>
                 </Form>
             </Modal.Content>

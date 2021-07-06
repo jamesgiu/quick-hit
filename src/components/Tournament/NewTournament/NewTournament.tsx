@@ -32,31 +32,36 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
         setStartingNewTournament(true);
 
         const tournamentMatches: DbTournamentMatch[] = [];
-        tournamentMatches.push({
-            "match_number": 0,
-            "home_player_id": players[0].id,
-            "away_player_id": players[7].id
-        }, {
-            "match_number": 1,
-            "home_player_id": players[3].id,
-            "away_player_id": players[4].id
-        }, {
-            "match_number": 2,
-            "home_player_id": players[1].id,
-            "away_player_id": players[6].id
-        }, {
-            "match_number": 3,
-            "home_player_id": players[2].id,
-            "away_player_id": players[5].id
-        });
-    
+        tournamentMatches.push(
+            {
+                match_number: 0,
+                home_player_id: players[0].id,
+                away_player_id: players[7].id,
+            },
+            {
+                match_number: 1,
+                home_player_id: players[3].id,
+                away_player_id: players[4].id,
+            },
+            {
+                match_number: 2,
+                home_player_id: players[1].id,
+                away_player_id: players[6].id,
+            },
+            {
+                match_number: 3,
+                home_player_id: players[2].id,
+                away_player_id: players[5].id,
+            }
+        );
+
         const newTournament: DbTournament = {
-            "id": uuidv4(),
+            id: uuidv4(),
             name,
-            "start_date": getISODate(),
-            "matches": tournamentMatches
+            start_date: getISODate(),
+            matches: tournamentMatches,
         };
-    
+
         QuickHitAPI.addUpdateTournament(newTournament, onSuccess, onError);
     };
 
@@ -66,29 +71,29 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
             tableRows.push(
                 <Table.Row positive={i <= 7} negative={i >= 8}>
                     <Table.Cell>{i + 1}</Table.Cell>
-                    <Table.Cell><Icon name={players[i].icon}/> {players[i].name}</Table.Cell>
+                    <Table.Cell>
+                        <Icon name={players[i].icon} /> {players[i].name}
+                    </Table.Cell>
                     <Table.Cell>{players[i].elo}</Table.Cell>
                 </Table.Row>
             );
-    
         }
         return tableRows;
     };
 
     return (
-        <Modal
-            onClose={props.onClose}
-            open={props.isOpen}
-            >
+        <Modal onClose={props.onClose} open={props.isOpen}>
             <Modal.Header>
-                Start new tournament <Icon name={"trophy"}/>
+                Start new tournament <Icon name={"trophy"} />
             </Modal.Header>
             <Modal.Content>
                 <Form onSubmit={() => startNewTournament(props.sortedPlayers.slice(0, 8), newTournamentName)}>
-                    <Form.Input className={"tournament-name-input"}
-                                label={"Tournament name"}
-                                onChange={(event, data) => setNewTournamentName(data.value)}
-                                required/>
+                    <Form.Input
+                        className={"tournament-name-input"}
+                        label={"Tournament name"}
+                        onChange={(event, data) => setNewTournamentName(data.value)}
+                        required
+                    />
                     <div id={"new-tournament-ladder-scroller"}>
                         <Table id={"new-tournament-ladder-table"}>
                             <Table.Header>
@@ -98,17 +103,12 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                                     <Table.HeaderCell>Player ELO</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
-                            <Table.Body>
-                                {getLadderTableRows(props.sortedPlayers)}
-                            </Table.Body>
+                            <Table.Body>{getLadderTableRows(props.sortedPlayers)}</Table.Body>
                         </Table>
                     </div>
                     <Form.Button disabled={!newTournamentName || startingNewTournament} id={"new-tournament-btn"}>
                         {`Start tournament with these top 8 players  `}
-                        {startingNewTournament
-                        ? <Icon loading name={"spinner"}/>
-                        : <span/>
-                        }
+                        {startingNewTournament ? <Icon loading name={"spinner"} /> : <span />}
                     </Form.Button>
                 </Form>
             </Modal.Content>
