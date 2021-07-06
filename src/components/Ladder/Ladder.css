@@ -37,6 +37,14 @@
   width: 13vh;
 }
 
+.players-area .card:last-child .playercardheader {
+  color: darkgray;
+}
+
+.players-area .card:last-child .extras {
+  color: darkgray;
+}
+
 .new-buttons {
   margin-top: 50px;
 }
