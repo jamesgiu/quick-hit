@@ -28,8 +28,14 @@ function Navbar(): JSX.Element {
                 </Link>
                 <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}>
                     <Menu.Item as={"a"}>
-                        <Icon name={"trophy"} />
+                        <Icon name={"list"} />
                         Ladder
+                    </Menu.Item>
+                </Link>
+                <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`}>
+                    <Menu.Item as={"a"}>
+                        <Icon name={"trophy"} />
+                        Tournament
                     </Menu.Item>
                 </Link>
                 <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}>

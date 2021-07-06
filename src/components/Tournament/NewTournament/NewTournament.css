@@ -1,0 +1,19 @@
+.tournament-name-input {
+  width: 40%;
+  display: inline-flex;
+}
+
+#new-tournament-ladder-scroller {
+  width: 50%;
+  float: right;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+#new-tournament-ladder-table {
+  text-align: center;
+}
+
+#new-tournament-btn {
+  display: inline;
+}

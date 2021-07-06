@@ -1,4 +1,4 @@
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, getTodaysDate } from "../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament, getTodaysDate } from "../types/database/models";
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
@@ -31,6 +31,19 @@ export class QuickHitAPI {
         QuickHitAPI.makeAxiosRequest(ApiActions.BADGE, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static getTournaments(
+        onSuccess: (tournaments: DbTournament[]) => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.TOURNAMENT, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data ? Object.values(response.data) : []);
             })
             .catch((error: AxiosError) => {
                 onFailure(error.message);
@@ -135,6 +148,20 @@ export class QuickHitAPI {
             .catch((error: AxiosError) => {
                 onFailure(error.message);
             });
+    }
+
+    public static addUpdateTournament(
+        tournamentToAdd: DbTournament,
+        onSuccess: () => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.TOURNAMENT,
+            HttpMethod.PATCH,
+            `{"${tournamentToAdd.id}" : ${JSON.stringify(tournamentToAdd)}}`
+        )
+            .then(() => onSuccess())
+            .catch((error: AxiosError) => onFailure(error.message));
     }
 
     private static makeAxiosRequest(uri: string, method: HttpMethod, data?: string): AxiosPromise {

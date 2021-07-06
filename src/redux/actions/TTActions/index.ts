@@ -1,5 +1,5 @@
 import * as constants from "../../constants/TTConstants";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer } from "../../../types/database/models";
+import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament } from "../../../types/database/models";
 
 export interface SetMatchesAction {
     type: constants.SET_MATCHES_TYPE;
@@ -29,6 +29,11 @@ export interface SetHappyHourAction {
 export interface SetBadgesAction {
     type: constants.SET_BADGES_TYPE;
     value: DbBadge[];
+}
+
+export interface SetTournamentsAction {
+    type: constants.SET_TOURNAMENTS_TYPE;
+    value: DbTournament[];
 }
 
 export function setMatches(newMatches: DbMatch[]): SetMatchesAction {
@@ -70,5 +75,12 @@ export function setBadges(newBadges: DbBadge[]): SetBadgesAction {
     return {
         type: constants.SET_BADGES,
         value: newBadges,
+    };
+}
+
+export function setTournaments(newTournaments: DbTournament[]): SetTournamentsAction {
+    return {
+        type: constants.SET_TOURNAMENTS,
+        value: newTournaments,
     };
 }
