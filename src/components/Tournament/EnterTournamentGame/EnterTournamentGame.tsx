@@ -10,6 +10,7 @@ interface EnterTournamentGameProps {
     onClose: () => void;
     isOpen: boolean;
     refresh: () => void;
+    // In theory will never be undefined.
     matchEntering: DbTournamentMatch | undefined;
     currentTournament: DbTournament;
     homePlayerEntering: string;
@@ -39,12 +40,14 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
 
         setConfirmingMatchScore(true);
 
+        // Should never be true.
         if (!props.matchEntering) {
             makeErrorToast("Come on man", "You've got to be entering a score");
             setConfirmingMatchScore(false);
             return;
         }
 
+        // Also should never be true.
         if (homePlayerEnteringScore === undefined || awayPlayerEnteringScore === undefined) {
             makeErrorToast("Come on man", "You've got to enter a score");
             setConfirmingMatchScore(false);
@@ -65,6 +68,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         const homeWon = homePlayerEnteringScore > awayPlayerEnteringScore;
         const matchWinnerId = homeWon ? props.matchEntering.home_player_id : props.matchEntering.away_player_id;
 
+        // Add the winner's ID to their next match.
         switch (props.matchEntering.match_number) {
             case 0:
                 updateFutureTournamentMatch(4, matchWinnerId, true);
@@ -85,6 +89,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 updateFutureTournamentMatch(6, matchWinnerId, false);
                 break;
             case 6:
+                // If the last game is being entered, then the tournament is over, and we can add its end date.
                 props.currentTournament.end_date = getISODate();
                 break;
         }
@@ -97,6 +102,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         previousMatchWinnerId: string,
         winnerWillBeHome: boolean
     ) => {
+        // If the future match already exists, just add the winner's ID to it. Otherwise, make the new match, with the winner's ID.
         if (props.currentTournament.matches[futureMatchIndex]) {
             if (winnerWillBeHome) {
                 props.currentTournament.matches[futureMatchIndex].home_player_id = previousMatchWinnerId;

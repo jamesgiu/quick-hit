@@ -7,7 +7,6 @@ import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 
-// Add comments.
 // Run lint and prettier again.
 
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
@@ -25,10 +24,13 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
 
+    // We have to sort the retrieved players and tournaments because using the Firebase REST API's query parameters does
+    // not guarantee order.
     const sortedPlayers = props.players.sort((p1, p2) => p2.elo - p1.elo);
     const sortedTournaments = props.tournaments.sort((t1, t2) => t2.start_date.localeCompare(t1.start_date));
     const playersMap = getPlayersMap(props.players);
 
+    // Determine what rank the player was in the supplied tournament.
     const getPlayerRank = (tournament: DbTournament, playerId: string): number => {
         if (tournament.matches[0].home_player_id === playerId) return 1;
         else if (tournament.matches[0].away_player_id === playerId) return 8;
@@ -48,6 +50,10 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         }
     };
 
+    // Returns the VS button differently depending on the match state. If the match has its players determined, but the match
+    // has not yet been played, make the button clickable to enter the score. If the match has already been played, make the
+    // button display the score, and be unclickable. Lastly, if the players for the match are not yet defined, just display
+    // an unclickable VS.
     const getMatchBtn = (match: DbTournamentMatch): JSX.Element => {
         if (match && match.home_player_id && match.away_player_id) {
             if (match.home_score === undefined) {
@@ -73,7 +79,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         }
     };
 
-    const getTeamItem = (
+    const getMatchItem = (
         match: DbTournamentMatch,
         playersMap: Map<string, DbPlayer>,
         tournament: DbTournament
@@ -114,8 +120,9 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         openEnterGameModal(true);
     };
 
+    // Returns the icon and name of the winner of the given tournament.
     const getWinner = (tournament: DbTournament): JSX.Element => {
-        const finalMatch = tournament ? tournament.matches[6] : sortedTournaments[0].matches[6];
+        const finalMatch = tournament.matches[6];
 
         if (finalMatch && finalMatch.home_score !== undefined && finalMatch.away_score !== undefined) {
             const homeWon = finalMatch.home_score > finalMatch.away_score;
@@ -172,29 +179,29 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div className="tournament-brackets">
                     <ul className="bracket bracket-2">
                         <li className="match-item" key={0}>
-                            {getTeamItem(tournament.matches[0], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[0], playersMap, tournament)}
                         </li>
                         <li className="match-item" key={1}>
-                            {getTeamItem(tournament.matches[1], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[1], playersMap, tournament)}
                         </li>
                         <li className="match-item" key={2}>
-                            {getTeamItem(tournament.matches[2], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[2], playersMap, tournament)}
                         </li>
                         <li className="match-item" key={3}>
-                            {getTeamItem(tournament.matches[3], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[3], playersMap, tournament)}
                         </li>
                     </ul>
                     <ul className="bracket bracket-3">
                         <li className="match-item" key={4}>
-                            {getTeamItem(tournament.matches[4], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[4], playersMap, tournament)}
                         </li>
                         <li className="match-item" key={5}>
-                            {getTeamItem(tournament.matches[5], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[5], playersMap, tournament)}
                         </li>
                     </ul>
                     <ul className="bracket bracket-4">
                         <li className="match-item" key={6}>
-                            {getTeamItem(tournament.matches[6], playersMap, tournament)}
+                            {getMatchItem(tournament.matches[6], playersMap, tournament)}
                         </li>
                     </ul>
 
