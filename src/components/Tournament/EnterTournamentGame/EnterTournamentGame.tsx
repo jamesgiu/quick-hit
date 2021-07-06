@@ -41,17 +41,20 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
 
         if (!props.matchEntering) {
             makeErrorToast("Come on man", "You've got to be entering a score");
+            setConfirmingMatchScore(false);
             return;
         }
 
-        if (!homePlayerEnteringScore || !awayPlayerEnteringScore) {
+        if (homePlayerEnteringScore === undefined || awayPlayerEnteringScore === undefined) {
             makeErrorToast("Come on man", "You've got to enter a score");
+            setConfirmingMatchScore(false);
             props.refresh();
             return;
         }
 
         if (homePlayerEnteringScore === awayPlayerEnteringScore) {
             makeErrorToast("Come on man", "Winning player score must be higher than losing player score");
+            setConfirmingMatchScore(false);
             props.refresh();
             return;
         }

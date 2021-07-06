@@ -7,7 +7,6 @@ import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 
-// Do run-through test.
 // Look through code for anything named oddly.
 // Add comments.
 
