@@ -121,7 +121,6 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         getMatches();
         getTournaments();
         getPlayers();
-        setPolling(false);
     };
 
     useEffect(() => {

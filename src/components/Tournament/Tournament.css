@@ -38,7 +38,7 @@
   background-color: rgba(30, 30, 30, 1);
 }
 
-.team-item {
+.match-item {
   background-color: rgba(53, 54, 58, 1);
   padding: 0.5rem;
   display: block;
@@ -49,7 +49,7 @@
   border: 1px solid darkorange;
 }
 
-.team-item::after {
+.match-item::after {
   content: '';
   border-color: darkorange;
   border-width: 2px;
@@ -59,21 +59,21 @@
   right: -11px;
 }
 
-.team-item:nth-of-type(odd)::after {
+.match-item:nth-of-type(odd)::after {
   border-right-style: solid;
   border-top-style: solid;
   height: 100%;
   top: 50%;
 }
 
-.team-item:nth-of-type(even)::after {
+.match-item:nth-of-type(even)::after {
   border-right-style: solid;
   border-bottom-style: solid;
   height: 100%;
   top: -50%;
 }
 
-.team-item::before {
+.match-item::before {
   content: '';
   border-top: 2px solid darkorange;
   position: absolute;
@@ -83,26 +83,26 @@
   top: 50%;
 }
 
-.bracket-4 .team-item::after {
+.bracket-4 .match-item::after {
   display: none;
 }
 
-.bracket-3 .team-item:nth-of-type(odd)::after {
+.bracket-3 .match-item:nth-of-type(odd)::after {
   height: 200%;
   top: 50%;
 }
 
-.bracket:first-of-type .team-item::before {
+.bracket:first-of-type .match-item::before {
   display: none;
 }
 
-.bracket:last-of-type .team-item::before,
-.bracket:last-of-type .team-item::after {
+.bracket:last-of-type .match-item::before,
+.bracket:last-of-type .match-item::after {
   display: none;
 }
 
-.team-item .vs,
-.team-item .clickable-vs {
+.match-item .vs,
+.match-item .clickable-vs {
   display: table;
   background-color: black;
   color: orange;
@@ -110,11 +110,11 @@
   margin: 0 auto;
 }
 
-.team-item .vs:hover {
+.match-item .vs:hover {
   cursor: not-allowed;
 }
 
-.team-item .clickable-vs:hover {
+.match-item .clickable-vs:hover {
   transition: 0.3s;
   cursor: pointer;
   background-color: orange;

@@ -7,8 +7,8 @@ import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 
-// Look through code for anything named oddly.
 // Add comments.
+// Run lint and prettier again.
 
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
@@ -171,35 +171,35 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
                 <div className="tournament-brackets">
                     <ul className="bracket bracket-2">
-                        <li className="team-item" key={0}>
+                        <li className="match-item" key={0}>
                             {getTeamItem(tournament.matches[0], playersMap, tournament)}
                         </li>
-                        <li className="team-item" key={1}>
+                        <li className="match-item" key={1}>
                             {getTeamItem(tournament.matches[1], playersMap, tournament)}
                         </li>
-                        <li className="team-item" key={2}>
+                        <li className="match-item" key={2}>
                             {getTeamItem(tournament.matches[2], playersMap, tournament)}
                         </li>
-                        <li className="team-item" key={3}>
+                        <li className="match-item" key={3}>
                             {getTeamItem(tournament.matches[3], playersMap, tournament)}
                         </li>
                     </ul>
                     <ul className="bracket bracket-3">
-                        <li className="team-item" key={4}>
+                        <li className="match-item" key={4}>
                             {getTeamItem(tournament.matches[4], playersMap, tournament)}
                         </li>
-                        <li className="team-item" key={5}>
+                        <li className="match-item" key={5}>
                             {getTeamItem(tournament.matches[5], playersMap, tournament)}
                         </li>
                     </ul>
                     <ul className="bracket bracket-4">
-                        <li className="team-item" key={6}>
+                        <li className="match-item" key={6}>
                             {getTeamItem(tournament.matches[6], playersMap, tournament)}
                         </li>
                     </ul>
 
                     <ul className="bracket bracket-5">
-                        <li className="team-item">{getWinner(tournament)}</li>
+                        <li className="match-item">{getWinner(tournament)}</li>
                     </ul>
                 </div>
             </div>
