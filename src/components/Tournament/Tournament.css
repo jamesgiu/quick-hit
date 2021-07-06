@@ -1,0 +1,214 @@
+.tournament-container {
+  border: 1px solid darkorange;
+}
+
+.tournament-headers {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border-bottom: 1px solid darkorange;
+}
+
+.tournament-headers h3 {
+  width: 25%;
+  text-align: center;
+  font-weight: 400;
+  border-right: 1px dashed #ccc;
+  margin: 0;
+  padding: 1rem;
+}
+
+.tournament-brackets {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  background: #fdfdfd;
+}
+
+.bracket {
+  display: flex;
+  margin: 0;
+  padding: 30px 0;
+  flex-direction: column;
+  justify-content: space-around;
+  list-style-type: none;
+  border-right: 1px dashed #ccc;
+  flex: 1;
+  background-color: rgba(30, 30, 30, 1);
+}
+
+.match-item {
+  background-color: rgba(53, 54, 58, 1);
+  padding: 0.5rem;
+  display: block;
+  margin: 0.5rem 10px;
+  position: relative;
+  line-height: 2;
+  text-align: center;
+  border: 1px solid darkorange;
+}
+
+.match-item::after {
+  content: '';
+  border-color: darkorange;
+  border-width: 2px;
+  position: absolute;
+  display: block;
+  width: 10px;
+  right: -11px;
+}
+
+.match-item:nth-of-type(odd)::after {
+  border-right-style: solid;
+  border-top-style: solid;
+  height: 100%;
+  top: 50%;
+}
+
+.match-item:nth-of-type(even)::after {
+  border-right-style: solid;
+  border-bottom-style: solid;
+  height: 100%;
+  top: -50%;
+}
+
+.match-item::before {
+  content: '';
+  border-top: 2px solid darkorange;
+  position: absolute;
+  height: 2px;
+  width: 10px;
+  left: -10px;
+  top: 50%;
+}
+
+.bracket-4 .match-item::after {
+  display: none;
+}
+
+.bracket-3 .match-item:nth-of-type(odd)::after {
+  height: 200%;
+  top: 50%;
+}
+
+.bracket:first-of-type .match-item::before {
+  display: none;
+}
+
+.bracket:last-of-type .match-item::before,
+.bracket:last-of-type .match-item::after {
+  display: none;
+}
+
+.match-item .vs,
+.match-item .clickable-vs {
+  display: table;
+  background-color: black;
+  color: orange;
+  font-size: 0.8rem;
+  margin: 0 auto;
+}
+
+.match-item .vs:hover {
+  cursor: not-allowed;
+}
+
+.match-item .clickable-vs:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  background-color: orange;
+  color: black;
+}
+
+.new-tournament-div .new-tournament-button {
+  color: darkorange;
+  background-color: #1b1c1d;
+  border: 1px solid darkorange;
+}
+
+.new-tournament-div .new-tournament-button:hover {
+  background-color: rgba(50, 50, 50, 1);
+  color: darkorange;
+}
+
+.qualified-player {
+  color: green;
+}
+
+.eliminated-player {
+  color: red;
+}
+
+.congrats-div {
+  font-size: x-large;
+  margin: 20px auto;
+  padding: 10px;
+  width: 40%;
+  border: 1px solid orange;
+  background-color: black;
+  color: darkorange;
+  border-radius: 5px;
+}
+
+#rules-msg {
+  width: 40%;
+  margin: 15px auto;
+  background-color: black;
+  color: darkorange;
+  border: 1px solid darkorange;
+  overflow-x: scroll;
+}
+
+.match-loser {
+  text-decoration: line-through;
+  text-decoration-color: red;
+
+  /* The below may not work on older browsers, but for most modern ones it should be fine. */
+  text-decoration-thickness: 2px;
+}
+
+.tournament-details .ui.header,
+.tournament-details .ui.header .sub.header {
+  color: white;
+  text-align: left;
+}
+
+.tournament-details .ui.header {
+  margin: 10px 0;
+}
+
+.enter-game-score-vs {
+  padding: 0.6rem;
+}
+
+#past-tournaments-button,
+#past-tournaments-modal .header,
+#second-past-tournaments-modal .header {
+  background: linear-gradient(172deg, #24002d 0%, #ea43ed 22%, #e44cef 26%, #140109 29%, #ff51f9 30%, #e147f5 35%, #d12fee 39%, #bb11e6 43%, #a701df 48%, #140109 51%, #9700db 52%, #e839e6 53%, #7b00c7 61%, #7200c0 65%, #140109 70%, #6501bd 71%, #e839e6 72%, #6700b3 78%, #6302a9 83%, #140109 85%, #370381 100%);
+  color: orange;
+  border: 2px solid darkorange;
+}
+
+#past-tournaments-modal .content {
+  background-image: url('assets/past-tournaments-background.gif');
+  background-size: 100% 100%;
+  height: 75vh;
+  border: 2px solid darkorange;
+}
+
+#second-past-tournaments-modal .content {
+  height: 80vh;
+  border: 2px solid darkorange;
+  background-color: rgba(53, 54, 58, 1);
+  color: white;
+}
+
+#past-tournaments-modal .ui.table {
+  opacity: 80%;
+  text-align: center;
+}
+
+.past-tournament-expand {
+  padding: 10px 0;
+}
