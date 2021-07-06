@@ -7,8 +7,6 @@ import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 
-// Run lint and prettier again.
-
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);

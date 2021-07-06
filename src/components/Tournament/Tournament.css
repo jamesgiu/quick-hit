@@ -163,6 +163,7 @@
 .match-loser {
   text-decoration: line-through;
   text-decoration-color: red;
+
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
   text-decoration-thickness: 2px;
 }
