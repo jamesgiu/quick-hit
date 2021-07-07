@@ -15,7 +15,7 @@
   transition: font-size 0.5s;
 }
 
-.ui.card.player-card .playercardheader {
+.ui.card.player-card .player-card-header {
   color: black;
 }
 

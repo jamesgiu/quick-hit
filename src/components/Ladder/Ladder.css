@@ -37,7 +37,7 @@
   width: 13vh;
 }
 
-.players-area .card:last-child .playercardheader {
+.players-area .card:last-child .player-card-header {
   color: darkgray;
 }
 
