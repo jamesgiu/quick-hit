@@ -185,7 +185,7 @@
 #past-tournaments-button,
 #past-tournaments-modal .header,
 #second-past-tournaments-modal .header {
-  background: linear-gradient(0deg,#e839e6 20%,#7b00c7 61%,#6700b3 78%,#6302a9 83%);  
+  background: linear-gradient(0deg, #e839e6 20%, #7b00c7 61%, #6700b3 78%, #6302a9 83%);
   color: orange;
   border: 2px solid darkorange;
 }
