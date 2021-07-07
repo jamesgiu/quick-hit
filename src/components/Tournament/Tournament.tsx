@@ -254,7 +254,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     </div>
                     {renderTournament(sortedTournaments[0])}
                     <Message
-                        id={"rules-msg"}
+                        id={"rulesMsg"}
                         icon={"warning sign"}
                         header={"Remember the tournament rules!"}
                         content={"Play to 21, and you must win by 2!"}
@@ -264,13 +264,13 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                             openViewPastModal(true);
                             synth ? pastTournamentsAudioSynth.play() : pastTournamentsAudioVapour.play();
                         }}
-                        id={synth ? "past-tournaments-button-synth" : "past-tournaments-button-vapour"}
+                        id={synth ? "pastTournamentsButtonSynth" : "pastTournamentsButtonVapour"}
                     >
                         <Icon name={"backward"} />
                         View past tournaments
                     </Button>
                     <div>
-                        <Button id={synth ? "vapour-toggle" : "synth-toggle"} onClick={() => setSynth(!synth)}>
+                        <Button id={synth ? "vapourToggle" : "synthToggle"} onClick={() => setSynth(!synth)}>
                             {synth ? "Change to Vapour" : "Change to Synth"}
                         </Button>
                     </div>
@@ -307,12 +307,12 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     synth ? (pastTournamentsAudioSynth.currentTime = 0) : (pastTournamentsAudioVapour.currentTime = 0);
                 }}
                 open={viewPastModalOpen}
-                id={synth ? "past-tournaments-modal-synth" : "past-tournaments-modal-vapour"}
+                id={synth ? "pastTournamentsModalSynth" : "pastTournamentsModalVapour"}
             >
                 <Modal.Header>Past tournaments</Modal.Header>
                 <Modal.Content>
                     <Table
-                        id={synth ? "past-tournaments-table-synth" : "past-tournaments-table-vapor"}
+                        id={synth ? "pastTournamentsTableSynth" : "pastTournamentsTableVapour"}
                         color={synth ? "orange" : "pink"}
                         inverted
                     >
@@ -331,7 +331,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <Modal
                     onClose={() => openSecondPastModal(false)}
                     open={secondPastModalOpen}
-                    id={synth ? "second-past-tournaments-modal-synth" : "second-past-tournaments-modal-vapour"}
+                    id={synth ? "secondPastTournamentsModalSynth" : "secondPastTournamentsModalVapour"}
                 >
                     <Modal.Header>{pastTournamentBeingViewed?.name}</Modal.Header>
                     <Modal.Content>

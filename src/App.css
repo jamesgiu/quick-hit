@@ -2,7 +2,7 @@ html {
   background-color: rgba(53, 54, 58, 1);
 }
 
-.App {
+.app {
   text-align: center;
   background-color: rgba(53, 54, 58, 1);
   color: white;
@@ -24,18 +24,18 @@ html {
   color: orangered;
 }
 
-.App-logo {
+.app-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
+  .app-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
-.App-header {
+.app-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -46,11 +46,11 @@ html {
   color: white;
 }
 
-.App-link {
+.app-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+@keyframes app-logo-spin {
   from {
     transform: rotate(0deg);
   }

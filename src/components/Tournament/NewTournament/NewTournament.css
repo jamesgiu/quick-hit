@@ -3,17 +3,17 @@
   display: inline-flex;
 }
 
-#new-tournament-ladder-scroller {
+#newTournamentLadderScroller {
   width: 50%;
   float: right;
   max-height: 400px;
   overflow-y: scroll;
 }
 
-#new-tournament-ladder-table {
+#newTournamentLadderTable {
   text-align: center;
 }
 
-#new-tournament-btn {
+#newTournamentBtn {
   display: inline;
 }

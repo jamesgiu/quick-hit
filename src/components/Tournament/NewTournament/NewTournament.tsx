@@ -94,8 +94,8 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                         onChange={(event, data) => setNewTournamentName(data.value)}
                         required
                     />
-                    <div id={"new-tournament-ladder-scroller"}>
-                        <Table id={"new-tournament-ladder-table"}>
+                    <div id={"newTournamentLadderScroller"}>
+                        <Table id={"newTournamentLadderTable"}>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Ladder position</Table.HeaderCell>
@@ -106,7 +106,7 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                             <Table.Body>{getLadderTableRows(props.sortedPlayers)}</Table.Body>
                         </Table>
                     </div>
-                    <Form.Button disabled={!newTournamentName || startingNewTournament} id={"new-tournament-btn"}>
+                    <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
                         {`Start tournament with these top 8 players  `}
                         {startingNewTournament ? <Icon loading name={"spinner"} /> : <span />}
                     </Form.Button>

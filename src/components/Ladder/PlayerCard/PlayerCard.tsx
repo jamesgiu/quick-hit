@@ -18,7 +18,7 @@ function PlayerCard(props: PlayerCardProps): JSX.Element {
         <Card as={"span"} className="player-card">
             <Card.Content>
                 <Link to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", props.player.id)}`}>
-                    <Card.Header className="playercardheader">
+                    <Card.Header className="player-card-header">
                         <div>
                             <Icon name={props.player.icon} size={"big"} />
                         </div>
@@ -26,7 +26,6 @@ function PlayerCard(props: PlayerCardProps): JSX.Element {
                     </Card.Header>
                 </Link>
             </Card.Content>
-            <Card.Meta></Card.Meta>
             {props.winLoss && (
                 <Card.Content extra className="extras">
                     <div>{props.player.elo}</div>
