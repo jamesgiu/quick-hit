@@ -14,3 +14,11 @@
   font-weight: 700;
   transition: font-size 0.5s;
 }
+
+.ui.card.player-card .playercardheader {
+  color: black;
+}
+
+.ui.card.player-card .extras {
+  color: black;
+}
