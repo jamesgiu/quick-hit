@@ -185,7 +185,7 @@
 #past-tournaments-button,
 #past-tournaments-modal .header,
 #second-past-tournaments-modal .header {
-  background: linear-gradient(172deg, #24002d 0%, #ea43ed 22%, #e44cef 26%, #140109 29%, #ff51f9 30%, #e147f5 35%, #d12fee 39%, #bb11e6 43%, #a701df 48%, #140109 51%, #9700db 52%, #e839e6 53%, #7b00c7 61%, #7200c0 65%, #140109 70%, #6501bd 71%, #e839e6 72%, #6700b3 78%, #6302a9 83%, #140109 85%, #370381 100%);
+  background: linear-gradient(0deg, #e839e6 20%, #7b00c7 61%, #6700b3 78%, #6302a9 83%);
   color: orange;
   border: 2px solid darkorange;
 }
