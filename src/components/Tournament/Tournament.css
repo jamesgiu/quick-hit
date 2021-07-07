@@ -198,7 +198,6 @@
 #past-tournaments-modal-vapour .header,
 #second-past-tournaments-modal-vapour .header {
   background: linear-gradient(0deg, #01cdfe 40%, #009abf 80%);
-  background-color: #01cdfe;
   color: #ff71ce;
   border: 2px solid #ff71ce;
 }
