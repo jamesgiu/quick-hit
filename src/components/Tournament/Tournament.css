@@ -145,23 +145,22 @@
   font-size: x-large;
   margin: 20px auto;
   padding: 10px;
-  width: 40%;
+  width: 40vw;
   border: 1px solid orange;
   background-color: black;
   color: darkorange;
   border-radius: 5px;
+  min-width: 200px;
 }
 
-#rules-msg {
-  width: 40%;
+#rulesMsg {
+  width: 40vw;
+  min-width: 200px;
   margin: 15px auto;
   background-color: black;
   color: darkorange;
   border: 1px solid darkorange;
-  overflow-x: auto;
-
-  /* The below may not work on older browsers, but for most modern ones it should be fine. */
-  scrollbar-width: none;
+  overflow: hidden;
 }
 
 .match-loser {
@@ -186,42 +185,42 @@
   padding: 0.6rem;
 }
 
-#past-tournaments-button-synth,
-#past-tournaments-modal-synth .header,
-#second-past-tournaments-modal-synth .header {
+#pastTournamentsButtonSynth,
+#pastTournamentsModalSynth .header,
+#secondPastTournamentsModalSynth .header {
   background: linear-gradient(0deg, #e839e6 20%, #7b00c7 61%, #6700b3 78%, #6302a9 83%);
   color: orange;
   border: 2px solid darkorange;
 }
 
-#past-tournaments-button-vapour,
-#past-tournaments-modal-vapour .header,
-#second-past-tournaments-modal-vapour .header {
+#pastTournamentsButtonVapour,
+#pastTournamentsModalVapour .header,
+#secondPastTournamentsModalVapour .header {
   background: linear-gradient(0deg, #01cdfe 40%, #009abf 80%);
   color: #ff71ce;
   border: 2px solid #ff71ce;
 }
 
-#past-tournaments-modal-vapour .header {
+#pastTournamentsModalVapour .header {
   letter-spacing: 5px;
 }
 
-#past-tournaments-modal-synth {
+#pastTournamentsModalSynth {
   width: 75%;
 
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
   aspect-ratio: 1160 / 653;
 }
 
-#past-tournaments-modal-vapour {
+#pastTournamentsModalVapour {
   width: 40%;
 
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
   aspect-ratio: 1;
 }
 
-#past-tournaments-modal-synth .content,
-#past-tournaments-modal-vapour .content {
+#pastTournamentsModalSynth .content,
+#pastTournamentsModalVapour .content {
   background-size: 100% 100%;
   height: 100%;
   overflow-y: auto;
@@ -230,33 +229,33 @@
   scrollbar-width: none;
 }
 
-#past-tournaments-modal-synth .content {
+#pastTournamentsModalSynth .content {
   background-image: url('assets/past-tournaments-background-synth.gif');
   border: 2px solid darkorange;
 }
 
-#past-tournaments-modal-vapour .content {
+#pastTournamentsModalVapour .content {
   background-image: url('assets/past-tournaments-background-vapour.gif');
   border: 2px solid #ff71ce;
 }
 
-#second-past-tournaments-modal-synth .content,
-#second-past-tournaments-modal-vapour .content {
+#secondPastTournamentsModalSynth .content,
+#secondPastTournamentsModalVapour .content {
   height: 80vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
 }
 
-#second-past-tournaments-modal-synth .content {
+#secondPastTournamentsModalSynth .content {
   border: 2px solid darkorange;
 }
 
-#second-past-tournaments-modal-vapour .content {
+#secondPastTournamentsModalVapour .content {
   border: 2px solid #ff71ce;
 }
 
-#past-tournaments-modal-synth .ui.table,
-#past-tournaments-modal-vapour .ui.table {
+#pastTournamentsModalSynth .ui.table,
+#pastTournamentsModalVapour .ui.table {
   opacity: 80%;
   text-align: center;
 }
@@ -265,16 +264,16 @@
   padding: 10px 0;
 }
 
-#vapour-toggle,
-#synth-toggle {
+#vapourToggle,
+#synthToggle {
   margin: 5px;
   color: white;
 }
 
-#vapour-toggle {
+#vapourToggle {
   background-color: #ff71ce;
 }
 
-#synth-toggle {
+#synthToggle {
   background-color: darkorange;
 }

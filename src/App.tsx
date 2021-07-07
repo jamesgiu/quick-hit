@@ -16,7 +16,7 @@ import Tournament from "./containers/Tournament/Tournament";
 function App(): JSX.Element {
     return (
         <BrowserRouter>
-            <div className="App">
+            <div className="app">
                 <QHDataLoader />
                 <Navbar />
                 <div className={"app-main-content"}>

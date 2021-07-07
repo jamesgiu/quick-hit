@@ -48,9 +48,9 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                         </Header>
                         <div className={"player-stats-wrapper"}>
                             <Statistic.Group className={"statistics-group"}>
-                                <Statistic label={"Min rating"} value={extraStats.minELO} className={"minELO"} />
+                                <Statistic label={"Min rating"} value={extraStats.minELO} className={"min-elo"} />
                                 <Statistic label={"Rating"} value={player.elo} />
-                                <Statistic label={"Max rating"} value={extraStats.maxELO} className={"maxELO"} />
+                                <Statistic label={"Max rating"} value={extraStats.maxELO} className={"max-elo"} />
                             </Statistic.Group>
                             <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={extraStats.wins} className={"wins"} />

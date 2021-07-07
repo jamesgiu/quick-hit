@@ -8,12 +8,12 @@
 }
 
 .player-statistics .statistics-group .ui.statistic.losses .value,
-.player-statistics .statistics-group .ui.statistic.minELO .value {
+.player-statistics .statistics-group .ui.statistic.min-elo .value {
   color: grey;
 }
 
 .player-statistics .statistics-group .ui.statistic .label,
-.player-statistics .statistics-group .ui.statistic.maxELO .value {
+.player-statistics .statistics-group .ui.statistic.max-elo .value {
   color: darkorange;
 }
 
