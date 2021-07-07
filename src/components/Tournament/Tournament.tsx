@@ -15,12 +15,18 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [matchEntering, setMatchEntering] = useState<DbTournamentMatch | undefined>(undefined);
     const [viewPastModalOpen, openViewPastModal] = useState<boolean>(false);
     // Music by Karl Casey @ White Bat Audio.
-    const [pastTournamentsAudio] = useState<HTMLAudioElement>(
-        new Audio(process.env.PUBLIC_URL + "/past-tournaments-music.mp3")
+    const [pastTournamentsAudioSynth] = useState<HTMLAudioElement>(
+        new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-synth.mp3")
     );
-    pastTournamentsAudio.volume = 0.5;
+    // Music by Luxury Elite.
+    const [pastTournamentsAudioVapour] = useState<HTMLAudioElement>(
+        new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-vapour.mp3")
+    );
+    pastTournamentsAudioSynth.volume = 0.5;
+    pastTournamentsAudioVapour.volume = 0.5;
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
+    const [synth, setSynth] = useState<boolean>(true);
 
     // We have to sort the retrieved players and tournaments because using the Firebase REST API's query parameters does
     // not guarantee order. Make sure to filter out players who have never played a game, too.
@@ -256,13 +262,18 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     <Button
                         onClick={() => {
                             openViewPastModal(true);
-                            pastTournamentsAudio.play();
+                            synth ? pastTournamentsAudioSynth.play() : pastTournamentsAudioVapour.play();
                         }}
-                        id={"past-tournaments-button"}
+                        id={synth ? "past-tournaments-button-synth" : "past-tournaments-button-vapour"}
                     >
                         <Icon name={"backward"} />
                         View past tournaments
                     </Button>
+                    <div>
+                        <Button id={synth ? "vapour-toggle" : "synth-toggle"} onClick={() => setSynth(!synth)}>
+                            {synth ? "Change to Vapour" : "Change to Synth"}
+                        </Button>
+                    </div>
                 </div>
             ) : (
                 <div className={"new-tournament-div"}>
@@ -292,15 +303,19 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             <Modal
                 onClose={() => {
                     openViewPastModal(false);
-                    pastTournamentsAudio.pause();
-                    pastTournamentsAudio.currentTime = 0;
+                    synth ? pastTournamentsAudioSynth.pause() : pastTournamentsAudioVapour.pause();
+                    synth ? (pastTournamentsAudioSynth.currentTime = 0) : (pastTournamentsAudioVapour.currentTime = 0);
                 }}
                 open={viewPastModalOpen}
-                id={"past-tournaments-modal"}
+                id={synth ? "past-tournaments-modal-synth" : "past-tournaments-modal-vapour"}
             >
                 <Modal.Header>Past tournaments</Modal.Header>
                 <Modal.Content>
-                    <Table id={"past-tournaments-table"} color={"orange"} inverted>
+                    <Table
+                        id={synth ? "past-tournaments-table-synth" : "past-tournaments-table-vapor"}
+                        color={synth ? "orange" : "pink"}
+                        inverted
+                    >
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>Tournament name</Table.HeaderCell>
@@ -316,7 +331,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <Modal
                     onClose={() => openSecondPastModal(false)}
                     open={secondPastModalOpen}
-                    id={"second-past-tournaments-modal"}
+                    id={synth ? "second-past-tournaments-modal-synth" : "second-past-tournaments-modal-vapour"}
                 >
                     <Modal.Header>{pastTournamentBeingViewed?.name}</Modal.Header>
                     <Modal.Content>
