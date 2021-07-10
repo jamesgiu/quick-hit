@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { getISODate } from "../Tournament";
 import "./EnterTournamentGame.css";
@@ -15,6 +15,7 @@ interface EnterTournamentGameProps {
     currentTournament: DbTournament;
     homePlayerEntering: string;
     awayPlayerEntering: string;
+    playersMap: Map<string, DbPlayer>;
 }
 
 function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
@@ -89,8 +90,48 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 updateFutureTournamentMatch(6, matchWinnerId, false);
                 break;
             case 6:
-                // If the last game is being entered, then the tournament is over, and we can add its end date.
-                props.currentTournament.end_date = getISODate();
+                {
+                    // If the last game is being entered, then the tournament is over, and we can add its end date.
+                    props.currentTournament.end_date = getISODate();
+                    const tournamentWinner = props.playersMap.get(matchWinnerId);
+                    const matchLoserId = homeWon
+                        ? props.matchEntering.away_player_id
+                        : props.matchEntering.home_player_id;
+                    const tournamentRunnerUp = props.playersMap.get(matchLoserId);
+                    if (tournamentWinner && tournamentRunnerUp) {
+                        if (tournamentWinner.tournamentWins) {
+                            ++tournamentWinner.tournamentWins;
+                        } else {
+                            tournamentWinner.tournamentWins = 1;
+                        }
+
+                        if (tournamentRunnerUp.tournamentRunnerUps) {
+                            ++tournamentRunnerUp.tournamentRunnerUps;
+                        } else {
+                            tournamentRunnerUp.tournamentRunnerUps = 1;
+                        }
+
+                        const onPlayerUpdateFailure = (errorMsg: string) => {
+                            onError(errorMsg);
+                            return;
+                        };
+
+                        QuickHitAPI.addOrUpdatePlayer(
+                            tournamentWinner,
+                            () => {
+                                /* Do nothing on success. */
+                            },
+                            onPlayerUpdateFailure
+                        );
+                        QuickHitAPI.addOrUpdatePlayer(
+                            tournamentRunnerUp,
+                            () => {
+                                /* Do nothing on success. */
+                            },
+                            onPlayerUpdateFailure
+                        );
+                    }
+                }
                 break;
         }
 
