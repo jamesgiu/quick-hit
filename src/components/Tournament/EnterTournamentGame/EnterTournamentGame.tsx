@@ -127,7 +127,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
     };
 
     return (
-        <Modal onClose={props.onClose} open={props.isOpen}>
+        <Modal closeIcon onClose={props.onClose} open={props.isOpen}>
             <Modal.Header>Enter tournament game</Modal.Header>
             <Modal.Content>
                 <Form onSubmit={updateMatchAndTournament}>

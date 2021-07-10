@@ -149,6 +149,7 @@ function NewGame(props: NewGameProps): JSX.Element {
 
     return (
         <Modal
+            closeIcon
             onClose={() => setModalOpen(false)}
             onOpen={() => setModalOpen(true)}
             open={open}
