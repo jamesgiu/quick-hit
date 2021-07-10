@@ -67,3 +67,12 @@
   font-size: 2rem;
   color: red;
 }
+
+.player-statistics .player-stats-wrapper .tournament-win-count {
+  font-size: large;
+  margin-bottom: 10px;
+}
+
+.player-statistics .player-stats-wrapper .tournament-win-count span {
+  margin: 0 5px;
+}

@@ -299,6 +299,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 currentTournament={sortedTournaments[0]}
                 homePlayerEntering={homePlayerEntering}
                 awayPlayerEntering={awayPlayerEntering}
+                playersMap={playersMap}
             />
             <Modal
                 closeIcon
