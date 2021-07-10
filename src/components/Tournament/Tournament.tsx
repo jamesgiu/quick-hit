@@ -301,6 +301,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 awayPlayerEntering={awayPlayerEntering}
             />
             <Modal
+                closeIcon
                 onClose={() => {
                     openViewPastModal(false);
                     synth ? pastTournamentsAudioSynth.pause() : pastTournamentsAudioVapour.pause();
@@ -329,6 +330,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 </Modal.Content>
 
                 <Modal
+                    closeIcon
                     onClose={() => openSecondPastModal(false)}
                     open={secondPastModalOpen}
                     id={synth ? "secondPastTournamentsModalSynth" : "secondPastTournamentsModalVapour"}

@@ -19,22 +19,22 @@
 
 .players-area .card:first-child {
   background-color: goldenrod;
-  width: 25vh;
+  width: 18vw;
 }
 
 .players-area .card:nth-child(2) {
   background-color: silver;
-  width: 20vh;
+  width: 15vw;
 }
 
 .players-area .card:nth-child(3) {
   background-color: sandybrown;
-  width: 15vh;
+  width: 12vw;
 }
 
 .players-area .card:last-child {
   background-color: #282c34;
-  width: 13vh;
+  width: 8vw;
 }
 
 .players-area .card:last-child .player-card-header {
@@ -92,6 +92,6 @@
   color: red;
 }
 
-.players .toggles span {
-  padding: 10px;
+.players .toggles .ui.button {
+  margin: 10px;
 }

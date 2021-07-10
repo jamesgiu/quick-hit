@@ -82,7 +82,7 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
     };
 
     return (
-        <Modal onClose={props.onClose} open={props.isOpen}>
+        <Modal closeIcon onClose={props.onClose} open={props.isOpen}>
             <Modal.Header>
                 Start new tournament <Icon name={"trophy"} />
             </Modal.Header>

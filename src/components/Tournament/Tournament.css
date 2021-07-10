@@ -206,7 +206,7 @@
 }
 
 #pastTournamentsModalSynth {
-  width: 75%;
+  width: 70%;
 
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
   aspect-ratio: 1160 / 653;
@@ -241,7 +241,7 @@
 
 #secondPastTournamentsModalSynth .content,
 #secondPastTournamentsModalVapour .content {
-  height: 80vh;
+  height: 75vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
 }
