@@ -34,7 +34,7 @@ function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined):
             badge.player_id === props.focusedPlayerId
         );
 
-        // Sort list from oldest to newest
+        // Sort list from newest to oldest
         relevantBadges.sort((badgeA, badgeB) => 
             new Date(badgeB.date).getTime() - new Date(badgeA.date).getTime()
         );
