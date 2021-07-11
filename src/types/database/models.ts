@@ -19,6 +19,8 @@ export interface DbPlayer {
     id: string;
     name: string;
     elo: number;
+    tournamentWins?: number;
+    tournamentRunnerUps?: number;
 }
 
 export interface DbHappyHour {

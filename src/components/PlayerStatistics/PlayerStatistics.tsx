@@ -1,6 +1,6 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import { Grid, Header, Icon, Statistic, Transition } from "semantic-ui-react";
+import { Grid, Header, Icon, Popup, Statistic, Transition } from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
@@ -47,10 +47,30 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
+                            <div className={"tournament-win-count"}>
+                                <Popup
+                                    content={"Tournament wins"}
+                                    trigger={
+                                        <span>
+                                            <Icon name={"trophy"} color={"yellow"} /> x {player.tournamentWins ?? 0}
+                                        </span>
+                                    }
+                                    position={"bottom center"}
+                                />
+                                <Popup
+                                    content={"Tournament runner ups"}
+                                    trigger={
+                                        <span>
+                                            <Icon name={"trophy"} color={"grey"} /> x {player.tournamentRunnerUps ?? 0}
+                                        </span>
+                                    }
+                                    position={"bottom center"}
+                                />
+                            </div>
                             <Statistic.Group className={"statistics-group"}>
-                                <Statistic label={"Min rating"} value={extraStats.minELO} className={"minELO"} />
+                                <Statistic label={"Min rating"} value={extraStats.minELO} className={"min-elo"} />
                                 <Statistic label={"Rating"} value={player.elo} />
-                                <Statistic label={"Max rating"} value={extraStats.maxELO} className={"maxELO"} />
+                                <Statistic label={"Max rating"} value={extraStats.maxELO} className={"max-elo"} />
                             </Statistic.Group>
                             <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={extraStats.wins} className={"wins"} />

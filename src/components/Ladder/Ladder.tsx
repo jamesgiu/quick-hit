@@ -1,6 +1,5 @@
-import React from "react";
 import "./Ladder.css";
-import { Checkbox, Header, Icon, Table, Transition } from "semantic-ui-react";
+import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "./NewEditPlayer/NewEditPlayer";
 import NewGame from "./NewGame/NewGame";
@@ -115,18 +114,34 @@ function Ladder(props: LadderProps): JSX.Element {
                 <Header.Content>Ladder</Header.Content>
             </Header>
             <div className={"toggles"}>
-                <span>
-                    Hide players who haven't played a game:
-                    <Checkbox
-                        toggle
-                        checked={props.hideZeroGamePlayers}
-                        onChange={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
-                    />
-                </span>
-                <span>
-                    Show player cards:
-                    <Checkbox toggle checked={props.showCards} onChange={() => props.setShowCards(!props.showCards)} />
-                </span>
+                <Button
+                    onClick={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
+                    color={props.hideZeroGamePlayers ? "green" : "red"}
+                >
+                    {props.hideZeroGamePlayers ? (
+                        <span>
+                            <Icon name={"eye"} /> Show zero game players
+                        </span>
+                    ) : (
+                        <span>
+                            <Icon name={"eye slash"} /> Hide zero game players
+                        </span>
+                    )}
+                </Button>
+                <Button
+                    onClick={() => props.setShowCards(!props.showCards)}
+                    color={props.showCards ? "orange" : "yellow"}
+                >
+                    {props.showCards ? (
+                        <span>
+                            <Icon name={"table"} /> Show ladder table
+                        </span>
+                    ) : (
+                        <span>
+                            <Icon name={"address card"} /> Show player cards
+                        </span>
+                    )}
+                </Button>
             </div>
             <Transition visible={!props.loading}>
                 <span>

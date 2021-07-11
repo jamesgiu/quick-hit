@@ -1,6 +1,7 @@
 .ui.card.player-card {
   font-size: 0.8rem;
-  width: 15vh;
+  width: 9vw;
+  min-width: 75px;
   box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
   border-radius: 15px;
 }
@@ -15,7 +16,7 @@
   transition: font-size 0.5s;
 }
 
-.ui.card.player-card .playercardheader {
+.ui.card.player-card .player-card-header {
   color: black;
 }
 

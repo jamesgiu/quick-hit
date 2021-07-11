@@ -8,12 +8,12 @@
 }
 
 .player-statistics .statistics-group .ui.statistic.losses .value,
-.player-statistics .statistics-group .ui.statistic.minELO .value {
+.player-statistics .statistics-group .ui.statistic.min-elo .value {
   color: grey;
 }
 
 .player-statistics .statistics-group .ui.statistic .label,
-.player-statistics .statistics-group .ui.statistic.maxELO .value {
+.player-statistics .statistics-group .ui.statistic.max-elo .value {
   color: darkorange;
 }
 
@@ -66,4 +66,13 @@
 .player-statistics .statistics-group .nemesis .card .icon {
   font-size: 2rem;
   color: red;
+}
+
+.player-statistics .player-stats-wrapper .tournament-win-count {
+  font-size: large;
+  margin-bottom: 10px;
+}
+
+.player-statistics .player-stats-wrapper .tournament-win-count span {
+  margin: 0 5px;
 }

@@ -62,6 +62,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
 
     return (
         <Modal
+            closeIcon
             onClose={() => setModalOpen(false)}
             onOpen={() => setModalOpen(true)}
             open={open}
