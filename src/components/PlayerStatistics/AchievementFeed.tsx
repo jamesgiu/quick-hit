@@ -35,12 +35,15 @@ function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined):
 
         relevantBadges.forEach((badge) => {
             const involvedPlayer = playersMap.get(badge.involved_player);
-
+            const attainmentPercentage = calculateAttainmentPercentage(badge);
+            
             events.push({
                 meta: (
                     <div className={"event-summary"}>
                         {badge.text}
-                        <div>{calculateAttainmentPercentage(badge).toFixed(1)}% of players have this achievement</div>
+                        <div className={(attainmentPercentage < 10) ? "achievement-stats-rare" : "achievement-stats"}>
+                            {attainmentPercentage.toFixed(1)}% of players have this achievement
+                        </div>
                         <Divider />
                     </div>
                 ),
