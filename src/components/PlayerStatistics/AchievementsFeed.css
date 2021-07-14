@@ -18,3 +18,11 @@
   font-size: 2rem;
   margin-top: 20%;
 }
+
+.player-statistics .achievements .event-summary .achievement-stats {
+  color: darkgrey;
+}
+
+.player-statistics .achievements .event-summary .achievement-stats-rare {
+  color: orange;
+}

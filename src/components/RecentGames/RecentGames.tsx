@@ -21,7 +21,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const events: FeedEventProps[] = [];
         const playersMap = getPlayersMap(props.players);
 
-        // Sort list from oldest to newest
+        // Sort list from newest to oldest
         props.matches.sort((matchA, matchB) => {
             return new Date(matchB.date).getTime() - new Date(matchA.date).getTime();
         });
