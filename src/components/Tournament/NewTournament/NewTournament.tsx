@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Modal, Icon, Form, Table } from "semantic-ui-react";
+import { Modal, Icon, Form, Table, Grid } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { DbPlayer, DbTournamentMatch, DbTournament } from "../../../types/database/models";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { v4 as uuidv4 } from "uuid";
 import { getISODate } from "../Tournament";
 import "./NewTournament.css";
-import { TournamentParticipantsType } from "../../../types/types";
+import { TournamentParticipantsType, TournamentType } from "../../../types/types";
 
 interface NewTournamentProps {
     onClose: () => void;
@@ -20,6 +20,7 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
     const [newTournamentParticipantsType, setParticipantsType] = useState<TournamentParticipantsType>(
         TournamentParticipantsType.STANDARD
     );
+    const [newTournamentType, setTournamentType] = useState<TournamentType>(TournamentType.SINGLE);
 
     const startNewTournament = (): void => {
         const onSuccess = (): void => {
@@ -70,6 +71,7 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
             start_date: getISODate(),
             matches: tournamentMatches,
             participants: newTournamentParticipantsType,
+            type: newTournamentType,
         };
 
         QuickHitAPI.addUpdateTournament(newTournament, onSuccess, onError);
@@ -101,49 +103,71 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                 Start new tournament <Icon name={"trophy"} />
             </Modal.Header>
             <Modal.Content>
-                <Form onSubmit={(): void => startNewTournament()}>
-                    <Form.Input
-                        className={"tournament-name-input"}
-                        label={"Tournament name"}
-                        onChange={(event, data): void => setNewTournamentName(data.value)}
-                        required
-                    />
-                    <Form.Group inline>
-                        <label>Tournament participants</label>
-                        <Form.Radio
-                            label={"Standard"}
-                            value={TournamentParticipantsType.STANDARD}
-                            checked={newTournamentParticipantsType === TournamentParticipantsType.STANDARD}
-                            onChange={(event, { value }): void =>
-                                setParticipantsType(value as TournamentParticipantsType)
-                            }
-                        />
-                        <Form.Radio
-                            label={"Reverse"}
-                            value={TournamentParticipantsType.REVERSE}
-                            checked={newTournamentParticipantsType === TournamentParticipantsType.REVERSE}
-                            onChange={(event, { value }): void =>
-                                setParticipantsType(value as TournamentParticipantsType)
-                            }
-                        />
-                    </Form.Group>
-                    <div id={"newTournamentLadderScroller"}>
-                        <Table id={"newTournamentLadderTable"}>
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell>Ladder position</Table.HeaderCell>
-                                    <Table.HeaderCell>Player name</Table.HeaderCell>
-                                    <Table.HeaderCell>Player ELO</Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Header>
-                            <Table.Body>{getLadderTableRows()}</Table.Body>
-                        </Table>
-                    </div>
-                    <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
-                        {`Start tournament with these top 8 players  `}
-                        {startingNewTournament ? <Icon loading name={"spinner"} /> : <span />}
-                    </Form.Button>
-                </Form>
+                <Grid id={"contentGrid"} divided>
+                    <Grid.Column className={"content-column"}>
+                        <Form onSubmit={(): void => startNewTournament()}>
+                            <Form.Input
+                                label={"Tournament name"}
+                                onChange={(event, data): void => setNewTournamentName(data.value)}
+                                required
+                            />
+                            <Form.Group inline>
+                                <label>Tournament participants</label>
+                                <Form.Radio
+                                    label={"Standard"}
+                                    value={TournamentParticipantsType.STANDARD}
+                                    checked={newTournamentParticipantsType === TournamentParticipantsType.STANDARD}
+                                    onChange={(event, { value }): void =>
+                                        setParticipantsType(value as TournamentParticipantsType)
+                                    }
+                                />
+                                <Form.Radio
+                                    label={"Reverse"}
+                                    value={TournamentParticipantsType.REVERSE}
+                                    checked={newTournamentParticipantsType === TournamentParticipantsType.REVERSE}
+                                    onChange={(event, { value }): void =>
+                                        setParticipantsType(value as TournamentParticipantsType)
+                                    }
+                                />
+                            </Form.Group>
+                            <Form.Field label={"Tournament type"} />
+                            <Form.Radio
+                                label={"Single elimination"}
+                                value={TournamentType.SINGLE}
+                                checked={newTournamentType === TournamentType.SINGLE}
+                                onChange={(event, { value }): void =>
+                                    setTournamentType(value as TournamentType)
+                                }
+                            />
+                            <Form.Radio
+                                label={"Double elimination"}
+                                value={TournamentType.DOUBLE}
+                                checked={newTournamentType === TournamentType.DOUBLE}
+                                onChange={(event, { value }): void =>
+                                    setTournamentType(value as TournamentType)
+                                }
+                            />
+                            <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
+                                {`Start tournament with these top 8 players  `}
+                                {startingNewTournament ? <Icon loading name={"spinner"} /> : <span />}
+                            </Form.Button>
+                        </Form>
+                    </Grid.Column>
+                    <Grid.Column className={"content-column"}>
+                        <div id={"newTournamentLadderScroller"}>
+                            <Table id={"newTournamentLadderTable"}>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>Ladder position</Table.HeaderCell>
+                                        <Table.HeaderCell>Player name</Table.HeaderCell>
+                                        <Table.HeaderCell>Player ELO</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>{getLadderTableRows()}</Table.Body>
+                            </Table>
+                        </div>
+                    </Grid.Column>
+                </Grid>
             </Modal.Content>
         </Modal>
     );

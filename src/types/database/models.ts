@@ -1,5 +1,5 @@
 import { SemanticICONS } from "semantic-ui-react";
-import { TournamentParticipantsType } from "../types";
+import { TournamentParticipantsType, TournamentType } from "../types";
 
 export interface DbMatch {
     id: string;
@@ -55,6 +55,7 @@ export interface DbTournament {
     end_date?: string;
     matches: DbTournamentMatch[];
     participants?: TournamentParticipantsType;
+    type?: TournamentType;
 }
 
 export interface DbTournamentMatch {

@@ -16,3 +16,8 @@ export enum TournamentParticipantsType {
     STANDARD = "Standard",
     REVERSE = "Reverse",
 }
+
+export enum TournamentType {
+    SINGLE = "Single Elimination",
+    DOUBLE = "Double Elimination",
+}

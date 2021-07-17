@@ -1,19 +1,16 @@
-.tournament-name-input {
-  width: 40%;
-  display: inline-flex;
-}
-
 #newTournamentLadderScroller {
-  width: 50%;
-  float: right;
   max-height: 400px;
   overflow-y: scroll;
+}
+
+#newTournamentBtn {
+  margin-top: 35%;
 }
 
 #newTournamentLadderTable {
   text-align: center;
 }
 
-#newTournamentBtn {
-  display: inline;
+#contentGrid .content-column {
+  width: 50%;
 }

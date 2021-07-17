@@ -6,7 +6,15 @@ import "./Tournament.css";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
-import { TournamentParticipantsType } from "../../types/types";
+import { TournamentParticipantsType, TournamentType } from "../../types/types";
+
+/*
+TODO
+- Add in actual game logic placing the winners and losers.
+- Can we separate the winners and losers brackets more?
+- Different colour for the losers bracket? Back from the dead, graveyard, black and white?
+- Could we add the winning lines back? Would be hard, but might be possible.
+*/
 
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
@@ -93,16 +101,20 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const getMatchItem = (
         match: DbTournamentMatch,
         playersMap: Map<string, DbPlayer>,
-        tournament: DbTournament
+        tournament: DbTournament,
+        homeTbdText?: string,
+        awayTbdText?: string
     ): JSX.Element => {
         return (
             <div>
-                <span className={homeWon(match) === false ? "match-loser" : undefined}>
+                <span className={homeWon(match) === false ? "match-loser" : "home-player"}>
                     {match?.home_player_id
                         ? `(${getPlayerRank(tournament, match.home_player_id)}) ${
                               playersMap.get(match.home_player_id)?.name
                           }`
-                        : "TBD"}
+                        : homeTbdText 
+                            ? <span className={"custom-tbd"}>{homeTbdText}</span>
+                            : "TBD"}
                 </span>
                 <span
                     className={
@@ -118,7 +130,9 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         ? `(${getPlayerRank(tournament, match.away_player_id)}) ${
                               playersMap.get(match.away_player_id)?.name
                           }`
-                        : "TBD"}
+                        : awayTbdText 
+                            ? <span className={"custom-tbd"}>{awayTbdText}</span>
+                            : "TBD"}
                 </span>
             </div>
         );
@@ -167,6 +181,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         </div>
                     </Table.Cell>
                     <Table.Cell>{tournament.participants ?? TournamentParticipantsType.STANDARD}</Table.Cell>
+                    <Table.Cell>{tournament.type ?? TournamentType.SINGLE}</Table.Cell>
                     <Table.Cell>{tournament.start_date}</Table.Cell>
                     <Table.Cell>{tournament.end_date}</Table.Cell>
                     <Table.Cell>{getWinner(tournament)}</Table.Cell>
@@ -176,50 +191,152 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         return tableRows;
     };
 
+    const getHeaders = (tournament: DbTournament): JSX.Element[] => {
+        const headers: JSX.Element[] = [];
+
+        if (tournament.type && tournament.type === TournamentType.DOUBLE) {
+            headers.push(
+                <h3>Round 1</h3>,
+                <h3>Quarter-Finals</h3>,
+                <h3>Semi-Finals</h3>,
+                <h3>Finals</h3>,
+                <h3>
+                    Winner <Icon name="trophy" />
+                </h3>
+            );
+        } else {
+            headers.push(
+                <h3>Quarter-Finals</h3>,
+                <h3>Semi-Finals</h3>,
+                <h3>Final</h3>,
+                <h3>
+                    Winner <Icon name="trophy" />
+                </h3>
+            );
+        }
+
+        return headers;
+    };
+
+    const getBrackets = (tournament: DbTournament): JSX.Element[] => {
+        const brackets: JSX.Element[] = [];
+
+        if (tournament.type && tournament.type === TournamentType.DOUBLE) {
+            brackets.push(
+                <ul className="bracket bracket-1">
+                    <li className="match-item" key={0}>
+                        <span className={"watermark"}>1</span>
+                        {getMatchItem(tournament.matches[0], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={1}>
+                        <span className={"watermark"}>2</span>
+                        {getMatchItem(tournament.matches[1], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={2}>
+                        <span className={"watermark"}>3</span>
+                        {getMatchItem(tournament.matches[2], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={3}>
+                        <span className={"watermark"}>4</span>
+                        {getMatchItem(tournament.matches[3], playersMap, tournament)}
+                    </li>
+                    <li className="match-item loser" key={4}>
+                        <span className={"watermark"}>5</span>
+                        {getMatchItem(tournament.matches[4], playersMap, tournament, "G1 Loser", "G2 Loser")}
+                    </li>
+                    <li className="match-item loser" key={5}>
+                        <span className={"watermark"}>6</span>
+                        {getMatchItem(tournament.matches[5], playersMap, tournament, "G3 Loser", "G4 Loser")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-2">
+                    <li className="match-item" key={6}>
+                        <span className={"watermark"}>7</span>
+                        {getMatchItem(tournament.matches[6], playersMap, tournament, "G1 Winner", "G2 Winner")}
+                    </li>
+                    <li className="match-item" key={7}>
+                        <span className={"watermark"}>8</span>
+                        {getMatchItem(tournament.matches[7], playersMap, tournament, "G3 Winner", "G4 Winner")}
+                    </li>
+                    <li className="match-item loser" key={9}>
+                        <span className={"watermark"}>10</span>
+                        {getMatchItem(tournament.matches[9], playersMap, tournament, "G8 Loser", "G5 Winner")}
+                    </li>
+                    <li className="match-item loser" key={8}>
+                        <span className={"watermark"}>9</span>
+                        {getMatchItem(tournament.matches[8], playersMap, tournament, "G7 Loser", "G6 Winner")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-3">
+                    <li className="match-item" key={11}>
+                        <span className={"watermark"}>12</span>
+                        {getMatchItem(tournament.matches[11], playersMap, tournament, "G7 Winner", "G8 Winner")}
+                    </li>
+                    <li className="match-item loser" key={10}>
+                        <span className={"watermark"}>11</span>
+                        {getMatchItem(tournament.matches[10], playersMap, tournament, "G10 Winner", "G9 Winner")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-4">
+                <li className="match-item" key={13}>
+                    <span className={"watermark"}>14</span>
+                    {getMatchItem(tournament.matches[13], playersMap, tournament, "G12 Winner", "G13 Winner")}
+                </li>
+                <li className="match-item loser" key={12}>
+                    <span className={"watermark"}>13</span>
+                    {getMatchItem(tournament.matches[12], playersMap, tournament, "G12 Loser", "G11 Winner")}
+                </li>
+            </ul>,
+                <ul className="bracket bracket-5">
+                    <li className="match-item">{getWinner(tournament)}</li>
+                </ul>,
+            );
+        } else {
+            brackets.push(
+                <ul className="bracket bracket-2">
+                    <li className="match-item" key={0}>
+                        {getMatchItem(tournament.matches[0], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={1}>
+                        {getMatchItem(tournament.matches[1], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={2}>
+                        {getMatchItem(tournament.matches[2], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={3}>
+                        {getMatchItem(tournament.matches[3], playersMap, tournament)}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-3">
+                    <li className="match-item" key={4}>
+                        {getMatchItem(tournament.matches[4], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={5}>
+                        {getMatchItem(tournament.matches[5], playersMap, tournament)}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-4">
+                    <li className="match-item" key={6}>
+                        {getMatchItem(tournament.matches[6], playersMap, tournament)}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-5">
+                    <li className="match-item">{getWinner(tournament)}</li>
+                </ul>,
+            );
+        }
+
+        return brackets;
+    };
+
     const renderTournament = (tournament: DbTournament): JSX.Element => {
         return (
             <div className="tournament-container">
                 <div className="tournament-headers">
-                    <h3>Quarter-Finals</h3>
-                    <h3>Semi-Finals</h3>
-                    <h3>Final</h3>
-                    <h3>
-                        Winner <Icon name="trophy" />
-                    </h3>
+                    {getHeaders(tournament)}
                 </div>
-
-                <div className="tournament-brackets">
-                    <ul className="bracket bracket-2">
-                        <li className="match-item" key={0}>
-                            {getMatchItem(tournament.matches[0], playersMap, tournament)}
-                        </li>
-                        <li className="match-item" key={1}>
-                            {getMatchItem(tournament.matches[1], playersMap, tournament)}
-                        </li>
-                        <li className="match-item" key={2}>
-                            {getMatchItem(tournament.matches[2], playersMap, tournament)}
-                        </li>
-                        <li className="match-item" key={3}>
-                            {getMatchItem(tournament.matches[3], playersMap, tournament)}
-                        </li>
-                    </ul>
-                    <ul className="bracket bracket-3">
-                        <li className="match-item" key={4}>
-                            {getMatchItem(tournament.matches[4], playersMap, tournament)}
-                        </li>
-                        <li className="match-item" key={5}>
-                            {getMatchItem(tournament.matches[5], playersMap, tournament)}
-                        </li>
-                    </ul>
-                    <ul className="bracket bracket-4">
-                        <li className="match-item" key={6}>
-                            {getMatchItem(tournament.matches[6], playersMap, tournament)}
-                        </li>
-                    </ul>
-
-                    <ul className="bracket bracket-5">
-                        <li className="match-item">{getWinner(tournament)}</li>
-                    </ul>
+                <div className={tournament.type && tournament.type === TournamentType.DOUBLE ? "tournament-brackets" : "tournament-brackets single"}>
+                    {getBrackets(tournament)}
                 </div>
             </div>
         );
@@ -258,6 +375,11 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                     <Label color={"orange"}>
                                         {(
                                             sortedTournaments[0].participants ?? TournamentParticipantsType.STANDARD
+                                        ).toUpperCase()}
+                                    </Label>
+                                    <Label color={"orange"}>
+                                        {(
+                                            sortedTournaments[0].type ?? TournamentType.SINGLE
                                         ).toUpperCase()}
                                     </Label>
                                 </span>
@@ -341,6 +463,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                             <Table.Row>
                                 <Table.HeaderCell>Tournament name</Table.HeaderCell>
                                 <Table.HeaderCell>Tournament participants</Table.HeaderCell>
+                                <Table.HeaderCell>Tournament type</Table.HeaderCell>
                                 <Table.HeaderCell>Start date</Table.HeaderCell>
                                 <Table.HeaderCell>End date</Table.HeaderCell>
                                 <Table.HeaderCell>Winner</Table.HeaderCell>
