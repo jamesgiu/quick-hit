@@ -331,7 +331,7 @@ export const checkForTriggersAfterAMatch = (
     if (!loserBadgeKeys.includes(Achievement.A_LITTLE_EMBARRASSING)) {
         if (checkForALittleEmbarrassing(matches, losingPlayer)) {
             QuickHitAPI.addBadge(
-                decorateAchievementForUpload(A_LITTLE_EMBARRASSING_BADGE, winningPlayer, losingPlayer),
+                decorateAchievementForUpload(A_LITTLE_EMBARRASSING_BADGE, losingPlayer, winningPlayer),
                 () => {
                     return;
                 },
