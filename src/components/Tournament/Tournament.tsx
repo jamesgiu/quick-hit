@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button, Header, Icon, Message, Modal, Table } from "semantic-ui-react";
+import { Button, Header, Icon, Label, Message, Modal, Table } from "semantic-ui-react";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DbPlayer, DbTournament, DbTournamentMatch, getTodaysDate } from "../../types/database/models";
 import "./Tournament.css";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
+import { TournamentParticipantsType } from "../../types/types";
 
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
@@ -165,6 +166,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                             {tournament.name} <Icon name={"external"} />
                         </div>
                     </Table.Cell>
+                    <Table.Cell>{tournament.participants ?? TournamentParticipantsType.STANDARD}</Table.Cell>
                     <Table.Cell>{tournament.start_date}</Table.Cell>
                     <Table.Cell>{tournament.end_date}</Table.Cell>
                     <Table.Cell>{getWinner(tournament)}</Table.Cell>
@@ -250,7 +252,16 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div>
                     <div className={"tournament-details"}>
                         <Header
-                            content={sortedTournaments[0].name}
+                            content={
+                                <span>
+                                    {sortedTournaments[0].name}
+                                    <Label color={"orange"}>
+                                        {(
+                                            sortedTournaments[0].participants ?? TournamentParticipantsType.STANDARD
+                                        ).toUpperCase()}
+                                    </Label>
+                                </span>
+                            }
                             subheader={"Start date: " + sortedTournaments[0].start_date}
                         />
                     </div>
@@ -329,6 +340,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>Tournament name</Table.HeaderCell>
+                                <Table.HeaderCell>Tournament participants</Table.HeaderCell>
                                 <Table.HeaderCell>Start date</Table.HeaderCell>
                                 <Table.HeaderCell>End date</Table.HeaderCell>
                                 <Table.HeaderCell>Winner</Table.HeaderCell>

@@ -6,6 +6,7 @@ import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { v4 as uuidv4 } from "uuid";
 import { getISODate } from "../Tournament";
 import "./NewTournament.css";
+import { TournamentParticipantsType } from "../../../types/types";
 
 interface NewTournamentProps {
     onClose: () => void;
@@ -16,8 +17,11 @@ interface NewTournamentProps {
 function NewTournament(props: NewTournamentProps): JSX.Element {
     const [startingNewTournament, setStartingNewTournament] = useState<boolean>(false);
     const [newTournamentName, setNewTournamentName] = useState<string>("");
+    const [newTournamentParticipantsType, setParticipantsType] = useState<TournamentParticipantsType>(
+        TournamentParticipantsType.STANDARD
+    );
 
-    const startNewTournament = (players: DbPlayer[], name: string): void => {
+    const startNewTournament = (): void => {
         const onSuccess = (): void => {
             makeSuccessToast("Tournament started!", `A new tournament ${name} has been started!`);
             setStartingNewTournament(false);
@@ -30,6 +34,11 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
         };
 
         setStartingNewTournament(true);
+
+        const players: DbPlayer[] = [...props.sortedPlayers];
+        if (newTournamentParticipantsType === TournamentParticipantsType.REVERSE) {
+            players.reverse();
+        }
 
         const tournamentMatches: DbTournamentMatch[] = [];
         tournamentMatches.push(
@@ -57,24 +66,29 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
 
         const newTournament: DbTournament = {
             id: uuidv4(),
-            name,
+            name: newTournamentName,
             start_date: getISODate(),
             matches: tournamentMatches,
+            participants: newTournamentParticipantsType,
         };
 
         QuickHitAPI.addUpdateTournament(newTournament, onSuccess, onError);
     };
 
-    const getLadderTableRows = (players: DbPlayer[]): JSX.Element[] => {
+    const getLadderTableRows = (): JSX.Element[] => {
+        const ladderPlayers: DbPlayer[] = [...props.sortedPlayers];
+        if (newTournamentParticipantsType === TournamentParticipantsType.REVERSE) {
+            ladderPlayers.reverse();
+        }
         const tableRows: JSX.Element[] = [];
-        for (let i = 0; i < players.length; ++i) {
+        for (let i = 0; i < ladderPlayers.length; ++i) {
             tableRows.push(
                 <Table.Row positive={i <= 7} negative={i >= 8}>
                     <Table.Cell>{i + 1}</Table.Cell>
                     <Table.Cell>
-                        <Icon name={players[i].icon} /> {players[i].name}
+                        <Icon name={ladderPlayers[i].icon} /> {ladderPlayers[i].name}
                     </Table.Cell>
-                    <Table.Cell>{players[i].elo}</Table.Cell>
+                    <Table.Cell>{ladderPlayers[i].elo}</Table.Cell>
                 </Table.Row>
             );
         }
@@ -87,13 +101,32 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                 Start new tournament <Icon name={"trophy"} />
             </Modal.Header>
             <Modal.Content>
-                <Form onSubmit={(): void => startNewTournament(props.sortedPlayers.slice(0, 8), newTournamentName)}>
+                <Form onSubmit={(): void => startNewTournament()}>
                     <Form.Input
                         className={"tournament-name-input"}
                         label={"Tournament name"}
                         onChange={(event, data): void => setNewTournamentName(data.value)}
                         required
                     />
+                    <Form.Group inline>
+                        <label>Tournament participants</label>
+                        <Form.Radio
+                            label={"Standard"}
+                            value={TournamentParticipantsType.STANDARD}
+                            checked={newTournamentParticipantsType === TournamentParticipantsType.STANDARD}
+                            onChange={(event, { value }): void =>
+                                setParticipantsType(value as TournamentParticipantsType)
+                            }
+                        />
+                        <Form.Radio
+                            label={"Reverse"}
+                            value={TournamentParticipantsType.REVERSE}
+                            checked={newTournamentParticipantsType === TournamentParticipantsType.REVERSE}
+                            onChange={(event, { value }): void =>
+                                setParticipantsType(value as TournamentParticipantsType)
+                            }
+                        />
+                    </Form.Group>
                     <div id={"newTournamentLadderScroller"}>
                         <Table id={"newTournamentLadderTable"}>
                             <Table.Header>
@@ -103,7 +136,7 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                                     <Table.HeaderCell>Player ELO</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
-                            <Table.Body>{getLadderTableRows(props.sortedPlayers)}</Table.Body>
+                            <Table.Body>{getLadderTableRows()}</Table.Body>
                         </Table>
                     </div>
                     <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
