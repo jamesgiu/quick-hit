@@ -201,6 +201,11 @@
   border: 2px solid #ff71ce;
 }
 
+#pastTournamentsButtonSynth i.icon,
+#pastTournamentsButtonVapour i.icon {
+  margin: 0 5px;
+}
+
 #pastTournamentsModalVapour .header {
   letter-spacing: 5px;
 }
@@ -241,7 +246,7 @@
 
 #secondPastTournamentsModalSynth .content,
 #secondPastTournamentsModalVapour .content {
-  height: 75vh;
+  height: 80vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
 }
@@ -279,8 +284,8 @@
 }
 
 #rulesMsg .rules-content-wrapper {
-  width: 50%;
-  margin: auto;
+  justify-content: center;
+  display: flex;
 }
 
 #rulesMsg ul {

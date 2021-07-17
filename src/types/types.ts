@@ -11,3 +11,8 @@ export interface ExtraPlayerStats {
     victim?: string;
     nemesis?: string;
 }
+
+export enum TournamentParticipantsType {
+    STANDARD = "Standard",
+    REVERSE = "Reverse",
+}
