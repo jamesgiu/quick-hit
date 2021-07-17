@@ -47,10 +47,16 @@ function Navbar(): JSX.Element {
                 </Link>
                 <Menu.Menu position={"right"}>
                     <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"} />} />
-                    <NewGame customModalOpenElement={<Menu.Item as={"a"}>
-                        <Icon name={"game"}/>
-                        <Icon name={"plus"} size={"tiny"}/>
-                    </Menu.Item>} />
+                    <NewGame
+                        customModalOpenElement={
+                            <Menu.Item as={"a"}>
+                                <span className={"new-game-icon-navbar"}>
+                                    <Icon name={"game"} />
+                                    <Icon name={"plus"} size={"tiny"} />
+                                </span>
+                            </Menu.Item>
+                        }
+                    />
                     <KeyPrompt />
                 </Menu.Menu>
             </Menu>

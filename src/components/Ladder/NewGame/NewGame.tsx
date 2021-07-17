@@ -1,4 +1,4 @@
-import { Button, Form, Icon, Modal } from "semantic-ui-react";
+import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
 import { DbBadge, DbMatch, DbPlayer } from "../../../types/database/models";
@@ -8,8 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
 import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
-import {NewGameStoreProps} from "../../../containers/NewGame/NewGame";
-import {TTRefreshDispatchType} from "../../../containers/shared";
+import { NewGameStoreProps } from "../../../containers/NewGame/NewGame";
+import { TTRefreshDispatchType } from "../../../containers/shared";
 
 export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;
@@ -27,13 +27,13 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>();
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>();
 
-    const sendCreateRequest = (addAnother: boolean) => {
-        const onSuccess = () => {
+    const sendCreateRequest = (addAnother: boolean): void => {
+        const onSuccess = (): void => {
             makeSuccessToast("Game added!", "Back to work?");
             checkForAchievementTriggers(addAnother);
         };
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Game not added!", errorMsg);
         };
 
@@ -105,12 +105,12 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
         }, onError);
     };
 
-    const checkForAchievementTriggers = (addAnother: boolean) => {
+    const checkForAchievementTriggers = (addAnother: boolean): void => {
         if (!(winningPlayer && losingPlayer)) {
             return;
         }
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Could not calculate achievements!", errorMsg);
         };
 
@@ -138,7 +138,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
         }, onError);
     };
 
-    const renderPlayerOption = (player: DbPlayer) => {
+    const renderPlayerOption = (player: DbPlayer): DropdownItemProps => {
         return {
             key: player.id,
             text: (
@@ -154,8 +154,8 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     return (
         <Modal
             closeIcon
-            onClose={() => setModalOpen(false)}
-            onOpen={() => setModalOpen(true)}
+            onClose={(): void => setModalOpen(false)}
+            onOpen={(): void => setModalOpen(true)}
             open={open}
             trigger={
                 props.customModalOpenElement ?? (
@@ -182,7 +182,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                 </b>
                             }
                             options={props.players.map((player) => renderPlayerOption(player))}
-                            search={(options, value) => {
+                            search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
                                     return player.name.toLowerCase().includes(value.toLowerCase());
@@ -190,7 +190,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             }}
                             placeholder="Chicken Dinner"
                             required
-                            onChange={(event, data) => setWinningPlayer(JSON.parse(data.value as string))}
+                            onChange={(event, data): void => setWinningPlayer(JSON.parse(data.value as string))}
                             value={winningPlayer ? renderPlayerOption(winningPlayer).value : ""}
                         />
                         <Form.Field>
@@ -200,7 +200,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                 min={0}
                                 required
                                 value={winningPlayerScore ?? ""}
-                                onChange={(event) =>
+                                onChange={(event): void =>
                                     setWinningPlayerScore(
                                         event.target.value !== "" ? parseInt(event.target.value) : undefined
                                     )
@@ -216,7 +216,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                 </b>
                             }
                             options={props.players.map((player) => renderPlayerOption(player))}
-                            search={(options, value) => {
+                            search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
                                     return player.name.toLowerCase().includes(value.toLowerCase());
@@ -224,7 +224,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             }}
                             placeholder="Big Dog"
                             required
-                            onChange={(event, data) => setLosingPlayer(JSON.parse(data.value as string))}
+                            onChange={(event, data): void => setLosingPlayer(JSON.parse(data.value as string))}
                             value={losingPlayer ? renderPlayerOption(losingPlayer).value : ""}
                         />
                         <Form.Field>
@@ -234,7 +234,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                 min={0}
                                 required
                                 value={losingPlayerScore ?? ""}
-                                onChange={(event) =>
+                                onChange={(event): void =>
                                     setLosingPlayerScore(
                                         event.target.value !== "" ? parseInt(event.target.value) : undefined
                                     )
@@ -243,7 +243,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                         </Form.Field>
                     </Form.Group>
                     <Button
-                        onClick={() => sendCreateRequest(false)}
+                        onClick={(): void => sendCreateRequest(false)}
                         disabled={
                             !(
                                 winningPlayer &&
@@ -256,7 +256,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                         GG
                     </Button>
                     <Button
-                        onClick={() => sendCreateRequest(true)}
+                        onClick={(): void => sendCreateRequest(true)}
                         disabled={
                             !(
                                 winningPlayer &&

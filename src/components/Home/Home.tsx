@@ -22,7 +22,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
         return players[0];
     };
 
-    const refreshContent = () => {
+    const refreshContent = (): void => {
         // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
         props.setForceRefresh(true);
     };

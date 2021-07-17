@@ -102,7 +102,7 @@ function Ladder(props: LadderProps): JSX.Element {
         }
     };
 
-    const refreshContent = () => {
+    const refreshContent = (): void => {
         // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
         props.setForceRefresh(true);
     };
@@ -115,7 +115,7 @@ function Ladder(props: LadderProps): JSX.Element {
             </Header>
             <div className={"toggles"}>
                 <Button
-                    onClick={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
+                    onClick={(): void => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
                     color={props.hideZeroGamePlayers ? "green" : "red"}
                 >
                     {props.hideZeroGamePlayers ? (
@@ -129,7 +129,7 @@ function Ladder(props: LadderProps): JSX.Element {
                     )}
                 </Button>
                 <Button
-                    onClick={() => props.setShowCards(!props.showCards)}
+                    onClick={(): void => props.setShowCards(!props.showCards)}
                     color={props.showCards ? "orange" : "yellow"}
                 >
                     {props.showCards ? (

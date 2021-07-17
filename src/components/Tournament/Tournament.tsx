@@ -22,8 +22,10 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [pastTournamentsAudioVapour] = useState<HTMLAudioElement>(
         new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-vapour.mp3")
     );
-    pastTournamentsAudioSynth.volume = 0.1;
+    pastTournamentsAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.volume = 0.2;
+    pastTournamentsAudioVapour.loop = true;
+    pastTournamentsAudioSynth.loop = true;
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
     const [synth, setSynth] = useState<boolean>(true);
@@ -68,7 +70,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 return (
                     <span
                         className={"enter-game-score-vs"}
-                        onClick={() => {
+                        onClick={(): void => {
                             openGameEntryModal(match);
                         }}
                     >
@@ -121,7 +123,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         );
     };
 
-    const openGameEntryModal = (match: DbTournamentMatch) => {
+    const openGameEntryModal = (match: DbTournamentMatch): void => {
         setMatchEntering(match);
         setHomePlayerEntering(playersMap.get(match.home_player_id)?.name as string);
         setAwayPlayerEntering(playersMap.get(match.away_player_id)?.name as string);
@@ -155,7 +157,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     <Table.Cell selectable>
                         <div
                             className={"past-tournament-expand"}
-                            onClick={() => {
+                            onClick={(): void => {
                                 setViewedPastTournament(tournament);
                                 openSecondPastModal(true);
                             }}
@@ -221,12 +223,12 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         );
     };
 
-    const onNewTournamentClose = () => {
+    const onNewTournamentClose = (): void => {
         openNewTournamentModal(false);
         props.setForceRefresh(true);
     };
 
-    const onEnterTournamentGameClose = () => openEnterGameModal(false);
+    const onEnterTournamentGameClose = (): void => openEnterGameModal(false);
 
     return (
         <div>
@@ -236,7 +238,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div>
                     <div className={"congrats-div"}>Congratulations {getWinner(sortedTournaments[0])}!</div>
                     <div className={"new-tournament-div"}>
-                        <Button onClick={() => openNewTournamentModal(true)} className={"new-tournament-button"}>
+                        <Button onClick={(): void => openNewTournamentModal(true)} className={"new-tournament-button"}>
                             Start new tournament?
                         </Button>
                     </div>
@@ -267,7 +269,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         }
                     />
                     <Button
-                        onClick={() => {
+                        onClick={(): void => {
                             openViewPastModal(true);
                             if (synth) {
                                 pastTournamentsAudioSynth.play();
@@ -278,13 +280,13 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         id={synth ? "pastTournamentsButtonSynth" : "pastTournamentsButtonVapour"}
                     >
                         <Icon name={"backward"} />
-                        View past tournaments <Icon name={"music"}/>
+                        View past tournaments <Icon name={"music"} />
                     </Button>
                 </div>
             ) : (
                 <div className={"new-tournament-div"}>
                     {!props.loading ? (
-                        <Button onClick={() => openNewTournamentModal(true)} className={"new-tournament-button"}>
+                        <Button onClick={(): void => openNewTournamentModal(true)} className={"new-tournament-button"}>
                             Start new tournament!
                         </Button>
                     ) : (
@@ -300,7 +302,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             <EnterTournamentGame
                 onClose={onEnterTournamentGameClose}
                 isOpen={enterGameModalOpen}
-                refresh={() => props.setForceRefresh(true)}
+                refresh={(): void => props.setForceRefresh(true)}
                 matchEntering={matchEntering}
                 currentTournament={sortedTournaments[0]}
                 homePlayerEntering={homePlayerEntering}
@@ -309,7 +311,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             />
             <Modal
                 closeIcon
-                onClose={() => {
+                onClose={(): void => {
                     openViewPastModal(false);
                     pastTournamentsAudioSynth.pause();
                     pastTournamentsAudioVapour.pause();
@@ -335,16 +337,19 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         <Table.Body>{getPastTournamentsTableRows(sortedTournaments.slice(1))}</Table.Body>
                     </Table>
                     <div>
-                        <Button id={synth ? "vapourToggle" : "synthToggle"} onClick={() => {
-                            if (synth) {
-                                pastTournamentsAudioVapour.play()
-                                pastTournamentsAudioSynth.pause();
-                            } else {
-                                pastTournamentsAudioVapour.pause();
-                                pastTournamentsAudioSynth.play();
-                            }
-                            setSynth(!synth);
-                        }}>
+                        <Button
+                            id={synth ? "vapourToggle" : "synthToggle"}
+                            onClick={(): void => {
+                                if (synth) {
+                                    pastTournamentsAudioVapour.play();
+                                    pastTournamentsAudioSynth.pause();
+                                } else {
+                                    pastTournamentsAudioVapour.pause();
+                                    pastTournamentsAudioSynth.play();
+                                }
+                                setSynth(!synth);
+                            }}
+                        >
                             {synth ? "Change to Vapour" : "Change to Synth"}
                         </Button>
                     </div>
@@ -352,7 +357,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
                 <Modal
                     closeIcon
-                    onClose={() => openSecondPastModal(false)}
+                    onClose={(): void => openSecondPastModal(false)}
                     open={secondPastModalOpen}
                     id={synth ? "secondPastTournamentsModalSynth" : "secondPastTournamentsModalVapour"}
                 >

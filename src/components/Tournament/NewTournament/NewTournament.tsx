@@ -17,14 +17,14 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
     const [startingNewTournament, setStartingNewTournament] = useState<boolean>(false);
     const [newTournamentName, setNewTournamentName] = useState<string>("");
 
-    const startNewTournament = (players: DbPlayer[], name: string) => {
-        const onSuccess = () => {
+    const startNewTournament = (players: DbPlayer[], name: string): void => {
+        const onSuccess = (): void => {
             makeSuccessToast("Tournament started!", `A new tournament ${name} has been started!`);
             setStartingNewTournament(false);
             props.onClose();
         };
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Could not start tournament", errorMsg);
             setStartingNewTournament(false);
         };
@@ -87,11 +87,11 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                 Start new tournament <Icon name={"trophy"} />
             </Modal.Header>
             <Modal.Content>
-                <Form onSubmit={() => startNewTournament(props.sortedPlayers.slice(0, 8), newTournamentName)}>
+                <Form onSubmit={(): void => startNewTournament(props.sortedPlayers.slice(0, 8), newTournamentName)}>
                     <Form.Input
                         className={"tournament-name-input"}
                         label={"Tournament name"}
-                        onChange={(event, data) => setNewTournamentName(data.value)}
+                        onChange={(event, data): void => setNewTournamentName(data.value)}
                         required
                     />
                     <div id={"newTournamentLadderScroller"}>

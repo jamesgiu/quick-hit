@@ -33,10 +33,12 @@ export function mapDispatchToProps(
     >
 ): TTRefreshDispatchType & ViewDispatchType {
     return {
-        setForceRefresh: (newRefresh: boolean) => dispatch(ttActions.setRefresh(newRefresh)),
-        setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) =>
+        setForceRefresh: (newRefresh: boolean): ttActions.SetForceRefreshAction =>
+            dispatch(ttActions.setRefresh(newRefresh)),
+        setHideZeroGamePlayers: (hideZeroGamePlayers: boolean): viewActions.SetZeroGamesFilterAction =>
             dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers)),
-        setShowCards: (showCards: boolean) => dispatch(viewActions.setShowCards(showCards)),
+        setShowCards: (showCards: boolean): viewActions.SetShowCardsAction =>
+            dispatch(viewActions.setShowCards(showCards)),
     };
 }
 
