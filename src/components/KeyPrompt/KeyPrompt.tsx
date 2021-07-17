@@ -15,8 +15,8 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     return (
         <Modal
             open={props.authKey === undefined || isOpen}
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
+            onClose={(): void => setIsOpen(false)}
+            onOpen={(): void => setIsOpen(true)}
             trigger={<Menu.Item as={"a"} icon={"key"} />}
         >
             <Modal.Header>
@@ -32,14 +32,14 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                 label="Key required to proceed"
                                 required
                                 placeholder="Key for table tennis service account"
-                                onChange={(event, data) => setKey(data.value)}
+                                onChange={(event, data): void => setKey(data.value)}
                             />
                         </Form.Field>
                     </Form.Group>
                 </Form>
                 <Button
                     icon={"key"}
-                    onClick={() => {
+                    onClick={(): void => {
                         props.setAuthKey(key);
                         setIsOpen(false);
                         location.reload();

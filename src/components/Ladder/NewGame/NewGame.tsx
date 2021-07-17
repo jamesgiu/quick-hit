@@ -1,17 +1,17 @@
-import { Button, Form, Icon, Modal } from "semantic-ui-react";
+import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer } from "../../../types/database/models";
+import { DbBadge, DbMatch, DbPlayer } from "../../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
 import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
+import { NewGameStoreProps } from "../../../containers/NewGame/NewGame";
+import { TTRefreshDispatchType } from "../../../containers/shared";
 
-interface NewGameProps {
-    players: DbPlayer[];
-    happyHour: DbHappyHour;
+export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;
     // Callback for when a new game is added.
     onNewGameAdded?: () => void;
@@ -20,20 +20,20 @@ interface NewGameProps {
 /**
  * QuickHit NewGame component.
  */
-function NewGame(props: NewGameProps): JSX.Element {
+function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchType): JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false);
     const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>();
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>();
     const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>();
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>();
 
-    const sendCreateRequest = (addAnother: boolean) => {
-        const onSuccess = () => {
+    const sendCreateRequest = (addAnother: boolean): void => {
+        const onSuccess = (): void => {
             makeSuccessToast("Game added!", "Back to work?");
             checkForAchievementTriggers(addAnother);
         };
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Game not added!", errorMsg);
         };
 
@@ -105,12 +105,12 @@ function NewGame(props: NewGameProps): JSX.Element {
         }, onError);
     };
 
-    const checkForAchievementTriggers = (addAnother: boolean) => {
+    const checkForAchievementTriggers = (addAnother: boolean): void => {
         if (!(winningPlayer && losingPlayer)) {
             return;
         }
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Could not calculate achievements!", errorMsg);
         };
 
@@ -122,6 +122,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                 if (!addAnother) {
                     setModalOpen(false);
                 }
+
                 setWinningPlayer(undefined);
                 setLosingPlayer(undefined);
                 setWinningPlayerScore(undefined);
@@ -130,11 +131,14 @@ function NewGame(props: NewGameProps): JSX.Element {
                 if (props.onNewGameAdded) {
                     props.onNewGameAdded();
                 }
+
+                // Force refresh the data after a match has been added.
+                props.setForceRefresh(true);
             }, onError);
         }, onError);
     };
 
-    const renderPlayerOption = (player: DbPlayer) => {
+    const renderPlayerOption = (player: DbPlayer): DropdownItemProps => {
         return {
             key: player.id,
             text: (
@@ -150,8 +154,8 @@ function NewGame(props: NewGameProps): JSX.Element {
     return (
         <Modal
             closeIcon
-            onClose={() => setModalOpen(false)}
-            onOpen={() => setModalOpen(true)}
+            onClose={(): void => setModalOpen(false)}
+            onOpen={(): void => setModalOpen(true)}
             open={open}
             trigger={
                 props.customModalOpenElement ?? (
@@ -178,7 +182,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                                 </b>
                             }
                             options={props.players.map((player) => renderPlayerOption(player))}
-                            search={(options, value) => {
+                            search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
                                     return player.name.toLowerCase().includes(value.toLowerCase());
@@ -186,7 +190,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                             }}
                             placeholder="Chicken Dinner"
                             required
-                            onChange={(event, data) => setWinningPlayer(JSON.parse(data.value as string))}
+                            onChange={(event, data): void => setWinningPlayer(JSON.parse(data.value as string))}
                             value={winningPlayer ? renderPlayerOption(winningPlayer).value : ""}
                         />
                         <Form.Field>
@@ -196,7 +200,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                                 min={0}
                                 required
                                 value={winningPlayerScore ?? ""}
-                                onChange={(event) =>
+                                onChange={(event): void =>
                                     setWinningPlayerScore(
                                         event.target.value !== "" ? parseInt(event.target.value) : undefined
                                     )
@@ -212,7 +216,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                                 </b>
                             }
                             options={props.players.map((player) => renderPlayerOption(player))}
-                            search={(options, value) => {
+                            search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
                                     return player.name.toLowerCase().includes(value.toLowerCase());
@@ -220,7 +224,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                             }}
                             placeholder="Big Dog"
                             required
-                            onChange={(event, data) => setLosingPlayer(JSON.parse(data.value as string))}
+                            onChange={(event, data): void => setLosingPlayer(JSON.parse(data.value as string))}
                             value={losingPlayer ? renderPlayerOption(losingPlayer).value : ""}
                         />
                         <Form.Field>
@@ -230,7 +234,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                                 min={0}
                                 required
                                 value={losingPlayerScore ?? ""}
-                                onChange={(event) =>
+                                onChange={(event): void =>
                                     setLosingPlayerScore(
                                         event.target.value !== "" ? parseInt(event.target.value) : undefined
                                     )
@@ -239,7 +243,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                         </Form.Field>
                     </Form.Group>
                     <Button
-                        onClick={() => sendCreateRequest(false)}
+                        onClick={(): void => sendCreateRequest(false)}
                         disabled={
                             !(
                                 winningPlayer &&
@@ -252,7 +256,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                         GG
                     </Button>
                     <Button
-                        onClick={() => sendCreateRequest(true)}
+                        onClick={(): void => sendCreateRequest(true)}
                         disabled={
                             !(
                                 winningPlayer &&

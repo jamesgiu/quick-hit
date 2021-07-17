@@ -1,11 +1,12 @@
 .home-menu-buttons .ui.icon.header {
   padding: 30px;
-  transition: font-size 0.5s;
+  transition: background-color 0.2s;
+  border-radius: 100%;
 }
 
 .home-menu-buttons .ui.icon.header:hover {
   cursor: pointer;
-  font-size: 1.42rem;
+  background-color: rgba(43, 44, 48, 0.5);
   height: auto;
 }
 
@@ -42,14 +43,15 @@
 }
 
 .home .happy-hour {
-  width: 20vw;
-  min-width: 125px;
+  max-width: 40vw;
+  font-size: 0.8rem;
   border-radius: 10px;
-  padding: 5px;
+  padding: 10px;
   margin: auto;
   background-color: #0f0f10;
   position: absolute;
-  bottom: 5vh;
+  left: 20px;
+  bottom: 50px;
   box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
 }
 

@@ -2,7 +2,7 @@ import "./Ladder.css";
 import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "./NewEditPlayer/NewEditPlayer";
-import NewGame from "./NewGame/NewGame";
+import NewGame from "../../containers/NewGame";
 import { getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
@@ -102,7 +102,7 @@ function Ladder(props: LadderProps): JSX.Element {
         }
     };
 
-    const refreshContent = () => {
+    const refreshContent = (): void => {
         // Set the store force refresh flag, alerting QHDataLoader to do a new fetch.
         props.setForceRefresh(true);
     };
@@ -115,7 +115,7 @@ function Ladder(props: LadderProps): JSX.Element {
             </Header>
             <div className={"toggles"}>
                 <Button
-                    onClick={() => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
+                    onClick={(): void => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
                     color={props.hideZeroGamePlayers ? "green" : "red"}
                 >
                     {props.hideZeroGamePlayers ? (
@@ -129,7 +129,7 @@ function Ladder(props: LadderProps): JSX.Element {
                     )}
                 </Button>
                 <Button
-                    onClick={() => props.setShowCards(!props.showCards)}
+                    onClick={(): void => props.setShowCards(!props.showCards)}
                     color={props.showCards ? "orange" : "yellow"}
                 >
                     {props.showCards ? (
@@ -148,7 +148,7 @@ function Ladder(props: LadderProps): JSX.Element {
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
                     <div className={"new-buttons"}>
                         <NewEditPlayer onRequestMade={refreshContent} />
-                        <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour} />
+                        <NewGame />
                     </div>
                 </span>
             </Transition>

@@ -1,5 +1,4 @@
 import React from "react";
-import "./AchievementsFeed.css";
 import { Divider, Feed, Header, Icon } from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";

@@ -41,7 +41,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                         customModalOpenElement={
                                             <Icon name={"pencil"} size={"tiny"} className={"edit-icon"} />
                                         }
-                                        onRequestMade={() => props.setForceRefresh(true)}
+                                        onRequestMade={(): void => props.setForceRefresh(true)}
                                     />
                                 </div>
                             </Header.Content>

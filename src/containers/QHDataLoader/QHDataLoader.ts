@@ -26,13 +26,16 @@ export function mapDispatchToProps(
     >
 ): DataLoaderDispatchType {
     return {
-        setMatches: (newMatches: DbMatch[]) => dispatch(actions.setMatches(newMatches)),
-        setPlayers: (newPlayers: DbPlayer[]) => dispatch(actions.setPlayers(newPlayers)),
-        setHappyHour: (newHappyHour: DbHappyHour) => dispatch(actions.setHappyHour(newHappyHour)),
-        setLoading: (newLoading: boolean) => dispatch(actions.setLoading(newLoading)),
-        setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
-        setBadges: (newBadges: DbBadge[]) => dispatch(actions.setBadges(newBadges)),
-        setTournaments: (newTournaments: DbTournament[]) => dispatch(actions.setTournaments(newTournaments)),
+        setMatches: (newMatches: DbMatch[]): actions.SetMatchesAction => dispatch(actions.setMatches(newMatches)),
+        setPlayers: (newPlayers: DbPlayer[]): actions.SetPlayersAction => dispatch(actions.setPlayers(newPlayers)),
+        setHappyHour: (newHappyHour: DbHappyHour): actions.SetHappyHourAction =>
+            dispatch(actions.setHappyHour(newHappyHour)),
+        setLoading: (newLoading: boolean): actions.SetLoadingAction => dispatch(actions.setLoading(newLoading)),
+        setForceRefresh: (newRefresh: boolean): actions.SetForceRefreshAction =>
+            dispatch(actions.setRefresh(newRefresh)),
+        setBadges: (newBadges: DbBadge[]): actions.SetBadgesAction => dispatch(actions.setBadges(newBadges)),
+        setTournaments: (newTournaments: DbTournament[]): actions.SetTournamentsAction =>
+            dispatch(actions.setTournaments(newTournaments)),
     };
 }
 

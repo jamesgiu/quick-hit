@@ -1,4 +1,4 @@
-import { Button, Card, Form, Icon, Modal, SemanticICONS } from "semantic-ui-react";
+import { Button, Card, DropdownItemProps, Form, Icon, Modal, SemanticICONS } from "semantic-ui-react";
 import React, { useState } from "react";
 import "./NewEditPlayer.css";
 import { FA_ICONS } from "../../../util/fa-icons";
@@ -13,7 +13,7 @@ interface NewEditPlayerProps {
     onRequestMade?: () => void;
 }
 
-const renderIconOption = (icon: SemanticICONS) => {
+const renderIconOption = (icon: SemanticICONS): DropdownItemProps => {
     return { key: icon, text: <Icon name={icon} size={"big"} />, value: icon };
 };
 
@@ -27,8 +27,8 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
     const [icon, setIcon] = useState<string>(props.editingPlayer ? props.editingPlayer.icon : "");
     const [name, setName] = useState<string>(props.editingPlayer ? props.editingPlayer.name : "");
 
-    const sendCreateRequest = () => {
-        const onSuccess = () => {
+    const sendCreateRequest = (): void => {
+        const onSuccess = (): void => {
             if (props.editingPlayer) {
                 makeSuccessToast("Player updated!", `Welcome back, ${player.name}!`);
             } else {
@@ -41,7 +41,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
             }
         };
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             if (props.editingPlayer) {
                 makeErrorToast("Player not updated!", errorMsg);
             } else {
@@ -63,8 +63,8 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
     return (
         <Modal
             closeIcon
-            onClose={() => setModalOpen(false)}
-            onOpen={() => setModalOpen(true)}
+            onClose={(): void => setModalOpen(false)}
+            onOpen={(): void => setModalOpen(true)}
             open={open}
             trigger={
                 props.customModalOpenElement ?? (
@@ -96,7 +96,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                             label="Name"
                             required
                             placeholder="Name"
-                            onChange={(event, data) => setName(data.value)}
+                            onChange={(event, data): void => setName(data.value)}
                             value={name}
                         />
                         <Form.Select
@@ -105,10 +105,10 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                             required
                             placeholder="user"
                             options={iconOptions}
-                            search={(options, value) => {
+                            search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => option.value?.toString().startsWith(value));
                             }}
-                            onChange={(event, data) => setIcon(data.value as string)}
+                            onChange={(event, data): void => setIcon(data.value as string)}
                             value={icon}
                         />
                     </Form.Group>

@@ -23,8 +23,8 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
     const [awayPlayerEnteringScore, setAwayPlayerEnteringScore] = useState<number | undefined>(undefined);
     const [confirmingMatchScore, setConfirmingMatchScore] = useState<boolean>(false);
 
-    const updateMatchAndTournament = () => {
-        const onSuccess = () => {
+    const updateMatchAndTournament = (): void => {
+        const onSuccess = (): void => {
             setHomePlayerEnteringScore(undefined);
             setAwayPlayerEnteringScore(undefined);
             makeSuccessToast("Game entered!", "The tournament marches on!");
@@ -33,7 +33,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
             props.refresh();
         };
 
-        const onError = (errorMsg: string) => {
+        const onError = (errorMsg: string): void => {
             makeErrorToast("Game not entered!", errorMsg);
             setConfirmingMatchScore(false);
             props.refresh();
@@ -111,7 +111,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                             tournamentRunnerUp.tournamentRunnerUps = 1;
                         }
 
-                        const onPlayerUpdateFailure = (errorMsg: string) => {
+                        const onPlayerUpdateFailure = (errorMsg: string): void => {
                             onError(errorMsg);
                             return;
                         };
@@ -142,7 +142,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         futureMatchIndex: number,
         previousMatchWinnerId: string,
         winnerWillBeHome: boolean
-    ) => {
+    ): void => {
         // If the future match already exists, just add the winner's ID to it. Otherwise, make the new match, with the winner's ID.
         if (props.currentTournament.matches[futureMatchIndex]) {
             if (winnerWillBeHome) {
@@ -179,7 +179,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                             type={"number"}
                             min={0}
                             value={homePlayerEnteringScore}
-                            onChange={(event, data) => setHomePlayerEnteringScore(parseInt(data.value))}
+                            onChange={(event, data): void => setHomePlayerEnteringScore(parseInt(data.value))}
                             required
                         />
                         <Form.Input
@@ -188,7 +188,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                             type={"number"}
                             min={0}
                             value={awayPlayerEnteringScore}
-                            onChange={(event, data) => setAwayPlayerEnteringScore(parseInt(data.value))}
+                            onChange={(event, data): void => setAwayPlayerEnteringScore(parseInt(data.value))}
                             required
                         />
                     </Form.Group>
