@@ -1,6 +1,6 @@
 .player-statistics .recent-games .ui.icon.header {
   float: left;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .player-statistics .statistics-group .ui.statistic .value {
@@ -75,4 +75,33 @@
 
 .player-statistics .player-stats-wrapper .tournament-win-count span {
   margin: 0 5px;
+}
+
+.player-statistics .achievements .event-content {
+  font-weight: bold;
+  color: orangered;
+}
+
+.player-statistics .achievements .event {
+  border-radius: 20px;
+  margin: 5px;
+}
+
+.player-statistics .achievements .event .label .icon {
+  color: green;
+  font-size: 2rem;
+  margin-top: 20%;
+}
+
+.player-statistics .achievements .event-summary .achievement-stats {
+  color: darkgrey;
+}
+
+.player-statistics .achievements .event-summary .achievement-stats-rare {
+  color: orange;
+}
+
+.player-statistics .achievements .ui.icon.header {
+  font-size: 1.2rem;
+  float: left;
 }
