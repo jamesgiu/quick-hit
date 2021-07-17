@@ -277,3 +277,13 @@
 #synthToggle {
   background-color: darkorange;
 }
+
+#rulesMsg .rules-content-wrapper {
+  width: 50%;
+  margin: auto;
+}
+
+#rulesMsg ul {
+  float: left;
+  text-align: left;
+}

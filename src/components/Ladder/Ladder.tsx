@@ -2,7 +2,7 @@ import "./Ladder.css";
 import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "./NewEditPlayer/NewEditPlayer";
-import NewGame from "./NewGame/NewGame";
+import NewGame from "../../containers/NewGame";
 import { getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
@@ -148,7 +148,7 @@ function Ladder(props: LadderProps): JSX.Element {
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
                     <div className={"new-buttons"}>
                         <NewEditPlayer onRequestMade={refreshContent} />
-                        <NewGame players={props.players} onNewGameAdded={refreshContent} happyHour={props.happyHour} />
+                        <NewGame />
                     </div>
                 </span>
             </Transition>

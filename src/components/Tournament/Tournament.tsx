@@ -22,8 +22,8 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [pastTournamentsAudioVapour] = useState<HTMLAudioElement>(
         new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-vapour.mp3")
     );
-    pastTournamentsAudioSynth.volume = 0.5;
-    pastTournamentsAudioVapour.volume = 0.5;
+    pastTournamentsAudioSynth.volume = 0.1;
+    pastTournamentsAudioVapour.volume = 0.2;
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
     const [synth, setSynth] = useState<boolean>(true);
@@ -257,23 +257,29 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         id={"rulesMsg"}
                         icon={"warning sign"}
                         header={"Remember the tournament rules!"}
-                        content={"Play to 21, and you must win by 2!"}
+                        content={
+                            <div className={"rules-content-wrapper"}>
+                                <ul>
+                                    <li>Play to 21, and you must win by 2!</li>
+                                    <li>Swap sides when the total score adds up to 20!</li>
+                                </ul>
+                            </div>
+                        }
                     />
                     <Button
                         onClick={() => {
                             openViewPastModal(true);
-                            synth ? pastTournamentsAudioSynth.play() : pastTournamentsAudioVapour.play();
+                            if (synth) {
+                                pastTournamentsAudioSynth.play();
+                            } else {
+                                pastTournamentsAudioVapour.play();
+                            }
                         }}
                         id={synth ? "pastTournamentsButtonSynth" : "pastTournamentsButtonVapour"}
                     >
                         <Icon name={"backward"} />
-                        View past tournaments
+                        View past tournaments <Icon name={"music"}/>
                     </Button>
-                    <div>
-                        <Button id={synth ? "vapourToggle" : "synthToggle"} onClick={() => setSynth(!synth)}>
-                            {synth ? "Change to Vapour" : "Change to Synth"}
-                        </Button>
-                    </div>
                 </div>
             ) : (
                 <div className={"new-tournament-div"}>
@@ -305,8 +311,8 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 closeIcon
                 onClose={() => {
                     openViewPastModal(false);
-                    synth ? pastTournamentsAudioSynth.pause() : pastTournamentsAudioVapour.pause();
-                    synth ? (pastTournamentsAudioSynth.currentTime = 0) : (pastTournamentsAudioVapour.currentTime = 0);
+                    pastTournamentsAudioSynth.pause();
+                    pastTournamentsAudioVapour.pause();
                 }}
                 open={viewPastModalOpen}
                 id={synth ? "pastTournamentsModalSynth" : "pastTournamentsModalVapour"}
@@ -328,6 +334,20 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         </Table.Header>
                         <Table.Body>{getPastTournamentsTableRows(sortedTournaments.slice(1))}</Table.Body>
                     </Table>
+                    <div>
+                        <Button id={synth ? "vapourToggle" : "synthToggle"} onClick={() => {
+                            if (synth) {
+                                pastTournamentsAudioVapour.play()
+                                pastTournamentsAudioSynth.pause();
+                            } else {
+                                pastTournamentsAudioVapour.pause();
+                                pastTournamentsAudioSynth.play();
+                            }
+                            setSynth(!synth);
+                        }}>
+                            {synth ? "Change to Vapour" : "Change to Synth"}
+                        </Button>
+                    </div>
                 </Modal.Content>
 
                 <Modal

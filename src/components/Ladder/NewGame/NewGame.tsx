@@ -1,17 +1,17 @@
 import { Button, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer } from "../../../types/database/models";
+import { DbBadge, DbMatch, DbPlayer } from "../../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
 import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
+import {NewGameStoreProps} from "../../../containers/NewGame/NewGame";
+import {TTRefreshDispatchType} from "../../../containers/shared";
 
-interface NewGameProps {
-    players: DbPlayer[];
-    happyHour: DbHappyHour;
+export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;
     // Callback for when a new game is added.
     onNewGameAdded?: () => void;
@@ -20,7 +20,7 @@ interface NewGameProps {
 /**
  * QuickHit NewGame component.
  */
-function NewGame(props: NewGameProps): JSX.Element {
+function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchType): JSX.Element {
     const [open, setModalOpen] = React.useState<boolean>(false);
     const [winningPlayer, setWinningPlayer] = React.useState<DbPlayer>();
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>();
@@ -122,6 +122,7 @@ function NewGame(props: NewGameProps): JSX.Element {
                 if (!addAnother) {
                     setModalOpen(false);
                 }
+
                 setWinningPlayer(undefined);
                 setLosingPlayer(undefined);
                 setWinningPlayerScore(undefined);
@@ -130,6 +131,9 @@ function NewGame(props: NewGameProps): JSX.Element {
                 if (props.onNewGameAdded) {
                     props.onNewGameAdded();
                 }
+
+                // Force refresh the data after a match has been added.
+                props.setForceRefresh(true);
             }, onError);
         }, onError);
     };
