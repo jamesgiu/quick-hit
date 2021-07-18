@@ -50,7 +50,12 @@
   box-shadow: 2px 2px 5px darkorange;
 }
 
-.match-item::after {
+.loser.match-item {
+  border: 1px solid red;
+  box-shadow: 2px 2px 5px red;
+}
+
+.single .match-item::after {
   content: '';
   border-color: darkorange;
   border-width: 2px;
@@ -60,21 +65,21 @@
   right: -11px;
 }
 
-.match-item:nth-of-type(odd)::after {
+.single .match-item:nth-of-type(odd)::after {
   border-right-style: solid;
   border-top-style: solid;
   height: 100%;
   top: 50%;
 }
 
-.match-item:nth-of-type(even)::after {
+.single .match-item:nth-of-type(even)::after {
   border-right-style: solid;
   border-bottom-style: solid;
   height: 100%;
   top: -50%;
 }
 
-.match-item::before {
+.single .match-item::before {
   content: '';
   border-top: 2px solid darkorange;
   position: absolute;
@@ -84,21 +89,21 @@
   top: 50%;
 }
 
-.bracket-4 .match-item::after {
+.single .bracket-4 .match-item::after {
   display: none;
 }
 
-.bracket-3 .match-item:nth-of-type(odd)::after {
+.single .bracket-3 .match-item:nth-of-type(odd)::after {
   height: 200%;
   top: 50%;
 }
 
-.bracket:first-of-type .match-item::before {
+.single .bracket:first-of-type .match-item::before {
   display: none;
 }
 
-.bracket:last-of-type .match-item::before,
-.bracket:last-of-type .match-item::after {
+.single .bracket:last-of-type .match-item::before,
+.single .bracket:last-of-type .match-item::after {
   display: none;
 }
 
@@ -111,6 +116,11 @@
   margin: 0 auto;
 }
 
+.loser .vs,
+.loser .clickable-vs {
+  color: red;
+}
+
 .match-item .vs:hover {
   cursor: not-allowed;
 }
@@ -120,6 +130,10 @@
   cursor: pointer;
   background-color: orange;
   color: black;
+}
+
+.loser .clickable-vs:hover {
+  background-color: red;
 }
 
 .new-tournament-div .new-tournament-button {
@@ -249,6 +263,7 @@
   height: 80vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
+  overflow-y: scroll;
 }
 
 #secondPastTournamentsModalSynth .content {
@@ -291,4 +306,21 @@
 #rulesMsg ul {
   float: left;
   text-align: left;
+}
+
+.watermark {
+  width: 10px;
+  float: left;
+  opacity: 0.5;
+  color: white;
+}
+
+.double .home-player {
+  margin-right: 10px;
+}
+
+.custom-tbd {
+  opacity: 0.5;
+  color: white;
+  font-style: italic;
 }

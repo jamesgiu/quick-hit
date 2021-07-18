@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { TournamentType } from "../../../types/types";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { getISODate } from "../Tournament";
 import "./EnterTournamentGame.css";
@@ -22,6 +23,52 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
     const [homePlayerEnteringScore, setHomePlayerEnteringScore] = useState<number | undefined>(undefined);
     const [awayPlayerEnteringScore, setAwayPlayerEnteringScore] = useState<number | undefined>(undefined);
     const [confirmingMatchScore, setConfirmingMatchScore] = useState<boolean>(false);
+
+    const endTournament = (
+        matchEntering: DbTournamentMatch,
+        homeWon: boolean,
+        onError: (errorMsg: string) => void
+    ): void => {
+        const matchWinnerId = homeWon ? matchEntering.home_player_id : matchEntering.away_player_id;
+        const matchLoserId = homeWon ? matchEntering.away_player_id : matchEntering.home_player_id;
+
+        props.currentTournament.end_date = getISODate();
+        const tournamentWinner = props.playersMap.get(matchWinnerId);
+        const tournamentRunnerUp = props.playersMap.get(matchLoserId);
+        if (tournamentWinner && tournamentRunnerUp) {
+            if (tournamentWinner.tournamentWins) {
+                ++tournamentWinner.tournamentWins;
+            } else {
+                tournamentWinner.tournamentWins = 1;
+            }
+
+            if (tournamentRunnerUp.tournamentRunnerUps) {
+                ++tournamentRunnerUp.tournamentRunnerUps;
+            } else {
+                tournamentRunnerUp.tournamentRunnerUps = 1;
+            }
+
+            const onPlayerUpdateFailure = (errorMsg: string): void => {
+                onError(errorMsg);
+                return;
+            };
+
+            QuickHitAPI.addOrUpdatePlayer(
+                tournamentWinner,
+                () => {
+                    /* Do nothing on success. */
+                },
+                onPlayerUpdateFailure
+            );
+            QuickHitAPI.addOrUpdatePlayer(
+                tournamentRunnerUp,
+                () => {
+                    /* Do nothing on success. */
+                },
+                onPlayerUpdateFailure
+            );
+        }
+    };
 
     const updateMatchAndTournament = (): void => {
         const onSuccess = (): void => {
@@ -68,71 +115,88 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
 
         const homeWon = homePlayerEnteringScore > awayPlayerEnteringScore;
         const matchWinnerId = homeWon ? props.matchEntering.home_player_id : props.matchEntering.away_player_id;
+        const matchLoserId = homeWon ? props.matchEntering.away_player_id : props.matchEntering.home_player_id;
 
-        // Add the winner's ID to their next match.
-        switch (props.matchEntering.match_number) {
-            case 0:
-                updateFutureTournamentMatch(4, matchWinnerId, true);
-                break;
-            case 1:
-                updateFutureTournamentMatch(4, matchWinnerId, false);
-                break;
-            case 2:
-                updateFutureTournamentMatch(5, matchWinnerId, true);
-                break;
-            case 3:
-                updateFutureTournamentMatch(5, matchWinnerId, false);
-                break;
-            case 4:
-                updateFutureTournamentMatch(6, matchWinnerId, true);
-                break;
-            case 5:
-                updateFutureTournamentMatch(6, matchWinnerId, false);
-                break;
-            case 6:
-                {
+        if (props.currentTournament.type && props.currentTournament.type === TournamentType.DOUBLE) {
+            // Add the winner's ID (and loser's ID, if it's their first loss) to their next match.
+            switch (props.matchEntering.match_number) {
+                case 0:
+                    updateFutureTournamentMatch(6, matchWinnerId, true);
+                    updateFutureTournamentMatch(4, matchLoserId, true);
+                    break;
+                case 1:
+                    updateFutureTournamentMatch(6, matchWinnerId, false);
+                    updateFutureTournamentMatch(4, matchLoserId, false);
+                    break;
+                case 2:
+                    updateFutureTournamentMatch(7, matchWinnerId, true);
+                    updateFutureTournamentMatch(5, matchLoserId, true);
+                    break;
+                case 3:
+                    updateFutureTournamentMatch(7, matchWinnerId, false);
+                    updateFutureTournamentMatch(5, matchLoserId, false);
+                    break;
+                case 4:
+                    updateFutureTournamentMatch(9, matchWinnerId, false);
+                    break;
+                case 5:
+                    updateFutureTournamentMatch(8, matchWinnerId, false);
+                    break;
+                case 6:
+                    updateFutureTournamentMatch(11, matchWinnerId, true);
+                    updateFutureTournamentMatch(8, matchLoserId, true);
+                    break;
+                case 7:
+                    updateFutureTournamentMatch(11, matchWinnerId, false);
+                    updateFutureTournamentMatch(9, matchLoserId, true);
+                    break;
+                case 8:
+                    updateFutureTournamentMatch(10, matchWinnerId, false);
+                    break;
+                case 9:
+                    updateFutureTournamentMatch(10, matchWinnerId, true);
+                    break;
+                case 10:
+                    updateFutureTournamentMatch(12, matchWinnerId, false);
+                    break;
+                case 11:
+                    updateFutureTournamentMatch(13, matchWinnerId, true);
+                    updateFutureTournamentMatch(12, matchLoserId, true);
+                    break;
+                case 12:
+                    updateFutureTournamentMatch(13, matchWinnerId, false);
+                    break;
+                case 13:
                     // If the last game is being entered, then the tournament is over, and we can add its end date.
-                    props.currentTournament.end_date = getISODate();
-                    const tournamentWinner = props.playersMap.get(matchWinnerId);
-                    const matchLoserId = homeWon
-                        ? props.matchEntering.away_player_id
-                        : props.matchEntering.home_player_id;
-                    const tournamentRunnerUp = props.playersMap.get(matchLoserId);
-                    if (tournamentWinner && tournamentRunnerUp) {
-                        if (tournamentWinner.tournamentWins) {
-                            ++tournamentWinner.tournamentWins;
-                        } else {
-                            tournamentWinner.tournamentWins = 1;
-                        }
-
-                        if (tournamentRunnerUp.tournamentRunnerUps) {
-                            ++tournamentRunnerUp.tournamentRunnerUps;
-                        } else {
-                            tournamentRunnerUp.tournamentRunnerUps = 1;
-                        }
-
-                        const onPlayerUpdateFailure = (errorMsg: string): void => {
-                            onError(errorMsg);
-                            return;
-                        };
-
-                        QuickHitAPI.addOrUpdatePlayer(
-                            tournamentWinner,
-                            () => {
-                                /* Do nothing on success. */
-                            },
-                            onPlayerUpdateFailure
-                        );
-                        QuickHitAPI.addOrUpdatePlayer(
-                            tournamentRunnerUp,
-                            () => {
-                                /* Do nothing on success. */
-                            },
-                            onPlayerUpdateFailure
-                        );
-                    }
-                }
-                break;
+                    endTournament(props.matchEntering, homeWon, onError);
+                    break;
+            }
+        } else {
+            // Add the winner's ID to their next match.
+            switch (props.matchEntering.match_number) {
+                case 0:
+                    updateFutureTournamentMatch(4, matchWinnerId, true);
+                    break;
+                case 1:
+                    updateFutureTournamentMatch(4, matchWinnerId, false);
+                    break;
+                case 2:
+                    updateFutureTournamentMatch(5, matchWinnerId, true);
+                    break;
+                case 3:
+                    updateFutureTournamentMatch(5, matchWinnerId, false);
+                    break;
+                case 4:
+                    updateFutureTournamentMatch(6, matchWinnerId, true);
+                    break;
+                case 5:
+                    updateFutureTournamentMatch(6, matchWinnerId, false);
+                    break;
+                case 6:
+                    // If the last game is being entered, then the tournament is over, and we can add its end date.
+                    endTournament(props.matchEntering, homeWon, onError);
+                    break;
+            }
         }
 
         QuickHitAPI.addUpdateTournament(props.currentTournament, onSuccess, onError);
@@ -140,28 +204,28 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
 
     const updateFutureTournamentMatch = (
         futureMatchIndex: number,
-        previousMatchWinnerId: string,
+        futurePlayerId: string,
         winnerWillBeHome: boolean
     ): void => {
         // If the future match already exists, just add the winner's ID to it. Otherwise, make the new match, with the winner's ID.
         if (props.currentTournament.matches[futureMatchIndex]) {
             if (winnerWillBeHome) {
-                props.currentTournament.matches[futureMatchIndex].home_player_id = previousMatchWinnerId;
+                props.currentTournament.matches[futureMatchIndex].home_player_id = futurePlayerId;
             } else {
-                props.currentTournament.matches[futureMatchIndex].away_player_id = previousMatchWinnerId;
+                props.currentTournament.matches[futureMatchIndex].away_player_id = futurePlayerId;
             }
         } else {
             if (winnerWillBeHome) {
                 props.currentTournament.matches[futureMatchIndex] = {
                     match_number: futureMatchIndex,
-                    home_player_id: previousMatchWinnerId,
+                    home_player_id: futurePlayerId,
                     away_player_id: "",
                 };
             } else {
                 props.currentTournament.matches[futureMatchIndex] = {
                     match_number: futureMatchIndex,
                     home_player_id: "",
-                    away_player_id: previousMatchWinnerId,
+                    away_player_id: futurePlayerId,
                 };
             }
         }
