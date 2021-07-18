@@ -50,7 +50,7 @@
   box-shadow: 2px 2px 5px darkorange;
 }
 
-.loser {
+.loser.match-item {
   border: 1px solid red;
   box-shadow: 2px 2px 5px red;
 }
@@ -263,6 +263,7 @@
   height: 80vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
+  overflow-y: scroll;
 }
 
 #secondPastTournamentsModalSynth .content {
@@ -314,7 +315,7 @@
   color: white;
 }
 
-.home-player {
+.double .home-player {
   margin-right: 10px;
 }
 

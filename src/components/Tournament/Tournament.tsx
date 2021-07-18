@@ -8,14 +8,6 @@ import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 import { TournamentParticipantsType, TournamentType } from "../../types/types";
 
-/*
-TODO
-- Add in actual game logic placing the winners and losers.
-- Can we separate the winners and losers brackets more?
-- Different colour for the losers bracket? Back from the dead, graveyard, black and white?
-- Could we add the winning lines back? Would be hard, but might be possible.
-*/
-
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);
@@ -107,14 +99,16 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     ): JSX.Element => {
         return (
             <div>
-                <span className={homeWon(match) === false ? "match-loser" : "home-player"}>
-                    {match?.home_player_id
-                        ? `(${getPlayerRank(tournament, match.home_player_id)}) ${
-                              playersMap.get(match.home_player_id)?.name
-                          }`
-                        : homeTbdText 
-                            ? <span className={"custom-tbd"}>{homeTbdText}</span>
-                            : "TBD"}
+                <span className={homeWon(match) === false ? "match-loser home-player" : "home-player"}>
+                    {match?.home_player_id ? (
+                        `(${getPlayerRank(tournament, match.home_player_id)}) ${
+                            playersMap.get(match.home_player_id)?.name
+                        }`
+                    ) : homeTbdText ? (
+                        <span className={"custom-tbd"}>{homeTbdText}</span>
+                    ) : (
+                        "TBD"
+                    )}
                 </span>
                 <span
                     className={
@@ -126,13 +120,15 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     {getMatchBtn(match)}
                 </span>
                 <span className={homeWon(match) === true ? "match-loser" : undefined}>
-                    {match?.away_player_id
-                        ? `(${getPlayerRank(tournament, match.away_player_id)}) ${
-                              playersMap.get(match.away_player_id)?.name
-                          }`
-                        : awayTbdText 
-                            ? <span className={"custom-tbd"}>{awayTbdText}</span>
-                            : "TBD"}
+                    {match?.away_player_id ? (
+                        `(${getPlayerRank(tournament, match.away_player_id)}) ${
+                            playersMap.get(match.away_player_id)?.name
+                        }`
+                    ) : awayTbdText ? (
+                        <span className={"custom-tbd"}>{awayTbdText}</span>
+                    ) : (
+                        "TBD"
+                    )}
                 </span>
             </div>
         );
@@ -147,7 +143,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
     // Returns the icon and name of the winner of the given tournament.
     const getWinner = (tournament: DbTournament): JSX.Element => {
-        const finalMatch = tournament.matches[6];
+        const finalMatch = tournament.matches[tournament.type && tournament.type === TournamentType.DOUBLE ? 13 : 6];
 
         if (finalMatch && finalMatch.home_score !== undefined && finalMatch.away_score !== undefined) {
             const homeWon = finalMatch.home_score > finalMatch.away_score;
@@ -278,18 +274,18 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     </li>
                 </ul>,
                 <ul className="bracket bracket-4">
-                <li className="match-item" key={13}>
-                    <span className={"watermark"}>14</span>
-                    {getMatchItem(tournament.matches[13], playersMap, tournament, "G12 Winner", "G13 Winner")}
-                </li>
-                <li className="match-item loser" key={12}>
-                    <span className={"watermark"}>13</span>
-                    {getMatchItem(tournament.matches[12], playersMap, tournament, "G12 Loser", "G11 Winner")}
-                </li>
-            </ul>,
+                    <li className="match-item" key={13}>
+                        <span className={"watermark"}>14</span>
+                        {getMatchItem(tournament.matches[13], playersMap, tournament, "G12 Winner", "G13 Winner")}
+                    </li>
+                    <li className="match-item loser" key={12}>
+                        <span className={"watermark"}>13</span>
+                        {getMatchItem(tournament.matches[12], playersMap, tournament, "G12 Loser", "G11 Winner")}
+                    </li>
+                </ul>,
                 <ul className="bracket bracket-5">
                     <li className="match-item">{getWinner(tournament)}</li>
-                </ul>,
+                </ul>
             );
         } else {
             brackets.push(
@@ -322,7 +318,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 </ul>,
                 <ul className="bracket bracket-5">
                     <li className="match-item">{getWinner(tournament)}</li>
-                </ul>,
+                </ul>
             );
         }
 
@@ -332,10 +328,14 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const renderTournament = (tournament: DbTournament): JSX.Element => {
         return (
             <div className="tournament-container">
-                <div className="tournament-headers">
-                    {getHeaders(tournament)}
-                </div>
-                <div className={tournament.type && tournament.type === TournamentType.DOUBLE ? "tournament-brackets" : "tournament-brackets single"}>
+                <div className="tournament-headers">{getHeaders(tournament)}</div>
+                <div
+                    className={
+                        tournament.type && tournament.type === TournamentType.DOUBLE
+                            ? "tournament-brackets double"
+                            : "tournament-brackets single"
+                    }
+                >
                     {getBrackets(tournament)}
                 </div>
             </div>
@@ -349,11 +349,17 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
     const onEnterTournamentGameClose = (): void => openEnterGameModal(false);
 
+    const tournamentIsFinished = (tournament: DbTournament): boolean => {
+        if (tournament.type && tournament.type === TournamentType.DOUBLE) {
+            return tournament.matches[13] && tournament.matches[13].home_score !== undefined;
+        } else {
+            return tournament.matches[6] && tournament.matches[6].home_score !== undefined;
+        }
+    };
+
     return (
         <div>
-            {sortedTournaments.length > 0 &&
-            sortedTournaments[0].matches[6] &&
-            sortedTournaments[0].matches[6].home_score !== undefined ? (
+            {sortedTournaments.length > 0 && tournamentIsFinished(sortedTournaments[0]) ? (
                 <div>
                     <div className={"congrats-div"}>Congratulations {getWinner(sortedTournaments[0])}!</div>
                     <div className={"new-tournament-div"}>
@@ -378,9 +384,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                         ).toUpperCase()}
                                     </Label>
                                     <Label color={"orange"}>
-                                        {(
-                                            sortedTournaments[0].type ?? TournamentType.SINGLE
-                                        ).toUpperCase()}
+                                        {(sortedTournaments[0].type ?? TournamentType.SINGLE).toUpperCase()}
                                     </Label>
                                 </span>
                             }

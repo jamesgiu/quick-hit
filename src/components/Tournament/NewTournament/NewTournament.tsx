@@ -135,17 +135,13 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                                 label={"Single elimination"}
                                 value={TournamentType.SINGLE}
                                 checked={newTournamentType === TournamentType.SINGLE}
-                                onChange={(event, { value }): void =>
-                                    setTournamentType(value as TournamentType)
-                                }
+                                onChange={(event, { value }): void => setTournamentType(value as TournamentType)}
                             />
                             <Form.Radio
                                 label={"Double elimination"}
                                 value={TournamentType.DOUBLE}
                                 checked={newTournamentType === TournamentType.DOUBLE}
-                                onChange={(event, { value }): void =>
-                                    setTournamentType(value as TournamentType)
-                                }
+                                onChange={(event, { value }): void => setTournamentType(value as TournamentType)}
                             />
                             <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
                                 {`Start tournament with these top 8 players  `}
