@@ -93,6 +93,8 @@ export const SHOULD_HAVE_PUT_MONEY_ON_IT_BADGE: BadgeDesc = {
     title: "Should Have Put Money On It",
 };
 
+// TODO: Maybe have a function that maps the achievement to its trigger function?
+
 export const checkForClutchPerformer = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
     const matchesInvolvingPlayerAsWinner = matches.filter((match) => {
@@ -212,27 +214,27 @@ export const checkForShouldHavePutMoneyOnIt = (matches: DbMatch[], player: DbPla
     return matchesInvolvingLowOddsWin.length > 0;
 };
 
-export const checkForTriggersAfterAMatch = (
+export const decorateAchievementForUpload = (
+    badgeDesc: BadgeDesc,
+    earnedPlayer: DbPlayer,
+    involvedPlayer: DbPlayer
+): DbBadge => {
+    return {
+        ...badgeDesc,
+        id: uuidv4(),
+        date: new Date().toISOString(),
+        player_id: earnedPlayer.id,
+        involved_player: involvedPlayer.id,
+    };
+};
+
+export const checkForAchievementTriggers = (
     winningPlayer: DbPlayer,
     losingPlayer: DbPlayer,
     badges: DbBadge[],
     matches: DbMatch[],
     onError: (errorMsg: string) => void
 ): void => {
-    const decorateAchievementForUpload = (
-        badgeDesc: BadgeDesc,
-        earnedPlayer: DbPlayer,
-        involvedPlayer: DbPlayer
-    ): DbBadge => {
-        return {
-            ...badgeDesc,
-            id: uuidv4(),
-            date: new Date().toISOString(),
-            player_id: earnedPlayer.id,
-            involved_player: involvedPlayer.id,
-        };
-    };
-
     const winnerBadgeKeys = badges
         .filter((badge: DbBadge) => {
             return badge.player_id === winningPlayer.id;

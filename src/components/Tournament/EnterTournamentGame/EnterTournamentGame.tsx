@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { BadgeDesc, DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { decorateAchievementForUpload } from "../../Achievements/AchievementChecker";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { getISODate } from "../Tournament";
 import "./EnterTournamentGame.css";
@@ -130,12 +131,44 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                             },
                             onPlayerUpdateFailure
                         );
+
+                        generateTournamentAchievement(
+                            props.currentTournament.name,
+                            tournamentWinner,
+                            tournamentRunnerUp
+                        );
                     }
                 }
                 break;
         }
 
         QuickHitAPI.addUpdateTournament(props.currentTournament, onSuccess, onError);
+    };
+
+    const generateTournamentAchievement = (
+        tournamentName: string,
+        earnedPlayer: DbPlayer,
+        involvedPlayer: DbPlayer
+    ) => {
+        // TODO: I wonder if this could be extracted into AchievementChecker.ts, and the other functions there could use it?
+        const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
+            icon: "trophy",
+            key: "mega-poopoo",
+            text: "yeah",
+            title: `Winner of the ${tournamentName} tournament`,
+        };
+
+        const onError = (errorMsg: string) => {
+            makeErrorToast("Could not calculate achievements!", errorMsg);
+        };
+
+        QuickHitAPI.addBadge(
+            decorateAchievementForUpload(TOURNAMENT_WINNER_BADGE, earnedPlayer, involvedPlayer),
+            () => {
+                return;
+            },
+            onError
+        );
     };
 
     const updateFutureTournamentMatch = (

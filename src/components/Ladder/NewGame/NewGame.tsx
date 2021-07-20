@@ -6,7 +6,7 @@ import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
+import { checkForAchievementTriggers } from "../../Achievements/AchievementChecker";
 import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
 
 interface NewGameProps {
@@ -30,7 +30,7 @@ function NewGame(props: NewGameProps): JSX.Element {
     const sendCreateRequest = (addAnother: boolean) => {
         const onSuccess = () => {
             makeSuccessToast("Game added!", "Back to work?");
-            checkForAchievementTriggers(addAnother);
+            calculateAchievements(addAnother);
         };
 
         const onError = (errorMsg: string) => {
@@ -105,7 +105,7 @@ function NewGame(props: NewGameProps): JSX.Element {
         }, onError);
     };
 
-    const checkForAchievementTriggers = (addAnother: boolean) => {
+    const calculateAchievements = (addAnother: boolean) => {
         if (!(winningPlayer && losingPlayer)) {
             return;
         }
@@ -117,11 +117,9 @@ function NewGame(props: NewGameProps): JSX.Element {
         // After new match has been added, fetch the matches and badges...
         QuickHitAPI.getMatches((matches: DbMatch[]) => {
             QuickHitAPI.getBadges((badges: DbBadge[]) => {
-                checkForTriggersAfterAMatch(winningPlayer, losingPlayer, badges, matches, onError);
+                checkForAchievementTriggers(winningPlayer, losingPlayer, badges, matches, onError);
 
-                if (!addAnother) {
-                    setModalOpen(false);
-                }
+                setModalOpen(!addAnother);
                 setWinningPlayer(undefined);
                 setLosingPlayer(undefined);
                 setWinningPlayerScore(undefined);
@@ -134,18 +132,16 @@ function NewGame(props: NewGameProps): JSX.Element {
         }, onError);
     };
 
-    const renderPlayerOption = (player: DbPlayer) => {
-        return {
-            key: player.id,
-            text: (
-                <span>
-                    <Icon name={player.icon} size={"small"} />
-                    {player.name}
-                </span>
-            ),
-            value: JSON.stringify(player),
-        };
-    };
+    const renderPlayerOption = (player: DbPlayer) => ({
+        key: player.id,
+        text: (
+            <span>
+                <Icon name={player.icon} size={"small"} />
+                {player.name}
+            </span>
+        ),
+        value: JSON.stringify(player),
+    });
 
     return (
         <Modal
