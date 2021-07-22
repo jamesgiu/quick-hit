@@ -8,9 +8,17 @@ import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 import { TournamentParticipantsType, TournamentType } from "../../types/types";
 
+/*
+TODO
+- Add match names based on tournament type.
+- Complete a tournament of each type and watch the recaps.
+- Run lint, lint:css, and style.
+*/
+
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);
+    const [recapModalOpen, openRecapModal] = useState<boolean>(false);
     const [homePlayerEntering, setHomePlayerEntering] = useState<string>("");
     const [awayPlayerEntering, setAwayPlayerEntering] = useState<string>("");
     const [matchEntering, setMatchEntering] = useState<DbTournamentMatch | undefined>(undefined);
@@ -22,6 +30,10 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     // Music by Luxury Elite.
     const [pastTournamentsAudioVapour] = useState<HTMLAudioElement>(
         new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-vapour.mp3")
+    );
+    // Music by HOME.
+    const [recapAudio] = useState<HTMLAudioElement>(
+        new Audio(process.env.PUBLIC_URL + "/recap-audio.mp3")
     );
     pastTournamentsAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.volume = 0.2;
@@ -437,16 +449,111 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         }
     };
 
+    const getRecapMatchLabels = (match: DbTournamentMatch, homeWon: boolean, winnerRank: number, loserRank: number): JSX.Element[] => {
+        const labels: JSX.Element[] = [];
+
+        if (match.home_score !== undefined && match.away_score !== undefined) {
+            if (match.home_score === 0 || match.away_score === 0) {
+                labels.push(
+                    <Label color={"red"}>
+                        <Icon name={"tint"} /> FATALITY
+                    </Label>
+                );
+            }
+            if (Math.abs(match.home_score - match.away_score) < 5) {
+                labels.push(
+                    <Label color={"yellow"}>
+                        <Icon name={"bolt"} /> THRILLER
+                    </Label>
+                );
+            }
+            if (winnerRank > loserRank) {
+                labels.push(
+                    <Label color={"orange"}>
+                        <Icon name={"exclamation"} /> UPSET
+                    </Label>
+                );
+            }
+            if (match.home_score > 21 || match.away_score > 21) {
+                labels.push(
+                    <Label color={"grey"}>
+                        <Icon name={"hourglass"} /> MARATHON
+                    </Label>
+                );
+            }
+        }
+
+        return labels;
+    };
+
+    const getRecapMatches = (): JSX.Element[] => {
+        const recapMatches: JSX.Element[] = [];
+
+        recapMatches.push(
+            <p className={"recap-match"}>{sortedTournaments[0].name}</p>
+        );
+
+        sortedTournaments[0].matches.forEach((match: DbTournamentMatch) => {
+            // The scores should always be defined, because we've finished the tournament if we're showing a recap.
+            if (match.home_score !== undefined && match.away_score !== undefined) {
+                const homeWon = match.home_score > match.away_score;
+                const winnerId = homeWon ? match.home_player_id : match.away_player_id
+                const loserId = homeWon ? match.away_player_id : match.home_player_id
+                const winnerName = playersMap.get(winnerId)?.name;
+                const loserName = playersMap.get(loserId)?.name;
+                const winnerScore = homeWon ? match.home_score : match.away_score;
+                const loserScore = homeWon ? match.away_score : match.home_score;
+                const winnerRank = getPlayerRank(sortedTournaments[0], winnerId);
+                const loserRank = getPlayerRank(sortedTournaments[0], loserId);
+
+                recapMatches.push(
+                    <p className={"recap-match"}>
+                        Match {match.match_number + 1}<br/>
+                        ({winnerRank}) {winnerName} defeated ({loserRank}) {loserName}, {winnerScore}-{loserScore}<br/>
+                        {getRecapMatchLabels(match, homeWon, winnerRank, loserRank)}
+                    </p>
+                );
+            }
+        });
+        recapMatches.push(
+            <p className={"recap-match"}>Congratulations, {getWinner(sortedTournaments[0])}!</p>
+        );
+        return recapMatches;
+    };
+
     return (
         <div>
             {sortedTournaments.length > 0 && tournamentIsFinished(sortedTournaments[0]) ? (
                 <div>
                     <div className={"congrats-div"}>Congratulations {getWinner(sortedTournaments[0])}!</div>
                     <div className={"new-tournament-div"}>
+                        <Button onClick={(): void => {
+                            openRecapModal(true);
+                            recapAudio.play();
+                        }} id={"recapButton"}>
+                            View tournament recap
+                        </Button>
                         <Button onClick={(): void => openNewTournamentModal(true)} className={"new-tournament-button"}>
                             Start new tournament?
                         </Button>
                     </div>
+                    <Modal
+                        closeIcon
+                        onClose={(): void => {
+                            openRecapModal(false);
+                            recapAudio.pause();
+                            recapAudio.currentTime = 0;
+                        }}
+                        open={recapModalOpen}
+                        id={"recapModal"}
+                    >
+                        <Modal.Header>Tournament recap</Modal.Header>
+                        <Modal.Content>
+                            <div>
+                                {getRecapMatches()}
+                            </div>
+                        </Modal.Content>
+                    </Modal>
                 </div>
             ) : (
                 <span />
