@@ -171,6 +171,40 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                     endTournament(props.matchEntering, homeWon, onError);
                     break;
             }
+        } else if (props.currentTournament.type && props.currentTournament.type === TournamentType.AFL) {
+            // Add the winner's ID (and loser's ID, if it's they have the double chance) to their next match.
+            switch (props.matchEntering.match_number) {
+                case 0:
+                    updateFutureTournamentMatch(6, matchWinnerId, true);
+                    updateFutureTournamentMatch(4, matchLoserId, true);
+                    break;
+                case 1:
+                    updateFutureTournamentMatch(4, matchWinnerId, false);
+                    break;
+                case 2:
+                    updateFutureTournamentMatch(5, matchWinnerId, false);
+                    break;
+                case 3:
+                    updateFutureTournamentMatch(7, matchWinnerId, true);
+                    updateFutureTournamentMatch(5, matchLoserId, true);
+                    break;
+                case 4:
+                    updateFutureTournamentMatch(7, matchWinnerId, false);
+                    break;
+                case 5:
+                    updateFutureTournamentMatch(6, matchWinnerId, false);
+                    break;
+                case 6:
+                    updateFutureTournamentMatch(8, matchWinnerId, true);
+                    break;
+                case 7:
+                    updateFutureTournamentMatch(8, matchWinnerId, false);
+                    break;
+                case 8:
+                    // If the grand final is being entered, then the tournament is over, and we can add its end date.
+                    endTournament(props.matchEntering, homeWon, onError);
+                    break;
+            }
         } else {
             // Add the winner's ID to their next match.
             switch (props.matchEntering.match_number) {

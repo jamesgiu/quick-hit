@@ -42,28 +42,53 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
         }
 
         const tournamentMatches: DbTournamentMatch[] = [];
-        tournamentMatches.push(
-            {
-                match_number: 0,
-                home_player_id: players[0].id,
-                away_player_id: players[7].id,
-            },
-            {
-                match_number: 1,
-                home_player_id: players[3].id,
-                away_player_id: players[4].id,
-            },
-            {
-                match_number: 2,
-                home_player_id: players[1].id,
-                away_player_id: players[6].id,
-            },
-            {
-                match_number: 3,
-                home_player_id: players[2].id,
-                away_player_id: players[5].id,
-            }
-        );
+        if (newTournamentType === TournamentType.AFL) {
+            tournamentMatches.push(
+                {
+                    match_number: 0,
+                    home_player_id: players[0].id,
+                    away_player_id: players[3].id,
+                },
+                {
+                    match_number: 1,
+                    home_player_id: players[4].id,
+                    away_player_id: players[7].id,
+                },
+                {
+                    match_number: 2,
+                    home_player_id: players[5].id,
+                    away_player_id: players[6].id,
+                },
+                {
+                    match_number: 3,
+                    home_player_id: players[1].id,
+                    away_player_id: players[2].id,
+                }
+            );
+        } else {
+            tournamentMatches.push(
+                {
+                    match_number: 0,
+                    home_player_id: players[0].id,
+                    away_player_id: players[7].id,
+                },
+                {
+                    match_number: 1,
+                    home_player_id: players[3].id,
+                    away_player_id: players[4].id,
+                },
+                {
+                    match_number: 2,
+                    home_player_id: players[1].id,
+                    away_player_id: players[6].id,
+                },
+                {
+                    match_number: 3,
+                    home_player_id: players[2].id,
+                    away_player_id: players[5].id,
+                }
+            );
+        }
 
         const newTournament: DbTournament = {
             id: uuidv4(),
@@ -141,6 +166,12 @@ function NewTournament(props: NewTournamentProps): JSX.Element {
                                 label={"Double elimination"}
                                 value={TournamentType.DOUBLE}
                                 checked={newTournamentType === TournamentType.DOUBLE}
+                                onChange={(event, { value }): void => setTournamentType(value as TournamentType)}
+                            />
+                            <Form.Radio
+                                label={"AFL-style"}
+                                value={TournamentType.AFL}
+                                checked={newTournamentType === TournamentType.AFL}
                                 onChange={(event, { value }): void => setTournamentType(value as TournamentType)}
                             />
                             <Form.Button disabled={!newTournamentName || startingNewTournament} id={"newTournamentBtn"}>
