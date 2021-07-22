@@ -43,14 +43,25 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
     // Determine what rank the player was in the supplied tournament.
     const getPlayerRank = (tournament: DbTournament, playerId: string): number => {
-        if (tournament.matches[0].home_player_id === playerId) return 1;
-        else if (tournament.matches[0].away_player_id === playerId) return 8;
-        else if (tournament.matches[1].home_player_id === playerId) return 4;
-        else if (tournament.matches[1].away_player_id === playerId) return 5;
-        else if (tournament.matches[2].home_player_id === playerId) return 2;
-        else if (tournament.matches[2].away_player_id === playerId) return 7;
-        else if (tournament.matches[3].home_player_id === playerId) return 3;
-        else return 6;
+        if (tournament.type && tournament.type === TournamentType.AFL) {
+            if (tournament.matches[0].home_player_id === playerId) return 1;
+            else if (tournament.matches[0].away_player_id === playerId) return 4;
+            else if (tournament.matches[1].home_player_id === playerId) return 5;
+            else if (tournament.matches[1].away_player_id === playerId) return 8;
+            else if (tournament.matches[2].home_player_id === playerId) return 6;
+            else if (tournament.matches[2].away_player_id === playerId) return 7;
+            else if (tournament.matches[3].home_player_id === playerId) return 2;
+            else return 3;
+        } else {
+            if (tournament.matches[0].home_player_id === playerId) return 1;
+            else if (tournament.matches[0].away_player_id === playerId) return 8;
+            else if (tournament.matches[1].home_player_id === playerId) return 4;
+            else if (tournament.matches[1].away_player_id === playerId) return 5;
+            else if (tournament.matches[2].home_player_id === playerId) return 2;
+            else if (tournament.matches[2].away_player_id === playerId) return 7;
+            else if (tournament.matches[3].home_player_id === playerId) return 3;
+            else return 6;
+        }
     };
 
     const homeWon = (match: DbTournamentMatch): boolean | undefined => {
@@ -143,7 +154,14 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
     // Returns the icon and name of the winner of the given tournament.
     const getWinner = (tournament: DbTournament): JSX.Element => {
-        const finalMatch = tournament.matches[tournament.type && tournament.type === TournamentType.DOUBLE ? 13 : 6];
+        let finalMatch;
+        if (tournament.type && tournament.type === TournamentType.DOUBLE) {
+            finalMatch = tournament.matches[13];
+        } else if (tournament.type && tournament.type === TournamentType.AFL) {
+            finalMatch = tournament.matches[8];
+        } else {
+            finalMatch = tournament.matches[6];
+        }
 
         if (finalMatch && finalMatch.home_score !== undefined && finalMatch.away_score !== undefined) {
             const homeWon = finalMatch.home_score > finalMatch.away_score;
@@ -196,6 +214,16 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <h3>Quarter-Finals</h3>,
                 <h3>Semi-Finals</h3>,
                 <h3>Finals</h3>,
+                <h3>
+                    Winner <Icon name="trophy" />
+                </h3>
+            );
+        } else if (tournament.type && tournament.type === TournamentType.AFL) {
+            headers.push(
+                <h3>Finals Week 1</h3>,
+                <h3>Semi Finals</h3>,
+                <h3>Preliminary Finals</h3>,
+                <h3>Grand Final</h3>,
                 <h3>
                     Winner <Icon name="trophy" />
                 </h3>
@@ -287,6 +315,56 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     <li className="match-item">{getWinner(tournament)}</li>
                 </ul>
             );
+        } else if (tournament.type && tournament.type === TournamentType.AFL) {
+            brackets.push(
+                <ul className="bracket bracket-1">
+                    <li className="match-item" key={0}>
+                        <span className={"watermark"}>QF1</span>
+                        {getMatchItem(tournament.matches[0], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={1}>
+                        <span className={"watermark"}>EF1</span>
+                        {getMatchItem(tournament.matches[1], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={2}>
+                        <span className={"watermark"}>EF2</span>
+                        {getMatchItem(tournament.matches[2], playersMap, tournament)}
+                    </li>
+                    <li className="match-item" key={3}>
+                        <span className={"watermark"}>QF2</span>
+                        {getMatchItem(tournament.matches[3], playersMap, tournament)}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-2">
+                    <li className="match-item" key={4}>
+                        <span className={"watermark"}>SF1</span>
+                        {getMatchItem(tournament.matches[4], playersMap, tournament, "QF1 Loser", "EF1 Winner")}
+                    </li>
+                    <li className="match-item" key={5}>
+                        <span className={"watermark"}>SF2</span>
+                        {getMatchItem(tournament.matches[5], playersMap, tournament, "QF2 Loser", "EF2 Winner")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-3">
+                    <li className="match-item" key={6}>
+                        <span className={"watermark"}>PF1</span>
+                        {getMatchItem(tournament.matches[6], playersMap, tournament, "QF1 Winner", "SF2 Winner")}
+                    </li>
+                    <li className="match-item" key={7}>
+                        <span className={"watermark"}>PF2</span>
+                        {getMatchItem(tournament.matches[7], playersMap, tournament, "QF2 Winner", "SF1 Winner")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-4">
+                    <li className="match-item" key={8}>
+                        <span className={"watermark"}>GF</span>
+                        {getMatchItem(tournament.matches[8], playersMap, tournament, "PF1 Winner", "PF2 Winner")}
+                    </li>
+                </ul>,
+                <ul className="bracket bracket-5">
+                    <li className="match-item">{getWinner(tournament)}</li>
+                </ul>
+            );
         } else {
             brackets.push(
                 <ul className="bracket bracket-2">
@@ -331,8 +409,8 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div className="tournament-headers">{getHeaders(tournament)}</div>
                 <div
                     className={
-                        tournament.type && tournament.type === TournamentType.DOUBLE
-                            ? "tournament-brackets double"
+                        tournament.type && tournament.type !== TournamentType.SINGLE
+                            ? "tournament-brackets watermarked"
                             : "tournament-brackets single"
                     }
                 >
@@ -352,6 +430,8 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const tournamentIsFinished = (tournament: DbTournament): boolean => {
         if (tournament.type && tournament.type === TournamentType.DOUBLE) {
             return tournament.matches[13] && tournament.matches[13].home_score !== undefined;
+        } else if (tournament.type && tournament.type === TournamentType.AFL) {
+            return tournament.matches[8] && tournament.matches[8].home_score !== undefined;
         } else {
             return tournament.matches[6] && tournament.matches[6].home_score !== undefined;
         }

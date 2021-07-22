@@ -20,4 +20,5 @@ export enum TournamentParticipantsType {
 export enum TournamentType {
     SINGLE = "Single Elimination",
     DOUBLE = "Double Elimination",
+    AFL = "AFL-style",
 }
