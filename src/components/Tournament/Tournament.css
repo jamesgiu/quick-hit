@@ -445,3 +445,76 @@
   color: white;
   font-style: italic;
 }
+
+#pastModalButtons {
+  position: relative;
+  bottom: 5px;
+  float: right;
+}
+
+@font-face {
+  font-family: arcade;
+  src: url("assets/PressStart2P-Regular.ttf");
+}
+
+#pastWinners {
+  font-family: arcade;
+  color: rgb(253, 93, 57);
+  text-align: center;
+  font-size: 24px;
+  height: 90%;
+}
+
+#pastWinners .past-winner {
+  position: absolute;
+  top: 75%;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  animation: 40s enlarge infinite linear;
+  opacity: 0;
+}
+
+#pastWinners .past-winner:nth-child(3) {
+  animation-delay: 4s;
+}
+
+#pastWinners .past-winner:nth-child(4) {
+  animation-delay: 8s;
+}
+
+#pastWinners .past-winner:nth-child(5) {
+  animation-delay: 12s;
+}
+
+#pastWinners .past-winner:nth-child(6) {
+  animation-delay: 16s;
+}
+
+#pastWinners .past-winner:nth-child(7) {
+  animation-delay: 20s;
+}
+
+#pastWinners .past-winner:nth-child(8) {
+  animation-delay: 24s;
+}
+
+#pastWinners .past-winner:nth-child(9) {
+  animation-delay: 28s;
+}
+
+#pastWinners .past-winner:nth-child(10) {
+  animation-delay: 32s;
+}
+
+#pastWinners .past-winner:nth-child(11) {
+  animation-delay: 36s;
+}
+
+@keyframes enlarge {
+  0% { font-size: 8px; opacity: 1; }
+  9.9% { font-size: 64px; opacity: 1; }
+  10% { font-size: 64px; opacity: 0; }
+}

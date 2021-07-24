@@ -26,13 +26,20 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     );
     // Music by HOME.
     const [recapAudio] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/recap-audio.mp3"));
+    // Music by tuddmusic.
+    const [arcadeAudioSynth] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/arcade-synth.mp3"));
     pastTournamentsAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.volume = 0.2;
+    recapAudio.volume = 0.5;
+    arcadeAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.loop = true;
     pastTournamentsAudioSynth.loop = true;
+    recapAudio.loop = true;
+    arcadeAudioSynth.loop = true;
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
     const [synth, setSynth] = useState<boolean>(true);
+    const [pastTournamentView, setPastTournamentView] = useState<string>("table");
 
     // We have to sort the retrieved players and tournaments because using the Firebase REST API's query parameters does
     // not guarantee order. Make sure to filter out players who have never played a game, too.
@@ -541,6 +548,30 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         return recapMatches;
     };
 
+    const playPastTableAudio = (): void => {
+        if (synth) {
+            arcadeAudioSynth.pause();
+            pastTournamentsAudioSynth.play();
+        }
+    };
+
+    const playPastArcadeAudio = (): void => {
+        if (synth) {
+            pastTournamentsAudioSynth.pause();
+            arcadeAudioSynth.play();
+        }
+    };
+
+    const getPastWinners = (tournaments: DbTournament[]): JSX.Element[] => {
+        const pastWinners: JSX.Element[] = [];
+
+        tournaments.forEach((tournament: DbTournament) => {
+            pastWinners.push(<p className={"past-winner"}>{getWinner(tournament)}</p>);
+        });
+
+        return pastWinners;
+    };
+
     return (
         <div>
             {sortedTournaments.length > 0 && tournamentIsFinished(sortedTournaments[0]) ? (
@@ -616,8 +647,10 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     <Button
                         onClick={(): void => {
                             openViewPastModal(true);
-                            if (synth) {
+                            if (synth && pastTournamentView === "table") {
                                 pastTournamentsAudioSynth.play();
+                            } else if (synth) {
+                                arcadeAudioSynth.play();
                             } else {
                                 pastTournamentsAudioVapour.play();
                             }
@@ -660,12 +693,34 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     openViewPastModal(false);
                     pastTournamentsAudioSynth.pause();
                     pastTournamentsAudioVapour.pause();
+                    arcadeAudioSynth.pause();
                 }}
                 open={viewPastModalOpen}
                 id={synth ? "pastTournamentsModalSynth" : "pastTournamentsModalVapour"}
             >
-                <Modal.Header>Past tournaments</Modal.Header>
+                <Modal.Header>
+                    <span>Past tournaments</span>
+                    <Button.Group id={"pastModalButtons"} color={"orange"}>
+                        <Button active={pastTournamentView === "table"}
+                                onClick={(): void => {
+                                    setPastTournamentView("table");
+                                    playPastTableAudio();
+                                }}>Table</Button>
+                        <Button active={pastTournamentView === "winners"}
+                                onClick={(): void => {
+                                    setPastTournamentView("winners");
+                                    playPastArcadeAudio();
+                                }}>Winners</Button>
+                        <Button active={pastTournamentView === "high-scores"}
+                                onClick={(): void => {
+                                    setPastTournamentView("high-scores");
+                                    playPastArcadeAudio();
+                                }}>High Scores</Button>
+                    </Button.Group>
+                </Modal.Header>
                 <Modal.Content>
+                    {pastTournamentView === "table"
+                    ?
                     <Table
                         id={synth ? "pastTournamentsTableSynth" : "pastTournamentsTableVapour"}
                         color={synth ? "orange" : "pink"}
@@ -683,16 +738,31 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                         </Table.Header>
                         <Table.Body>{getPastTournamentsTableRows(sortedTournaments.slice(1))}</Table.Body>
                     </Table>
+                    : <span/>
+                    }
+                    {pastTournamentView === "winners"
+                    ? <div id={"pastWinners"}>
+                        <div id={"pastWinnersTitle"}>10 MOST RECENT TOURNAMENT WINNERS</div>
+                        {getPastWinners(sortedTournaments.slice(1, 11))}
+                    </div>
+                    : <span/>
+                    }
                     <div>
                         <Button
                             id={synth ? "vapourToggle" : "synthToggle"}
                             onClick={(): void => {
-                                if (synth) {
+                                if (synth && pastTournamentView === "table") {
                                     pastTournamentsAudioVapour.play();
                                     pastTournamentsAudioSynth.pause();
-                                } else {
+                                } else if (synth) {
+                                    pastTournamentsAudioVapour.play();
+                                    arcadeAudioSynth.pause();
+                                } else if (pastTournamentView === "table") {
                                     pastTournamentsAudioVapour.pause();
                                     pastTournamentsAudioSynth.play();
+                                } else {
+                                    pastTournamentsAudioVapour.pause();
+                                    arcadeAudioSynth.play();
                                 }
                                 setSynth(!synth);
                             }}
