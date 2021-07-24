@@ -8,13 +8,6 @@ import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 import { TournamentParticipantsType, TournamentType } from "../../types/types";
 
-/*
-TODO
-- Add match names based on tournament type.
-- Complete a tournament of each type and watch the recaps.
-- Run lint, lint:css, and style.
-*/
-
 function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);
@@ -486,6 +479,38 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         return labels;
     };
 
+    const getMatchName = (match: DbTournamentMatch, tournamentType: TournamentType): string => {
+        switch (tournamentType) {
+            case TournamentType.SINGLE:
+                switch (match.match_number) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        return "Quarter Final"
+                    case 4:
+                    case 5:
+                        return "Semi Final"
+                    case 6:
+                        return "Final"
+                }
+                break;
+            case TournamentType.DOUBLE:
+                return "Game " + (match.match_number + 1).toString();
+            case TournamentType.AFL:
+                if (match.match_number === 0) return "Qualifying Final 1";
+                if (match.match_number === 1) return "Elimination Final 1";
+                if (match.match_number === 2) return "Elimination Final 2";
+                if (match.match_number === 3) return "Qualifying Final 2";
+                if (match.match_number === 4) return "Semi Final 1";
+                if (match.match_number === 5) return "Semi Final 2";
+                if (match.match_number === 6) return "Preliminary Final 1";
+                if (match.match_number === 7) return "Preliminary Final 2";
+                if (match.match_number === 8) return "Grand Final";
+        }
+        return "";
+    };
+
     const getRecapMatches = (): JSX.Element[] => {
         const recapMatches: JSX.Element[] = [];
 
@@ -508,7 +533,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
                 recapMatches.push(
                     <p className={"recap-match"}>
-                        Match {match.match_number + 1}<br/>
+                        {getMatchName(match, sortedTournaments[0].type ?? TournamentType.SINGLE)}<br/>
                         ({winnerRank}) {winnerName} defeated ({loserRank}) {loserName}, {winnerScore}-{loserScore}<br/>
                         {getRecapMatchLabels(match, homeWon, winnerRank, loserRank)}
                     </p>

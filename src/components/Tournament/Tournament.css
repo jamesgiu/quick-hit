@@ -275,6 +275,13 @@
 #recapModal .content {
   background-image: url('assets/recap-modal-background.gif');
   border: 2px solid rgb(192, 206, 254);
+  animation: 4s fade-in infinite linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes fade-in {
+  from {filter: brightness(0%)}
+  to {filter: brightness(100%)}
 }
 
 #recapModal .content div {
@@ -285,7 +292,7 @@
 
 .recap-match {
   position: absolute;
-  animation: 79.7s fade infinite linear;
+  animation: 90.3s fade infinite linear;
   opacity: 0;
   width: 100%;
   color: rgb(192, 206, 254);
@@ -356,11 +363,19 @@
   animation-delay: 74.4s;
 }
 
+.recap-match:nth-child(15) {
+  animation-delay: 79.7s;
+}
+
+.recap-match:nth-child(16) {
+  animation-delay: 85s;
+}
+
 @keyframes fade {
   0% {opacity: 0.0}
   1% {opacity: 1.0}
-  6% {opacity: 1.0}
-  7% {opacity: 0.0}
+  5% {opacity: 1.0}
+  6% {opacity: 0.0}
   100% {opacity: 0.0}
 }
 
