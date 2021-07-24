@@ -147,6 +147,12 @@
   color: darkorange;
 }
 
+.new-tournament-div #recapButton {
+  background-image: url('assets/recap-button-background.gif');
+  color: rgb(192, 206, 254);
+  border: 1px solid rgb(192, 206, 254);
+}
+
 .qualified-player {
   color: green;
 }
@@ -215,6 +221,12 @@
   border: 2px solid #ff71ce;
 }
 
+#recapModal .header {
+  background-color: rgb(29, 29, 35);
+  color: rgb(192, 206, 254);
+  border: 2px solid rgb(192, 206, 254);
+}
+
 #pastTournamentsButtonSynth i.icon,
 #pastTournamentsButtonVapour i.icon {
   margin: 0 5px;
@@ -231,7 +243,8 @@
   aspect-ratio: 1160 / 653;
 }
 
-#pastTournamentsModalVapour {
+#pastTournamentsModalVapour,
+#recapModal {
   width: 40%;
 
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
@@ -239,7 +252,8 @@
 }
 
 #pastTournamentsModalSynth .content,
-#pastTournamentsModalVapour .content {
+#pastTournamentsModalVapour .content,
+#recapModal .content {
   background-size: 100% 100%;
   height: 100%;
   overflow-y: auto;
@@ -256,6 +270,113 @@
 #pastTournamentsModalVapour .content {
   background-image: url('assets/past-tournaments-background-vapour.gif');
   border: 2px solid #ff71ce;
+}
+
+#recapModal .content {
+  background-image: url('assets/recap-modal-background.gif');
+  border: 2px solid rgb(192, 206, 254);
+  animation: 4s fade-in infinite linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes fade-in {
+  from { filter: brightness(0%); }
+  to { filter: brightness(100%); }
+}
+
+#recapModal .content div {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.recap-match {
+  position: absolute;
+  animation: 90.3s fade infinite linear;
+  opacity: 0;
+  width: 100%;
+  color: rgb(192, 206, 254);
+  font-weight: bolder;
+  font-size: large;
+  text-align: center;
+  margin-top: 40%;
+}
+
+#recapModal .recap-match .ui.label {
+  width: 25%;
+}
+
+.recap-match:nth-child(1) {
+  margin-top: 40%;
+  animation-delay: 5.5s;
+}
+
+.recap-match:nth-child(2) {
+  animation-delay: 10.8s;
+}
+
+.recap-match:nth-child(3) {
+  animation-delay: 16.1s;
+}
+
+.recap-match:nth-child(4) {
+  animation-delay: 21.4s;
+}
+
+.recap-match:nth-child(5) {
+  animation-delay: 26.7s;
+}
+
+.recap-match:nth-child(6) {
+  animation-delay: 32s;
+}
+
+.recap-match:nth-child(7) {
+  animation-delay: 37.3s;
+}
+
+.recap-match:nth-child(8) {
+  animation-delay: 42.6s;
+}
+
+.recap-match:nth-child(9) {
+  animation-delay: 47.9s;
+}
+
+.recap-match:nth-child(10) {
+  animation-delay: 53.2s;
+}
+
+.recap-match:nth-child(11) {
+  animation-delay: 58.5s;
+}
+
+.recap-match:nth-child(12) {
+  animation-delay: 63.8s;
+}
+
+.recap-match:nth-child(13) {
+  animation-delay: 69.1s;
+}
+
+.recap-match:nth-child(14) {
+  animation-delay: 74.4s;
+}
+
+.recap-match:nth-child(15) {
+  animation-delay: 79.7s;
+}
+
+.recap-match:nth-child(16) {
+  animation-delay: 85s;
+}
+
+@keyframes fade {
+  0% { opacity: 0; }
+  1% { opacity: 1; }
+  5% { opacity: 1; }
+  6% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 #secondPastTournamentsModalSynth .content,
