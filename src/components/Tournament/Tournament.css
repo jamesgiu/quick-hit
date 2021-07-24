@@ -280,8 +280,8 @@
 }
 
 @keyframes fade-in {
-  from {filter: brightness(0%)}
-  to {filter: brightness(100%)}
+  from { filter: brightness(0%); }
+  to { filter: brightness(100%); }
 }
 
 #recapModal .content div {
@@ -372,11 +372,11 @@
 }
 
 @keyframes fade {
-  0% {opacity: 0.0}
-  1% {opacity: 1.0}
-  5% {opacity: 1.0}
-  6% {opacity: 0.0}
-  100% {opacity: 0.0}
+  0% { opacity: 0; }
+  1% { opacity: 1; }
+  5% { opacity: 1; }
+  6% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 #secondPastTournamentsModalSynth .content,

@@ -25,9 +25,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         new Audio(process.env.PUBLIC_URL + "/past-tournaments-music-vapour.mp3")
     );
     // Music by HOME.
-    const [recapAudio] = useState<HTMLAudioElement>(
-        new Audio(process.env.PUBLIC_URL + "/recap-audio.mp3")
-    );
+    const [recapAudio] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/recap-audio.mp3"));
     pastTournamentsAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.volume = 0.2;
     pastTournamentsAudioVapour.loop = true;
@@ -442,7 +440,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         }
     };
 
-    const getRecapMatchLabels = (match: DbTournamentMatch, homeWon: boolean, winnerRank: number, loserRank: number): JSX.Element[] => {
+    const getRecapMatchLabels = (match: DbTournamentMatch, winnerRank: number, loserRank: number): JSX.Element[] => {
         const labels: JSX.Element[] = [];
 
         if (match.home_score !== undefined && match.away_score !== undefined) {
@@ -487,12 +485,12 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     case 1:
                     case 2:
                     case 3:
-                        return "Quarter Final"
+                        return "Quarter Final";
                     case 4:
                     case 5:
-                        return "Semi Final"
+                        return "Semi Final";
                     case 6:
-                        return "Final"
+                        return "Final";
                 }
                 break;
             case TournamentType.DOUBLE:
@@ -514,16 +512,14 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const getRecapMatches = (): JSX.Element[] => {
         const recapMatches: JSX.Element[] = [];
 
-        recapMatches.push(
-            <p className={"recap-match"}>{sortedTournaments[0].name}</p>
-        );
+        recapMatches.push(<p className={"recap-match"}>{sortedTournaments[0].name}</p>);
 
         sortedTournaments[0].matches.forEach((match: DbTournamentMatch) => {
             // The scores should always be defined, because we've finished the tournament if we're showing a recap.
             if (match.home_score !== undefined && match.away_score !== undefined) {
                 const homeWon = match.home_score > match.away_score;
-                const winnerId = homeWon ? match.home_player_id : match.away_player_id
-                const loserId = homeWon ? match.away_player_id : match.home_player_id
+                const winnerId = homeWon ? match.home_player_id : match.away_player_id;
+                const loserId = homeWon ? match.away_player_id : match.home_player_id;
                 const winnerName = playersMap.get(winnerId)?.name;
                 const loserName = playersMap.get(loserId)?.name;
                 const winnerScore = homeWon ? match.home_score : match.away_score;
@@ -533,16 +529,15 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
 
                 recapMatches.push(
                     <p className={"recap-match"}>
-                        {getMatchName(match, sortedTournaments[0].type ?? TournamentType.SINGLE)}<br/>
-                        ({winnerRank}) {winnerName} defeated ({loserRank}) {loserName}, {winnerScore}-{loserScore}<br/>
-                        {getRecapMatchLabels(match, homeWon, winnerRank, loserRank)}
+                        {getMatchName(match, sortedTournaments[0].type ?? TournamentType.SINGLE)}
+                        <br />({winnerRank}) {winnerName} defeated ({loserRank}) {loserName}, {winnerScore}-{loserScore}
+                        <br />
+                        {getRecapMatchLabels(match, winnerRank, loserRank)}
                     </p>
                 );
             }
         });
-        recapMatches.push(
-            <p className={"recap-match"}>Congratulations, {getWinner(sortedTournaments[0])}!</p>
-        );
+        recapMatches.push(<p className={"recap-match"}>Congratulations, {getWinner(sortedTournaments[0])}!</p>);
         return recapMatches;
     };
 
@@ -552,10 +547,13 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <div>
                     <div className={"congrats-div"}>Congratulations {getWinner(sortedTournaments[0])}!</div>
                     <div className={"new-tournament-div"}>
-                        <Button onClick={(): void => {
-                            openRecapModal(true);
-                            recapAudio.play();
-                        }} id={"recapButton"}>
+                        <Button
+                            onClick={(): void => {
+                                openRecapModal(true);
+                                recapAudio.play();
+                            }}
+                            id={"recapButton"}
+                        >
                             View tournament recap
                         </Button>
                         <Button onClick={(): void => openNewTournamentModal(true)} className={"new-tournament-button"}>
@@ -574,9 +572,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     >
                         <Modal.Header>Tournament recap</Modal.Header>
                         <Modal.Content>
-                            <div>
-                                {getRecapMatches()}
-                            </div>
+                            <div>{getRecapMatches()}</div>
                         </Modal.Content>
                     </Modal>
                 </div>
