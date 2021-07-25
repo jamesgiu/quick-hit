@@ -591,19 +591,20 @@
   }
 }
 
-#highScoresSynth #highScoresTable {
-  font-size: 16px;
+#highScoresSynth #highScoresTable,
+#highScoresVapour #highScoresTable {
   width: 100%;
   color: yellow;
   margin-top: 10px;
+}
+
+#highScoresSynth #highScoresTable {
+  font-size: 16px;
   animation: flicker 5s infinite;
 }
 
 #highScoresVapour #highScoresTable {
   font-size: 12px;
-  width: 100%;
-  color: yellow;
-  margin-top: 10px;
 }
 
 #highScoresVapour {
