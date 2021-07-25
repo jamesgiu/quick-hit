@@ -457,6 +457,12 @@
   letter-spacing: normal;
 }
 
+#pastModalButtons .active {
+  background-color: white;
+  color: orange;
+  border: 3px solid orange;
+}
+
 @font-face {
   font-family: arcade;
   src: url("assets/PressStart2P-Regular.ttf");
