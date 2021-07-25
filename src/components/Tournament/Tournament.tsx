@@ -761,13 +761,14 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                 <Modal.Header>
                     <span>Past tournaments</span>
                     {synth ? (
-                        <Button.Group id={"pastModalButtons"} color={"orange"}>
+                        <div id={"pastModalButtons"}>
                             <Button
                                 active={pastTournamentView === "table"}
                                 onClick={(): void => {
                                     setPastTournamentView("table");
                                     playPastTableAudio();
                                 }}
+                                color={"orange"}
                             >
                                 Table
                             </Button>
@@ -777,6 +778,7 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                     setPastTournamentView("winners");
                                     playPastArcadeAudio();
                                 }}
+                                color={"orange"}
                             >
                                 Winners
                             </Button>
@@ -786,10 +788,11 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                     setPastTournamentView("high-scores");
                                     playPastArcadeAudio();
                                 }}
+                                color={"orange"}
                             >
                                 High Scores
                             </Button>
-                        </Button.Group>
+                        </div>
                     ) : (
                         <Dropdown
                             id={"pastModalDropdown"}
