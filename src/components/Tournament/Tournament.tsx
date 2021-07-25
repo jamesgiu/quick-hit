@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Header, Icon, Label, Message, Modal, Table } from "semantic-ui-react";
+import { Button, Dropdown, Header, Icon, Label, Message, Modal, Table } from "semantic-ui-react";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DbPlayer, DbTournament, DbTournamentMatch, getTodaysDate } from "../../types/database/models";
 import "./Tournament.css";
@@ -28,14 +28,18 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [recapAudio] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/recap-audio.mp3"));
     // Music by tuddmusic.
     const [arcadeAudioSynth] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/arcade-synth.mp3"));
+    // Music by Kannibal.
+    const [arcadeAudioVapour] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/arcade-vapour.mp3"));
     pastTournamentsAudioSynth.volume = 0.2;
     pastTournamentsAudioVapour.volume = 0.2;
     recapAudio.volume = 0.5;
     arcadeAudioSynth.volume = 0.2;
+    arcadeAudioVapour.volume = 0.2;
     pastTournamentsAudioVapour.loop = true;
     pastTournamentsAudioSynth.loop = true;
     recapAudio.loop = true;
     arcadeAudioSynth.loop = true;
+    arcadeAudioVapour.loop = true;
     const [secondPastModalOpen, openSecondPastModal] = useState<boolean>(false);
     const [pastTournamentBeingViewed, setViewedPastTournament] = useState<DbTournament | undefined>(undefined);
     const [synth, setSynth] = useState<boolean>(true);
@@ -552,6 +556,9 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         if (synth) {
             arcadeAudioSynth.pause();
             pastTournamentsAudioSynth.play();
+        } else {
+            arcadeAudioVapour.pause();
+            pastTournamentsAudioVapour.play();
         }
     };
 
@@ -559,6 +566,9 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         if (synth) {
             pastTournamentsAudioSynth.pause();
             arcadeAudioSynth.play();
+        } else {
+            pastTournamentsAudioVapour.pause();
+            arcadeAudioVapour.play();
         }
     };
 
@@ -570,6 +580,42 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
         });
 
         return pastWinners;
+    };
+
+    const getHighScoresTableRows = (): JSX.Element[] => {
+        const tableRows: JSX.Element[] = [];
+        const playerPointsWon: Map<string, number> = new Map<string, number>();
+
+        sortedTournaments.slice(1).forEach((tournament: DbTournament) => {
+            tournament.matches.forEach((match: DbTournamentMatch) => {
+                if (match.home_score !== undefined && match.away_score !== undefined) {
+                    if (playerPointsWon.has(match.home_player_id)) {
+                        playerPointsWon.set(match.home_player_id, (playerPointsWon.get(match.home_player_id) ?? 0) + match.home_score);
+                    } else {
+                        playerPointsWon.set(match.home_player_id, match.home_score);
+                    }
+                    if (playerPointsWon.has(match.away_player_id)) {
+                        playerPointsWon.set(match.away_player_id, (playerPointsWon.get(match.away_player_id) ?? 0) + match.away_score);
+                    } else {
+                        playerPointsWon.set(match.away_player_id, match.away_score);
+                    }
+                }
+            });
+        });
+
+        props.players.sort((p1, p2) => (p2.tournamentWins ?? 0) - (p1.tournamentWins ?? 0) || (playerPointsWon.get(p2.id) ?? 0) - (playerPointsWon.get(p1.id) ?? 0))
+                     .slice(0, synth ? 10 : 3)
+                     .forEach((player: DbPlayer) => {
+            tableRows.push(
+                <tr>
+                    <td>{player.name}</td>
+                    <td>{player.tournamentWins ?? 0}</td>
+                    <td>{playerPointsWon.get(player.id) ?? 0}</td>
+                </tr>
+            );
+        });
+
+        return tableRows;
     };
 
     return (
@@ -651,8 +697,10 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                 pastTournamentsAudioSynth.play();
                             } else if (synth) {
                                 arcadeAudioSynth.play();
-                            } else {
+                            } else if (pastTournamentView === "table") {
                                 pastTournamentsAudioVapour.play();
+                            } else {
+                                arcadeAudioVapour.play();
                             }
                         }}
                         id={synth ? "pastTournamentsButtonSynth" : "pastTournamentsButtonVapour"}
@@ -694,13 +742,15 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     pastTournamentsAudioSynth.pause();
                     pastTournamentsAudioVapour.pause();
                     arcadeAudioSynth.pause();
+                    arcadeAudioVapour.pause();
                 }}
                 open={viewPastModalOpen}
                 id={synth ? "pastTournamentsModalSynth" : "pastTournamentsModalVapour"}
             >
                 <Modal.Header>
                     <span>Past tournaments</span>
-                    <Button.Group id={"pastModalButtons"} color={"orange"}>
+                    {synth
+                    ? <Button.Group id={"pastModalButtons"} color={"orange"}>
                         <Button active={pastTournamentView === "table"}
                                 onClick={(): void => {
                                     setPastTournamentView("table");
@@ -717,6 +767,20 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                                     playPastArcadeAudio();
                                 }}>High Scores</Button>
                     </Button.Group>
+                    : <Dropdown id={"pastModalDropdown"}
+                                onChange={(e, {value}): void => {
+                                    setPastTournamentView(value as string);
+                                    if (value as string === "table") playPastTableAudio();
+                                    else playPastArcadeAudio();
+                                }}
+                                options={[
+                                    {text: "Table", value: "table"},
+                                    {text: "Winners", value: "winners"},
+                                    {text: "High Scores", value: "high-scores"}
+                                ]}
+                                value={pastTournamentView}
+                                />
+                    }
                 </Modal.Header>
                 <Modal.Content>
                     {pastTournamentView === "table"
@@ -741,9 +805,23 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                     : <span/>
                     }
                     {pastTournamentView === "winners"
-                    ? <div id={"pastWinners"}>
+                    ? <div id={synth ? "pastWinnersSynth" : "pastWinnersVapour"}>
                         <div id={"pastWinnersTitle"}>10 MOST RECENT TOURNAMENT WINNERS</div>
                         {getPastWinners(sortedTournaments.slice(1, 11))}
+                    </div>
+                    : <span/>
+                    }
+                    {pastTournamentView === "high-scores"
+                    ? <div id={synth ? "highScoresSynth" : "highScoresVapour"}>
+                        <div id={"highScoresTitle"}>TOURNAMENT HIGH SCORES TOP {synth ? 10 : 3}</div>
+                        <table id={"highScoresTable"}>
+                            <tr>
+                                <th>{synth ? "Player name" : "Name"}</th>
+                                <th>{synth ? "Tournament wins" : "Tourn. Ws"}</th>
+                                <th>{synth ? "Points won" : "Pts won"}</th>
+                            </tr>
+                            {getHighScoresTableRows()}
+                        </table>
                     </div>
                     : <span/>
                     }
@@ -752,16 +830,16 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
                             id={synth ? "vapourToggle" : "synthToggle"}
                             onClick={(): void => {
                                 if (synth && pastTournamentView === "table") {
-                                    pastTournamentsAudioVapour.play();
                                     pastTournamentsAudioSynth.pause();
-                                } else if (synth) {
                                     pastTournamentsAudioVapour.play();
+                                } else if (synth) {
                                     arcadeAudioSynth.pause();
+                                    arcadeAudioVapour.play();
                                 } else if (pastTournamentView === "table") {
                                     pastTournamentsAudioVapour.pause();
                                     pastTournamentsAudioSynth.play();
                                 } else {
-                                    pastTournamentsAudioVapour.pause();
+                                    arcadeAudioVapour.pause();
                                     arcadeAudioSynth.play();
                                 }
                                 setSynth(!synth);
