@@ -3,6 +3,12 @@
   "rules": {
     "declaration-no-important": true,
     "selector-class-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
-    "selector-id-pattern": "^[a-z][a-zA-Z0-9]+$"
+    "selector-id-pattern": "^[a-z][a-zA-Z0-9]+$",
+    "font-family-no-missing-generic-family-keyword": [
+      true,
+      {
+        "ignoreFontFamilies": ["arcade"]
+      }
+    ]
   }
 }

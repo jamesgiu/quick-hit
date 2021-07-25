@@ -558,15 +558,37 @@
 }
 
 @keyframes enlarge {
-  0% { font-size: 8px; opacity: 1; }
-  9.9% { font-size: 64px; opacity: 1; }
-  10% { font-size: 64px; opacity: 0; }
+  0% {
+    font-size: 8px;
+    opacity: 1;
+  }
+
+  9.9% {
+    font-size: 64px;
+    opacity: 1;
+  }
+
+  10% {
+    font-size: 64px;
+    opacity: 0;
+  }
 }
 
 @keyframes enlargeTV {
-  0% { font-size: 8px; opacity: 1; }
-  9.9% { font-size: 24px; opacity: 1; }
-  10% { font-size: 24px; opacity: 0; }
+  0% {
+    font-size: 8px;
+    opacity: 1;
+  }
+
+  9.9% {
+    font-size: 24px;
+    opacity: 1;
+  }
+
+  10% {
+    font-size: 24px;
+    opacity: 0;
+  }
 }
 
 #highScoresSynth #highScoresTable {
@@ -589,14 +611,14 @@
 }
 
 @keyframes flicker {
-  9% { opacity:1; }
-  10% { opacity:0; }
+  9% { opacity: 1; }
+  10% { opacity: 0; }
   11% { opacity: 1; }
-  54% { opacity:1; }
-  55% { opacity:0; }
+  54% { opacity: 1; }
+  55% { opacity: 0; }
   56% { opacity: 1; }
-  89% { opacity:1; }
-  90% { opacity:0; }
+  89% { opacity: 1; }
+  90% { opacity: 0; }
   91% { opacity: 1; }
 }
 

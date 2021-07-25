@@ -590,12 +590,18 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             tournament.matches.forEach((match: DbTournamentMatch) => {
                 if (match.home_score !== undefined && match.away_score !== undefined) {
                     if (playerPointsWon.has(match.home_player_id)) {
-                        playerPointsWon.set(match.home_player_id, (playerPointsWon.get(match.home_player_id) ?? 0) + match.home_score);
+                        playerPointsWon.set(
+                            match.home_player_id,
+                            (playerPointsWon.get(match.home_player_id) ?? 0) + match.home_score
+                        );
                     } else {
                         playerPointsWon.set(match.home_player_id, match.home_score);
                     }
                     if (playerPointsWon.has(match.away_player_id)) {
-                        playerPointsWon.set(match.away_player_id, (playerPointsWon.get(match.away_player_id) ?? 0) + match.away_score);
+                        playerPointsWon.set(
+                            match.away_player_id,
+                            (playerPointsWon.get(match.away_player_id) ?? 0) + match.away_score
+                        );
                     } else {
                         playerPointsWon.set(match.away_player_id, match.away_score);
                     }
@@ -603,17 +609,22 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             });
         });
 
-        props.players.sort((p1, p2) => (p2.tournamentWins ?? 0) - (p1.tournamentWins ?? 0) || (playerPointsWon.get(p2.id) ?? 0) - (playerPointsWon.get(p1.id) ?? 0))
-                     .slice(0, synth ? 10 : 3)
-                     .forEach((player: DbPlayer) => {
-            tableRows.push(
-                <tr>
-                    <td>{player.name}</td>
-                    <td>{player.tournamentWins ?? 0}</td>
-                    <td>{playerPointsWon.get(player.id) ?? 0}</td>
-                </tr>
-            );
-        });
+        props.players
+            .sort(
+                (p1, p2) =>
+                    (p2.tournamentWins ?? 0) - (p1.tournamentWins ?? 0) ||
+                    (playerPointsWon.get(p2.id) ?? 0) - (playerPointsWon.get(p1.id) ?? 0)
+            )
+            .slice(0, synth ? 10 : 3)
+            .forEach((player: DbPlayer) => {
+                tableRows.push(
+                    <tr>
+                        <td>{player.name}</td>
+                        <td>{player.tournamentWins ?? 0}</td>
+                        <td>{playerPointsWon.get(player.id) ?? 0}</td>
+                    </tr>
+                );
+            });
 
         return tableRows;
     };
@@ -749,82 +760,98 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
             >
                 <Modal.Header>
                     <span>Past tournaments</span>
-                    {synth
-                    ? <Button.Group id={"pastModalButtons"} color={"orange"}>
-                        <Button active={pastTournamentView === "table"}
+                    {synth ? (
+                        <Button.Group id={"pastModalButtons"} color={"orange"}>
+                            <Button
+                                active={pastTournamentView === "table"}
                                 onClick={(): void => {
                                     setPastTournamentView("table");
                                     playPastTableAudio();
-                                }}>Table</Button>
-                        <Button active={pastTournamentView === "winners"}
+                                }}
+                            >
+                                Table
+                            </Button>
+                            <Button
+                                active={pastTournamentView === "winners"}
                                 onClick={(): void => {
                                     setPastTournamentView("winners");
                                     playPastArcadeAudio();
-                                }}>Winners</Button>
-                        <Button active={pastTournamentView === "high-scores"}
+                                }}
+                            >
+                                Winners
+                            </Button>
+                            <Button
+                                active={pastTournamentView === "high-scores"}
                                 onClick={(): void => {
                                     setPastTournamentView("high-scores");
                                     playPastArcadeAudio();
-                                }}>High Scores</Button>
-                    </Button.Group>
-                    : <Dropdown id={"pastModalDropdown"}
-                                onChange={(e, {value}): void => {
-                                    setPastTournamentView(value as string);
-                                    if (value as string === "table") playPastTableAudio();
-                                    else playPastArcadeAudio();
                                 }}
-                                options={[
-                                    {text: "Table", value: "table"},
-                                    {text: "Winners", value: "winners"},
-                                    {text: "High Scores", value: "high-scores"}
-                                ]}
-                                value={pastTournamentView}
-                                />
-                    }
+                            >
+                                High Scores
+                            </Button>
+                        </Button.Group>
+                    ) : (
+                        <Dropdown
+                            id={"pastModalDropdown"}
+                            onChange={(e, { value }): void => {
+                                setPastTournamentView(value as string);
+                                if ((value as string) === "table") playPastTableAudio();
+                                else playPastArcadeAudio();
+                            }}
+                            options={[
+                                { text: "Table", value: "table" },
+                                { text: "Winners", value: "winners" },
+                                { text: "High Scores", value: "high-scores" },
+                            ]}
+                            value={pastTournamentView}
+                        />
+                    )}
                 </Modal.Header>
                 <Modal.Content>
-                    {pastTournamentView === "table"
-                    ?
-                    <Table
-                        id={synth ? "pastTournamentsTableSynth" : "pastTournamentsTableVapour"}
-                        color={synth ? "orange" : "pink"}
-                        inverted
-                    >
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Tournament name</Table.HeaderCell>
-                                <Table.HeaderCell>Tournament participants</Table.HeaderCell>
-                                <Table.HeaderCell>Tournament type</Table.HeaderCell>
-                                <Table.HeaderCell>Start date</Table.HeaderCell>
-                                <Table.HeaderCell>End date</Table.HeaderCell>
-                                <Table.HeaderCell>Winner</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>{getPastTournamentsTableRows(sortedTournaments.slice(1))}</Table.Body>
-                    </Table>
-                    : <span/>
-                    }
-                    {pastTournamentView === "winners"
-                    ? <div id={synth ? "pastWinnersSynth" : "pastWinnersVapour"}>
-                        <div id={"pastWinnersTitle"}>10 MOST RECENT TOURNAMENT WINNERS</div>
-                        {getPastWinners(sortedTournaments.slice(1, 11))}
-                    </div>
-                    : <span/>
-                    }
-                    {pastTournamentView === "high-scores"
-                    ? <div id={synth ? "highScoresSynth" : "highScoresVapour"}>
-                        <div id={"highScoresTitle"}>TOURNAMENT HIGH SCORES TOP {synth ? 10 : 3}</div>
-                        <table id={"highScoresTable"}>
-                            <tr>
-                                <th>{synth ? "Player name" : "Name"}</th>
-                                <th>{synth ? "Tournament wins" : "Tourn. Ws"}</th>
-                                <th>{synth ? "Points won" : "Pts won"}</th>
-                            </tr>
-                            {getHighScoresTableRows()}
-                        </table>
-                    </div>
-                    : <span/>
-                    }
+                    {pastTournamentView === "table" ? (
+                        <Table
+                            id={synth ? "pastTournamentsTableSynth" : "pastTournamentsTableVapour"}
+                            color={synth ? "orange" : "pink"}
+                            inverted
+                        >
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>Tournament name</Table.HeaderCell>
+                                    <Table.HeaderCell>Tournament participants</Table.HeaderCell>
+                                    <Table.HeaderCell>Tournament type</Table.HeaderCell>
+                                    <Table.HeaderCell>Start date</Table.HeaderCell>
+                                    <Table.HeaderCell>End date</Table.HeaderCell>
+                                    <Table.HeaderCell>Winner</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>{getPastTournamentsTableRows(sortedTournaments.slice(1))}</Table.Body>
+                        </Table>
+                    ) : (
+                        <span />
+                    )}
+                    {pastTournamentView === "winners" ? (
+                        <div id={synth ? "pastWinnersSynth" : "pastWinnersVapour"}>
+                            <div id={"pastWinnersTitle"}>10 MOST RECENT TOURNAMENT WINNERS</div>
+                            {getPastWinners(sortedTournaments.slice(1, 11))}
+                        </div>
+                    ) : (
+                        <span />
+                    )}
+                    {pastTournamentView === "high-scores" ? (
+                        <div id={synth ? "highScoresSynth" : "highScoresVapour"}>
+                            <div id={"highScoresTitle"}>TOURNAMENT HIGH SCORES TOP {synth ? 10 : 3}</div>
+                            <table id={"highScoresTable"}>
+                                <tr>
+                                    <th>{synth ? "Player name" : "Name"}</th>
+                                    <th>{synth ? "Tournament wins" : "Tourn. Ws"}</th>
+                                    <th>{synth ? "Points won" : "Pts won"}</th>
+                                </tr>
+                                {getHighScoresTableRows()}
+                            </table>
+                        </div>
+                    ) : (
+                        <span />
+                    )}
                     <div>
                         <Button
                             id={synth ? "vapourToggle" : "synthToggle"}
