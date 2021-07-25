@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/quick-hit/static/css/main.7956ef4e.chunk.css",
-    "main.js": "/quick-hit/static/js/main.973c8e2a.chunk.js",
-    "main.js.map": "/quick-hit/static/js/main.973c8e2a.chunk.js.map",
+    "main.css": "/quick-hit/static/css/main.67607f4a.chunk.css",
+    "main.js": "/quick-hit/static/js/main.3ce47150.chunk.js",
+    "main.js.map": "/quick-hit/static/js/main.3ce47150.chunk.js.map",
     "runtime-main.js": "/quick-hit/static/js/runtime-main.b62ae7ef.js",
     "runtime-main.js.map": "/quick-hit/static/js/runtime-main.b62ae7ef.js.map",
     "static/css/2.d8258dba.chunk.css": "/quick-hit/static/css/2.d8258dba.chunk.css",
@@ -10,16 +10,16 @@
     "static/js/2.9a44d251.chunk.js.map": "/quick-hit/static/js/2.9a44d251.chunk.js.map",
     "index.html": "/quick-hit/index.html",
     "static/css/2.d8258dba.chunk.css.map": "/quick-hit/static/css/2.d8258dba.chunk.css.map",
-    "static/css/main.7956ef4e.chunk.css.map": "/quick-hit/static/css/main.7956ef4e.chunk.css.map",
+    "static/css/main.67607f4a.chunk.css.map": "/quick-hit/static/css/main.67607f4a.chunk.css.map",
     "static/js/2.9a44d251.chunk.js.LICENSE.txt": "/quick-hit/static/js/2.9a44d251.chunk.js.LICENSE.txt",
-    "static/media/semantic.min.css": "/quick-hit/static/media/outline-icons.ddae9b1b.woff",
-    "static/media/Tournament.css": "/quick-hit/static/media/recap-modal-background.ba979644.gif"
+    "static/media/Tournament.css": "/quick-hit/static/media/recap-modal-background.ba979644.gif",
+    "static/media/semantic.min.css": "/quick-hit/static/media/outline-icons.ddae9b1b.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.b62ae7ef.js",
     "static/css/2.d8258dba.chunk.css",
     "static/js/2.9a44d251.chunk.js",
-    "static/css/main.7956ef4e.chunk.css",
-    "static/js/main.973c8e2a.chunk.js"
+    "static/css/main.67607f4a.chunk.css",
+    "static/js/main.3ce47150.chunk.js"
   ]
 }
