@@ -151,6 +151,9 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         involvedPlayer: DbPlayer
     ) => {
         // TODO: I wonder if this could be extracted into AchievementChecker.ts, and the other functions there could use it?
+        // TODO: Generate better values for this badge's properties instead of "mega-poopoo"
+        // TODO: Find a way to award achievements to tournaments that have already finished
+        
         const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
             icon: "trophy",
             key: "mega-poopoo",
