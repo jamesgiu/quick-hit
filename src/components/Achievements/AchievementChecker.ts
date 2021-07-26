@@ -123,21 +123,24 @@ export const checkForHeartBreaker = (matches: DbMatch[], player: DbPlayer): bool
 };
 
 export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: number): boolean => {
-    let winsInARowNeeded = count;
-    const matchesInvolvingPlayer = matches.filter((match) => {
-        return match.winning_player_id === player.id || match.losing_player_id === player.id;
-    });
+    const matchesInvolvingPlayer = matches
+        .filter((match) => {
+            return match.winning_player_id === player.id || match.losing_player_id === player.id;
+        })
+        .sort((match1, match2) => {
+            return match1.date.localeCompare(match2.date);
+        });
+    console.table(matchesInvolvingPlayer);
 
+    let streak = 0;
     matchesInvolvingPlayer.forEach((match: DbMatch) => {
-        if (match.winning_player_id === player.id) {
-            winsInARowNeeded--;
-        } else {
-            winsInARowNeeded++;
-        }
+        streak = (match.winning_player_id === player.id)
+            ? streak + 1
+            : 0;
     });
 
-    // If the player has won 3 games in a row, award this achievement.
-    return winsInARowNeeded < 0;
+    // If the player has won enough games in a row, award this achievement.
+    return streak >= count;
 };
 
 export const checkForFatality = (matches: DbMatch[], player: DbPlayer): boolean => {
