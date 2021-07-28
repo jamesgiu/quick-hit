@@ -22,77 +22,77 @@ export const ALL_BADGE_DESCRIPTIONS: BadgeDesc[] = [
         key: Achievement.FATALITY,
         text: "Win a game to 11 or more without losing a single point",
         title: "FATALITY!",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForFatality(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForFatality(matches, player)
     },
     {
         icon: "hand victory",
         key: Achievement.CLUTCH_PERFORMER,
         text: "Win 5 games by 2 points or less",
         title: "Clutch Performer",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForClutchPerformer(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForClutchPerformer(matches, player)
     },
     {
         icon: "heartbeat",
         key: Achievement.HEART_BREAKER,
         text: "Lose 5 games by 2 points or less",
         title: "Heart Breaker",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForHeartBreaker(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHeartBreaker(matches, player)
     },
     {
         icon: "smile",
         key: Achievement.ON_A_ROLL,
         text: "Win 3 games in a row",
         title: "On A Roll",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForWinsInARow(matches, player, 3)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 3)
     },
     {
         icon: "ship",
         key: Achievement.UNSTOPPABLE,
         text: "Win 5 games in a row",
         title: "Unstoppable",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForWinsInARow(matches, player, 5)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 5)
     },
     {
         icon: "cloudversify",
         key: Achievement.ASCENDED,
         text: "Win 10 games in a row",
         title: "Ascended",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForWinsInARow(matches, player, 10)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 10)
     },
     {
         icon: "bed",
         key: Achievement.HELPLESS,
         text: "Lose a game to 11 or more without winning a point",
         title: "Helpless",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForHelpless(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHelpless(matches, player)
     },
     {
         icon: "chess king",
         key: Achievement.SUPERIOR,
         text: "Reach 1300 ELO",
         title: "Superior",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForSuperior(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForSuperior(matches, player)
     },
     {
         icon: "spoon",
         key: Achievement.CELLAR_DWELLAR,
         text: "Fall to 1100 ELO",
         title: "Cellar Dwellar",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForCellarDwellar(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForCellarDwellar(matches, player)
     },
     {
         icon: "frown",
         key: Achievement.A_LITTLE_EMBARRASSING,
         text: "Lose to a player with an ELO of 200+ less than you",
         title: "A Little Embarrassing",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForALittleEmbarrassing(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForALittleEmbarrassing(matches, player)
     },
     {
         icon: "money",
         key: Achievement.SHOULD_HAVE_PUT_MONEY_ON_IT,
         text: "Win against a player with an ELO of 200+ more than you",
         title: "Should Have Put Money On It",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer) => checkForShouldHavePutMoneyOnIt(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForShouldHavePutMoneyOnIt(matches, player)
     },
 ];
 

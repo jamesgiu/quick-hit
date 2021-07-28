@@ -21,7 +21,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     const intervalRef = useRef<NodeJS.Timeout>();
     const [polling, setPolling] = useState<boolean>(true);
 
-    const getHappyHourOrSetIfNotPresent = () => {
+    const getHappyHourOrSetIfNotPresent = (): void => {
         const onFailure = (error: string): void => {
             makeErrorToast("Could not determine today's happy hour", error);
             props.setLoading(false);
@@ -51,7 +51,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getTodaysHappyHour(onSuccess, onFailure);
     };
 
-    const getMatches = () => {
+    const getMatches = (): void => {
         const onSuccess = (receivedMatches: DbMatch[]): void => {
             // Check for match data changes, and alert the user to manually refresh when they return, unless it was an
             // expected/forced refresh.
@@ -76,7 +76,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getMatches(onSuccess, onFailure);
     };
 
-    const getPlayers = () => {
+    const getPlayers = (): void => {
         const onSuccess = (players: DbPlayer[]): void => {
             props.setPlayers(players);
         };
@@ -89,7 +89,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getPlayers(onSuccess, onFailure);
     };
 
-    const getBadges = () => {
+    const getBadges = (): void => {
         const onSuccess = (badges: DbBadge[]): void => {
             props.setBadges(badges);
         };
@@ -102,7 +102,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getBadges(onSuccess, onFailure);
     };
 
-    const getTournaments = () => {
+    const getTournaments = (): void => {
         const onSuccess = (tournaments: DbTournament[]): void => {
             props.setTournaments(tournaments);
         };
@@ -115,7 +115,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getTournaments(onSuccess, onFailure);
     };
 
-    const getData = () => {
+    const getData = (): void => {
         getHappyHourOrSetIfNotPresent();
         getBadges();
         getMatches();

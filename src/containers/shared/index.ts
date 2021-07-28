@@ -23,6 +23,7 @@ export function mapTTDataToProps(store: QuickHitReduxStores): TTStoreState {
 
 export function mapTTDispatchToProps(dispatch: Dispatch<actions.SetForceRefreshAction>): TTRefreshDispatchType {
     return {
-        setForceRefresh: (newRefresh: boolean) => dispatch(actions.setRefresh(newRefresh)),
+        setForceRefresh: (newRefresh: boolean): actions.SetForceRefreshAction =>
+            dispatch(actions.setRefresh(newRefresh)),
     };
 }

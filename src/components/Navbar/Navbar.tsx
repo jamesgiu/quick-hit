@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
 import KeyPrompt from "../../containers/KeyPrompt";
+import NewGame from "../../containers/NewGame";
 
 /**
  * QuickHit's navbar.
@@ -46,6 +47,16 @@ function Navbar(): JSX.Element {
                 </Link>
                 <Menu.Menu position={"right"}>
                     <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"} />} />
+                    <NewGame
+                        customModalOpenElement={
+                            <Menu.Item as={"a"}>
+                                <span className={"new-game-icon-navbar"}>
+                                    <Icon name={"game"} />
+                                    <Icon name={"plus"} size={"tiny"} />
+                                </span>
+                            </Menu.Item>
+                        }
+                    />
                     <KeyPrompt />
                 </Menu.Menu>
             </Menu>

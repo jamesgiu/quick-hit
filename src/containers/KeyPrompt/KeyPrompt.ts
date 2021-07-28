@@ -14,7 +14,7 @@ export function mapStateToProps(store: QuickHitReduxStores): AuthStoreState {
 
 export function mapDispatchToProps(dispatch: Dispatch<SetAuthKeyAction>): KeyPromptProps {
     return {
-        setAuthKey: (newKey: string) => dispatch(authActions.setAuthKey(newKey)),
+        setAuthKey: (newKey: string): SetAuthKeyAction => dispatch(authActions.setAuthKey(newKey)),
     };
 }
 

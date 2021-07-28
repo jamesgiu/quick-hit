@@ -50,7 +50,12 @@
   box-shadow: 2px 2px 5px darkorange;
 }
 
-.match-item::after {
+.loser.match-item {
+  border: 1px solid red;
+  box-shadow: 2px 2px 5px red;
+}
+
+.single .match-item::after {
   content: '';
   border-color: darkorange;
   border-width: 2px;
@@ -60,21 +65,21 @@
   right: -11px;
 }
 
-.match-item:nth-of-type(odd)::after {
+.single .match-item:nth-of-type(odd)::after {
   border-right-style: solid;
   border-top-style: solid;
   height: 100%;
   top: 50%;
 }
 
-.match-item:nth-of-type(even)::after {
+.single .match-item:nth-of-type(even)::after {
   border-right-style: solid;
   border-bottom-style: solid;
   height: 100%;
   top: -50%;
 }
 
-.match-item::before {
+.single .match-item::before {
   content: '';
   border-top: 2px solid darkorange;
   position: absolute;
@@ -84,21 +89,21 @@
   top: 50%;
 }
 
-.bracket-4 .match-item::after {
+.single .bracket-4 .match-item::after {
   display: none;
 }
 
-.bracket-3 .match-item:nth-of-type(odd)::after {
+.single .bracket-3 .match-item:nth-of-type(odd)::after {
   height: 200%;
   top: 50%;
 }
 
-.bracket:first-of-type .match-item::before {
+.single .bracket:first-of-type .match-item::before {
   display: none;
 }
 
-.bracket:last-of-type .match-item::before,
-.bracket:last-of-type .match-item::after {
+.single .bracket:last-of-type .match-item::before,
+.single .bracket:last-of-type .match-item::after {
   display: none;
 }
 
@@ -109,6 +114,11 @@
   color: orange;
   font-size: 0.8rem;
   margin: 0 auto;
+}
+
+.loser .vs,
+.loser .clickable-vs {
+  color: red;
 }
 
 .match-item .vs:hover {
@@ -122,6 +132,10 @@
   color: black;
 }
 
+.loser .clickable-vs:hover {
+  background-color: red;
+}
+
 .new-tournament-div .new-tournament-button {
   color: darkorange;
   background-color: #1b1c1d;
@@ -131,6 +145,12 @@
 .new-tournament-div .new-tournament-button:hover {
   background-color: rgba(50, 50, 50, 1);
   color: darkorange;
+}
+
+.new-tournament-div #recapButton {
+  background-image: url('assets/recap-button-background.gif');
+  color: rgb(192, 206, 254);
+  border: 1px solid rgb(192, 206, 254);
 }
 
 .qualified-player {
@@ -201,6 +221,17 @@
   border: 2px solid #ff71ce;
 }
 
+#recapModal .header {
+  background-color: rgb(29, 29, 35);
+  color: rgb(192, 206, 254);
+  border: 2px solid rgb(192, 206, 254);
+}
+
+#pastTournamentsButtonSynth i.icon,
+#pastTournamentsButtonVapour i.icon {
+  margin: 0 5px;
+}
+
 #pastTournamentsModalVapour .header {
   letter-spacing: 5px;
 }
@@ -212,7 +243,8 @@
   aspect-ratio: 1160 / 653;
 }
 
-#pastTournamentsModalVapour {
+#pastTournamentsModalVapour,
+#recapModal {
   width: 40%;
 
   /* The below may not work on older browsers, but for most modern ones it should be fine. */
@@ -220,7 +252,8 @@
 }
 
 #pastTournamentsModalSynth .content,
-#pastTournamentsModalVapour .content {
+#pastTournamentsModalVapour .content,
+#recapModal .content {
   background-size: 100% 100%;
   height: 100%;
   overflow-y: auto;
@@ -239,11 +272,119 @@
   border: 2px solid #ff71ce;
 }
 
+#recapModal .content {
+  background-image: url('assets/recap-modal-background.gif');
+  border: 2px solid rgb(192, 206, 254);
+  animation: 4s fade-in infinite linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes fade-in {
+  from { filter: brightness(0%); }
+  to { filter: brightness(100%); }
+}
+
+#recapModal .content div {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.recap-match {
+  position: absolute;
+  animation: 90.3s fade infinite linear;
+  opacity: 0;
+  width: 100%;
+  color: rgb(192, 206, 254);
+  font-weight: bolder;
+  font-size: large;
+  text-align: center;
+  margin-top: 40%;
+}
+
+#recapModal .recap-match .ui.label {
+  width: 25%;
+}
+
+.recap-match:nth-child(1) {
+  margin-top: 40%;
+  animation-delay: 5.5s;
+}
+
+.recap-match:nth-child(2) {
+  animation-delay: 10.8s;
+}
+
+.recap-match:nth-child(3) {
+  animation-delay: 16.1s;
+}
+
+.recap-match:nth-child(4) {
+  animation-delay: 21.4s;
+}
+
+.recap-match:nth-child(5) {
+  animation-delay: 26.7s;
+}
+
+.recap-match:nth-child(6) {
+  animation-delay: 32s;
+}
+
+.recap-match:nth-child(7) {
+  animation-delay: 37.3s;
+}
+
+.recap-match:nth-child(8) {
+  animation-delay: 42.6s;
+}
+
+.recap-match:nth-child(9) {
+  animation-delay: 47.9s;
+}
+
+.recap-match:nth-child(10) {
+  animation-delay: 53.2s;
+}
+
+.recap-match:nth-child(11) {
+  animation-delay: 58.5s;
+}
+
+.recap-match:nth-child(12) {
+  animation-delay: 63.8s;
+}
+
+.recap-match:nth-child(13) {
+  animation-delay: 69.1s;
+}
+
+.recap-match:nth-child(14) {
+  animation-delay: 74.4s;
+}
+
+.recap-match:nth-child(15) {
+  animation-delay: 79.7s;
+}
+
+.recap-match:nth-child(16) {
+  animation-delay: 85s;
+}
+
+@keyframes fade {
+  0% { opacity: 0; }
+  1% { opacity: 1; }
+  5% { opacity: 1; }
+  6% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 #secondPastTournamentsModalSynth .content,
 #secondPastTournamentsModalVapour .content {
-  height: 75vh;
+  height: 80vh;
   background-color: rgba(53, 54, 58, 1);
   color: white;
+  overflow-y: scroll;
 }
 
 #secondPastTournamentsModalSynth .content {
@@ -276,4 +417,218 @@
 
 #synthToggle {
   background-color: darkorange;
+}
+
+#rulesMsg .rules-content-wrapper {
+  justify-content: center;
+  display: flex;
+}
+
+#rulesMsg ul {
+  float: left;
+  text-align: left;
+}
+
+.watermark {
+  width: 10px;
+  float: left;
+  opacity: 0.5;
+  color: white;
+}
+
+.watermarked .home-player {
+  margin-right: 10px;
+}
+
+.custom-tbd {
+  opacity: 0.5;
+  color: white;
+  font-style: italic;
+}
+
+#pastModalButtons {
+  position: relative;
+  bottom: 5px;
+  float: right;
+}
+
+#pastModalDropdown {
+  float: right;
+  letter-spacing: normal;
+}
+
+#pastModalButtons .active {
+  background-color: white;
+  color: orange;
+  border: 3px solid orange;
+}
+
+@font-face {
+  font-family: arcade;
+  src: url("assets/PressStart2P-Regular.ttf");
+}
+
+#pastWinnersSynth,
+#highScoresSynth {
+  font-family: arcade;
+  color: rgb(253, 93, 57);
+  text-align: center;
+  font-size: 24px;
+  height: 90%;
+}
+
+#pastWinnersVapour,
+#highScoresVapour {
+  font-family: arcade;
+  color: #ff71ce;
+  margin: 42% 40% 45% 10%;
+  text-align: center;
+  height: 4%;
+}
+
+#pastWinnersVapour #pastWinnersTitle {
+  border: 1px solid white;
+  background-color: #009abf;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+#pastWinnersSynth .past-winner {
+  position: absolute;
+  top: 75%;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  animation: 40s enlarge infinite linear;
+  opacity: 0;
+}
+
+#pastWinnersVapour .past-winner {
+  position: absolute;
+  width: 45%;
+  top: 65%;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin-left: 15%;
+  margin-right: 40%;
+  animation: 40s enlargeTV infinite linear;
+  opacity: 0;
+}
+
+#pastWinnersSynth .past-winner:nth-child(3),
+#pastWinnersVapour .past-winner:nth-child(3) {
+  animation-delay: 4s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(4),
+#pastWinnersVapour .past-winner:nth-child(4) {
+  animation-delay: 8s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(5),
+#pastWinnersVapour .past-winner:nth-child(5) {
+  animation-delay: 12s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(6),
+#pastWinnersVapour .past-winner:nth-child(6) {
+  animation-delay: 16s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(7),
+#pastWinnersVapour .past-winner:nth-child(7) {
+  animation-delay: 20s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(8),
+#pastWinnersVapour .past-winner:nth-child(8) {
+  animation-delay: 24s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(9),
+#pastWinnersVapour .past-winner:nth-child(9) {
+  animation-delay: 28s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(10),
+#pastWinnersVapour .past-winner:nth-child(10) {
+  animation-delay: 32s;
+}
+
+#pastWinnersSynth .past-winner:nth-child(11),
+#pastWinnersVapour .past-winner:nth-child(11) {
+  animation-delay: 36s;
+}
+
+@keyframes enlarge {
+  0% {
+    font-size: 8px;
+    opacity: 1;
+  }
+
+  9.9% {
+    font-size: 64px;
+    opacity: 1;
+  }
+
+  10% {
+    font-size: 64px;
+    opacity: 0;
+  }
+}
+
+@keyframes enlargeTV {
+  0% {
+    font-size: 8px;
+    opacity: 1;
+  }
+
+  9.9% {
+    font-size: 24px;
+    opacity: 1;
+  }
+
+  10% {
+    font-size: 24px;
+    opacity: 0;
+  }
+}
+
+#highScoresSynth #highScoresTable,
+#highScoresVapour #highScoresTable {
+  width: 100%;
+  color: yellow;
+  margin-top: 10px;
+}
+
+#highScoresSynth #highScoresTable {
+  font-size: 16px;
+  animation: flicker 5s infinite;
+}
+
+#highScoresVapour #highScoresTable {
+  font-size: 12px;
+}
+
+#highScoresVapour {
+  animation: flicker 5s infinite;
+}
+
+@keyframes flicker {
+  9% { opacity: 1; }
+  10% { opacity: 0; }
+  11% { opacity: 1; }
+  54% { opacity: 1; }
+  55% { opacity: 0; }
+  56% { opacity: 1; }
+  89% { opacity: 1; }
+  90% { opacity: 0; }
+  91% { opacity: 1; }
+}
+
+#highScoresTable td {
+  padding: 5px;
 }
