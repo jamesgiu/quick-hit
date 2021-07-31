@@ -61,7 +61,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 },
                 onPlayerUpdateFailure
             );
-            
+
             QuickHitAPI.addOrUpdatePlayer(
                 tournamentRunnerUp,
                 () => {
@@ -70,12 +70,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 onPlayerUpdateFailure
             );
 
-            generateTournamentAchievements(
-                props.currentTournament.name,
-                tournamentWinner,
-                tournamentRunnerUp,
-                onError,
-            )
+            generateTournamentAchievements(props.currentTournament.name, tournamentWinner, tournamentRunnerUp, onError);
         }
     };
 

@@ -22,77 +22,85 @@ export const ALL_BADGE_DESCRIPTIONS: BadgeDesc[] = [
         key: Achievement.FATALITY,
         text: "Win a game to 11 or more without losing a single point",
         title: "FATALITY!",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForFatality(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForFatality(matches, player),
     },
     {
         icon: "hand victory",
         key: Achievement.CLUTCH_PERFORMER,
         text: "Win 5 games by 2 points or less",
         title: "Clutch Performer",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForClutchPerformer(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForClutchPerformer(matches, player),
     },
     {
         icon: "heartbeat",
         key: Achievement.HEART_BREAKER,
         text: "Lose 5 games by 2 points or less",
         title: "Heart Breaker",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHeartBreaker(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForHeartBreaker(matches, player),
     },
     {
         icon: "smile",
         key: Achievement.ON_A_ROLL,
         text: "Win 3 games in a row",
         title: "On A Roll",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 3)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 3),
     },
     {
         icon: "ship",
         key: Achievement.UNSTOPPABLE,
         text: "Win 5 games in a row",
         title: "Unstoppable",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 5)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 5),
     },
     {
         icon: "cloudversify",
         key: Achievement.ASCENDED,
         text: "Win 10 games in a row",
         title: "Ascended",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForWinsInARow(matches, player, 10)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 10),
     },
     {
         icon: "bed",
         key: Achievement.HELPLESS,
         text: "Lose a game to 11 or more without winning a point",
         title: "Helpless",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHelpless(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHelpless(matches, player),
     },
     {
         icon: "chess king",
         key: Achievement.SUPERIOR,
         text: "Reach 1300 ELO",
         title: "Superior",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForSuperior(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForSuperior(matches, player),
     },
     {
         icon: "spoon",
         key: Achievement.CELLAR_DWELLAR,
         text: "Fall to 1100 ELO",
         title: "Cellar Dwellar",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForCellarDwellar(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForCellarDwellar(matches, player),
     },
     {
         icon: "frown",
         key: Achievement.A_LITTLE_EMBARRASSING,
         text: "Lose to a player with an ELO of 200+ less than you",
         title: "A Little Embarrassing",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForALittleEmbarrassing(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForALittleEmbarrassing(matches, player),
     },
     {
         icon: "money",
         key: Achievement.SHOULD_HAVE_PUT_MONEY_ON_IT,
         text: "Win against a player with an ELO of 200+ more than you",
         title: "Should Have Put Money On It",
-        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForShouldHavePutMoneyOnIt(matches, player)
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForShouldHavePutMoneyOnIt(matches, player),
     },
 ];
 
@@ -134,9 +142,7 @@ export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: 
 
     let streak = 0;
     matchesInvolvingPlayer.forEach((match: DbMatch) => {
-        streak = (match.winning_player_id === player.id)
-            ? streak + 1
-            : 0;
+        streak = match.winning_player_id === player.id ? streak + 1 : 0;
     });
 
     // If the player has won enough games in a row, award this achievement.
@@ -248,7 +254,9 @@ export const checkForAchievementTriggers = (
             if (!winnerBadgeKeys.includes(badge.key) && badge.check_for_requirements(matches, winningPlayer)) {
                 QuickHitAPI.addBadge(
                     decorateAchievementForUpload(badge, winningPlayer, losingPlayer),
-                    () => { return },
+                    () => {
+                        return;
+                    },
                     onError
                 );
             }
@@ -256,7 +264,9 @@ export const checkForAchievementTriggers = (
             if (!loserBadgeKeys.includes(badge.key) && badge.check_for_requirements(matches, losingPlayer)) {
                 QuickHitAPI.addBadge(
                     decorateAchievementForUpload(badge, losingPlayer, winningPlayer),
-                    () => { return },
+                    () => {
+                        return;
+                    },
                     onError
                 );
             }
@@ -272,8 +282,8 @@ export const generateTournamentAchievements = (
 ): void => {
     // Create the badge key based off the tournament name
     // e.g. "Flipped Transparent Muscle" becomes "flipped_transparent_muscle"
-    const tournamentBadgeKey = tournamentName.toLowerCase().replace(' ', '_');
-    
+    const tournamentBadgeKey = tournamentName.toLowerCase().replace(" ", "_");
+
     const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
         icon: "trophy",
         key: tournamentBadgeKey,
@@ -292,27 +302,26 @@ export const generateTournamentAchievements = (
         if (!getBadgeKeys(earnedPlayer, badges).includes(tournamentBadgeKey)) {
             QuickHitAPI.addBadge(
                 decorateAchievementForUpload(TOURNAMENT_WINNER_BADGE, earnedPlayer, involvedPlayer),
-                () => { return },
+                () => {
+                    return;
+                },
                 onError
             );
-        
+
             QuickHitAPI.addBadge(
                 decorateAchievementForUpload(TOURNAMENT_RUNNER_UP_BADGE, involvedPlayer, earnedPlayer),
-                () => { return },
+                () => {
+                    return;
+                },
                 onError
             );
         }
     }, onError);
-
 };
 
-export const getBadgeKeys = (
-    player: DbPlayer,
-    badges: DbBadge[],
-): string[] => (
+export const getBadgeKeys = (player: DbPlayer, badges: DbBadge[]): string[] =>
     badges
-    .filter((badge: DbBadge) => {
-        return badge.player_id === player.id;
-    })
-    .flatMap((badge) => badge.key)
-);
+        .filter((badge: DbBadge) => {
+            return badge.player_id === player.id;
+        })
+        .flatMap((badge) => badge.key);
