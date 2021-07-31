@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { BadgeDesc, DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
-import { decorateAchievementForUpload } from "../../Achievements/AchievementChecker";
+import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { generateTournamentAchievements } from "../../Achievements/AchievementChecker";
 import { TournamentType } from "../../../types/types";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { getISODate } from "../Tournament";
@@ -73,7 +73,8 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
             generateTournamentAchievements(
                 props.currentTournament.name,
                 tournamentWinner,
-                tournamentRunnerUp
+                tournamentRunnerUp,
+                onError,
             )
         }
     };
@@ -242,47 +243,6 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
         }
 
         QuickHitAPI.addUpdateTournament(props.currentTournament, onSuccess, onError);
-    };
-
-    const generateTournamentAchievements = (
-        tournamentName: string,
-        earnedPlayer: DbPlayer,
-        involvedPlayer: DbPlayer
-    ): void => {
-        // TODO: generate badges for past tournaments
-        // maybe check if they already have the badge? otherwise generate it
-
-        const badgeKey = tournamentName.replace(' ', '_');
-        
-        const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
-            icon: "trophy",
-            key: badgeKey,
-            text: `Get first place in the tournament`,
-            title: `Winner of the ${tournamentName} tournament`,
-        };
-
-        const TOURNAMENT_RUNNER_UP_BADGE: BadgeDesc = {
-            icon: "certificate",
-            key: badgeKey,
-            text: "Get second place in the tournament",
-            title: `Runner-up of the ${tournamentName} tournament`,
-        };
-
-        const onError = (errorMsg: string): void => {
-            makeErrorToast("Could not calculate achievements!", errorMsg);
-        };
-
-        QuickHitAPI.addBadge(
-            decorateAchievementForUpload(TOURNAMENT_WINNER_BADGE, earnedPlayer, involvedPlayer),
-            () => { return },
-            onError
-        );
-
-        QuickHitAPI.addBadge(
-            decorateAchievementForUpload(TOURNAMENT_RUNNER_UP_BADGE, involvedPlayer, earnedPlayer),
-            () => { return },
-            onError
-        );
     };
 
     const updateFutureTournamentMatch = (

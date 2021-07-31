@@ -239,16 +239,8 @@ export const checkForAchievementTriggers = (
     matches: DbMatch[],
     onError: (errorMsg: string) => void
 ): void => {
-    const winnerBadgeKeys = badges
-        .filter((badge: DbBadge) => {
-            return badge.player_id === winningPlayer.id;
-        })
-        .flatMap((badge) => badge.key);
-    const loserBadgeKeys = badges
-        .filter((badge: DbBadge) => {
-            return badge.player_id === losingPlayer.id;
-        })
-        .flatMap((badge) => badge.key);
+    const winnerBadgeKeys = getBadgeKeys(winningPlayer, badges);
+    const loserBadgeKeys = getBadgeKeys(losingPlayer, badges);
 
     ALL_BADGE_DESCRIPTIONS.forEach((badge: BadgeDesc) => {
         if (badge.check_for_requirements) {
@@ -271,3 +263,56 @@ export const checkForAchievementTriggers = (
         }
     });
 };
+
+export const generateTournamentAchievements = (
+    tournamentName: string,
+    earnedPlayer: DbPlayer,
+    involvedPlayer: DbPlayer,
+    onError: (errorMsg: string) => void
+): void => {
+    // Create the badge key based off the tournament name
+    // e.g. "Flipped Transparent Muscle" becomes "flipped_transparent_muscle"
+    const tournamentBadgeKey = tournamentName.toLowerCase().replace(' ', '_');
+    
+    const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
+        icon: "trophy",
+        key: tournamentBadgeKey,
+        text: "Get first place in the tournament",
+        title: `Winner of the "${tournamentName}" tournament`,
+    };
+
+    const TOURNAMENT_RUNNER_UP_BADGE: BadgeDesc = {
+        icon: "certificate",
+        key: tournamentBadgeKey,
+        text: "Get second place in the tournament",
+        title: `Runner-up of the "${tournamentName}" tournament`,
+    };
+
+    QuickHitAPI.getBadges((badges: DbBadge[]) => {
+        if (!getBadgeKeys(earnedPlayer, badges).includes(tournamentBadgeKey)) {
+            QuickHitAPI.addBadge(
+                decorateAchievementForUpload(TOURNAMENT_WINNER_BADGE, earnedPlayer, involvedPlayer),
+                () => { return },
+                onError
+            );
+        
+            QuickHitAPI.addBadge(
+                decorateAchievementForUpload(TOURNAMENT_RUNNER_UP_BADGE, involvedPlayer, earnedPlayer),
+                () => { return },
+                onError
+            );
+        }
+    }, onError);
+
+};
+
+export const getBadgeKeys = (
+    player: DbPlayer,
+    badges: DbBadge[],
+): string[] => (
+    badges
+    .filter((badge: DbBadge) => {
+        return badge.player_id === player.id;
+    })
+    .flatMap((badge) => badge.key)
+);
