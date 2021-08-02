@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
+import { generateTournamentAchievements } from "../../Achievements/AchievementChecker";
 import { TournamentType } from "../../../types/types";
 import { makeSuccessToast, makeErrorToast } from "../../Toast/Toast";
 import { getISODate } from "../Tournament";
@@ -60,6 +61,7 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 },
                 onPlayerUpdateFailure
             );
+
             QuickHitAPI.addOrUpdatePlayer(
                 tournamentRunnerUp,
                 () => {
@@ -67,6 +69,8 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                 },
                 onPlayerUpdateFailure
             );
+
+            generateTournamentAchievements(props.currentTournament.name, tournamentWinner, tournamentRunnerUp, onError);
         }
     };
 

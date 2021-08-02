@@ -16,82 +16,93 @@ export enum Achievement {
     SHOULD_HAVE_PUT_MONEY_ON_IT = "should_have_put_money_on_it",
 }
 
-export const FATALITY_BADGE: BadgeDesc = {
-    icon: "tint",
-    key: Achievement.FATALITY,
-    text: "Win a game to 11 or more without losing a single point",
-    title: "FATALITY!",
-};
-
-export const CLUTCH_PERFORMER_BADGE: BadgeDesc = {
-    icon: "hand victory",
-    key: Achievement.CLUTCH_PERFORMER,
-    text: "Win 5 games by 2 points or less",
-    title: "Clutch Performer",
-};
-
-export const HEART_BREAKER_BADGE: BadgeDesc = {
-    icon: "heartbeat",
-    key: Achievement.HEART_BREAKER,
-    text: "Lose 5 games by 2 points or less",
-    title: "Heart Breaker",
-};
-
-export const ON_A_ROLL_BADGE: BadgeDesc = {
-    icon: "smile",
-    key: Achievement.ON_A_ROLL,
-    text: "Win 3 games in a row",
-    title: "On A Roll",
-};
-
-export const ASCENDED_BADGE: BadgeDesc = {
-    icon: "cloudversify",
-    key: Achievement.ASCENDED,
-    text: "Win 10 games in a row",
-    title: "Ascended",
-};
-
-export const UNSTOPPABLE_BADGE: BadgeDesc = {
-    icon: "ship",
-    key: Achievement.UNSTOPPABLE,
-    text: "Win 5 games in a row",
-    title: "Unstoppable",
-};
-
-export const HELPLESS_BADGE: BadgeDesc = {
-    icon: "bed",
-    key: Achievement.HELPLESS,
-    text: "Lose a game to 11 or more without winning a point",
-    title: "Helpless",
-};
-
-export const SUPERIOR_BADGE: BadgeDesc = {
-    icon: "chess king",
-    key: Achievement.SUPERIOR,
-    text: "Reach 1300 ELO",
-    title: "Superior",
-};
-
-export const CELLAR_DWELLAR_BADGE: BadgeDesc = {
-    icon: "spoon",
-    key: Achievement.CELLAR_DWELLAR,
-    text: "Fall to 1100 ELO",
-    title: "Cellar Dwellar",
-};
-
-export const A_LITTLE_EMBARRASSING_BADGE: BadgeDesc = {
-    icon: "frown",
-    key: Achievement.A_LITTLE_EMBARRASSING,
-    text: "Lose to a player with an ELO of 200+ less than you",
-    title: "A Little Embarrassing",
-};
-
-export const SHOULD_HAVE_PUT_MONEY_ON_IT_BADGE: BadgeDesc = {
-    icon: "money",
-    key: Achievement.SHOULD_HAVE_PUT_MONEY_ON_IT,
-    text: "Win against a player with an ELO of 200+ more than you",
-    title: "Should Have Put Money On It",
-};
+export const ALL_BADGE_DESCRIPTIONS: BadgeDesc[] = [
+    {
+        icon: "tint",
+        key: Achievement.FATALITY,
+        text: "Win a game to 11 or more without losing a single point",
+        title: "FATALITY!",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForFatality(matches, player),
+    },
+    {
+        icon: "hand victory",
+        key: Achievement.CLUTCH_PERFORMER,
+        text: "Win 5 games by 2 points or less",
+        title: "Clutch Performer",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForClutchPerformer(matches, player),
+    },
+    {
+        icon: "heartbeat",
+        key: Achievement.HEART_BREAKER,
+        text: "Lose 5 games by 2 points or less",
+        title: "Heart Breaker",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForHeartBreaker(matches, player),
+    },
+    {
+        icon: "smile",
+        key: Achievement.ON_A_ROLL,
+        text: "Win 3 games in a row",
+        title: "On A Roll",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 3),
+    },
+    {
+        icon: "ship",
+        key: Achievement.UNSTOPPABLE,
+        text: "Win 5 games in a row",
+        title: "Unstoppable",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 5),
+    },
+    {
+        icon: "cloudversify",
+        key: Achievement.ASCENDED,
+        text: "Win 10 games in a row",
+        title: "Ascended",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForWinsInARow(matches, player, 10),
+    },
+    {
+        icon: "bed",
+        key: Achievement.HELPLESS,
+        text: "Lose a game to 11 or more without winning a point",
+        title: "Helpless",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForHelpless(matches, player),
+    },
+    {
+        icon: "chess king",
+        key: Achievement.SUPERIOR,
+        text: "Reach 1300 ELO",
+        title: "Superior",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean => checkForSuperior(matches, player),
+    },
+    {
+        icon: "spoon",
+        key: Achievement.CELLAR_DWELLAR,
+        text: "Fall to 1100 ELO",
+        title: "Cellar Dwellar",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForCellarDwellar(matches, player),
+    },
+    {
+        icon: "frown",
+        key: Achievement.A_LITTLE_EMBARRASSING,
+        text: "Lose to a player with an ELO of 200+ less than you",
+        title: "A Little Embarrassing",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForALittleEmbarrassing(matches, player),
+    },
+    {
+        icon: "money",
+        key: Achievement.SHOULD_HAVE_PUT_MONEY_ON_IT,
+        text: "Win against a player with an ELO of 200+ more than you",
+        title: "Should Have Put Money On It",
+        check_for_requirements: (matches: DbMatch[], player: DbPlayer): boolean =>
+            checkForShouldHavePutMoneyOnIt(matches, player),
+    },
+];
 
 export const checkForClutchPerformer = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the winner is this player
@@ -120,21 +131,22 @@ export const checkForHeartBreaker = (matches: DbMatch[], player: DbPlayer): bool
 };
 
 export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: number): boolean => {
-    let winsInARowNeeded = count;
-    const matchesInvolvingPlayer = matches.filter((match) => {
-        return match.winning_player_id === player.id || match.losing_player_id === player.id;
-    });
+    const matchesInvolvingPlayer = matches
+        .filter((match) => {
+            return match.winning_player_id === player.id || match.losing_player_id === player.id;
+        })
+        .sort((match1, match2) => {
+            return match1.date.localeCompare(match2.date);
+        });
+    console.table(matchesInvolvingPlayer);
 
+    let streak = 0;
     matchesInvolvingPlayer.forEach((match: DbMatch) => {
-        if (match.winning_player_id === player.id) {
-            winsInARowNeeded--;
-        } else {
-            winsInARowNeeded++;
-        }
+        streak = match.winning_player_id === player.id ? streak + 1 : 0;
     });
 
-    // If the player has won 3 games in a row, award this achievement.
-    return winsInARowNeeded < 0;
+    // If the player has won enough games in a row, award this achievement.
+    return streak >= count;
 };
 
 export const checkForFatality = (matches: DbMatch[], player: DbPlayer): boolean => {
@@ -176,7 +188,7 @@ export const checkForSuperior = (matches: DbMatch[], player: DbPlayer): boolean 
     return matchesInvolving1300ELORank.length > 0;
 };
 
-export const checkForCellarDweller = (matches: DbMatch[], player: DbPlayer): boolean => {
+export const checkForCellarDwellar = (matches: DbMatch[], player: DbPlayer): boolean => {
     // Filter only to be the matches where the loser is this player
     const matchesInvolvingPlayerAsLoser = matches.filter((match) => {
         return match.losing_player_id === player.id;
@@ -212,167 +224,104 @@ export const checkForShouldHavePutMoneyOnIt = (matches: DbMatch[], player: DbPla
     return matchesInvolvingLowOddsWin.length > 0;
 };
 
-export const checkForTriggersAfterAMatch = (
+export const decorateAchievementForUpload = (
+    badgeDesc: BadgeDesc,
+    winningPlayer: DbPlayer,
+    losingPlayer: DbPlayer
+): DbBadge => {
+    return {
+        ...badgeDesc,
+        id: uuidv4(),
+        date: new Date().toISOString(),
+        player_id: winningPlayer.id,
+        involved_player: losingPlayer.id,
+    };
+};
+
+export const checkForAchievementTriggers = (
     winningPlayer: DbPlayer,
     losingPlayer: DbPlayer,
     badges: DbBadge[],
     matches: DbMatch[],
     onError: (errorMsg: string) => void
 ): void => {
-    const decorateAchievementForUpload = (
-        badgeDesc: BadgeDesc,
-        earnedPlayer: DbPlayer,
-        involvedPlayer: DbPlayer
-    ): DbBadge => {
-        return {
-            ...badgeDesc,
-            id: uuidv4(),
-            date: new Date().toISOString(),
-            player_id: earnedPlayer.id,
-            involved_player: involvedPlayer.id,
-        };
+    const winnerBadgeKeys = getBadgeKeys(winningPlayer, badges);
+    const loserBadgeKeys = getBadgeKeys(losingPlayer, badges);
+
+    ALL_BADGE_DESCRIPTIONS.forEach((badge: BadgeDesc) => {
+        if (badge.check_for_requirements) {
+            // Check achievement criteria for the winning player
+            if (!winnerBadgeKeys.includes(badge.key) && badge.check_for_requirements(matches, winningPlayer)) {
+                QuickHitAPI.addBadge(
+                    decorateAchievementForUpload(badge, winningPlayer, losingPlayer),
+                    () => {
+                        return;
+                    },
+                    onError
+                );
+            }
+            // Check achievement criteria for the losing player
+            if (!loserBadgeKeys.includes(badge.key) && badge.check_for_requirements(matches, losingPlayer)) {
+                QuickHitAPI.addBadge(
+                    decorateAchievementForUpload(badge, losingPlayer, winningPlayer),
+                    () => {
+                        return;
+                    },
+                    onError
+                );
+            }
+        }
+    });
+};
+
+export const generateTournamentAchievements = (
+    tournamentName: string,
+    earnedPlayer: DbPlayer,
+    involvedPlayer: DbPlayer,
+    onError: (errorMsg: string) => void
+): void => {
+    // Create the badge key based off the tournament name
+    // e.g. "Flipped Transparent Muscle" becomes "flipped_transparent_muscle"
+    const tournamentBadgeKey = tournamentName.toLowerCase().replace(" ", "_");
+
+    const TOURNAMENT_WINNER_BADGE: BadgeDesc = {
+        icon: "trophy",
+        key: tournamentBadgeKey,
+        text: "Get first place in the tournament",
+        title: `Winner of the "${tournamentName}" tournament`,
     };
 
-    const winnerBadgeKeys = badges
-        .filter((badge: DbBadge) => {
-            return badge.player_id === winningPlayer.id;
-        })
-        .flatMap((badge) => badge.key);
-    const loserBadgeKeys = badges
-        .filter((badge: DbBadge) => {
-            return badge.player_id === losingPlayer.id;
-        })
-        .flatMap((badge) => badge.key);
+    const TOURNAMENT_RUNNER_UP_BADGE: BadgeDesc = {
+        icon: "certificate",
+        key: tournamentBadgeKey,
+        text: "Get second place in the tournament",
+        title: `Runner-up of the "${tournamentName}" tournament`,
+    };
 
-    if (!winnerBadgeKeys.includes(Achievement.FATALITY)) {
-        if (checkForFatality(matches, winningPlayer)) {
+    QuickHitAPI.getBadges((badges: DbBadge[]) => {
+        if (!getBadgeKeys(earnedPlayer, badges).includes(tournamentBadgeKey)) {
             QuickHitAPI.addBadge(
-                decorateAchievementForUpload(FATALITY_BADGE, winningPlayer, losingPlayer),
+                decorateAchievementForUpload(TOURNAMENT_WINNER_BADGE, earnedPlayer, involvedPlayer),
+                () => {
+                    return;
+                },
+                onError
+            );
+
+            QuickHitAPI.addBadge(
+                decorateAchievementForUpload(TOURNAMENT_RUNNER_UP_BADGE, involvedPlayer, earnedPlayer),
                 () => {
                     return;
                 },
                 onError
             );
         }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.CLUTCH_PERFORMER)) {
-        if (checkForClutchPerformer(matches, winningPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(CLUTCH_PERFORMER_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.ON_A_ROLL)) {
-        if (checkForWinsInARow(matches, winningPlayer, 3)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(ON_A_ROLL_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.UNSTOPPABLE)) {
-        if (checkForWinsInARow(matches, winningPlayer, 5)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(UNSTOPPABLE_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.ASCENDED)) {
-        if (checkForWinsInARow(matches, winningPlayer, 10)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(ASCENDED_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.SUPERIOR)) {
-        if (checkForSuperior(matches, winningPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(SUPERIOR_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!winnerBadgeKeys.includes(Achievement.SHOULD_HAVE_PUT_MONEY_ON_IT)) {
-        if (checkForShouldHavePutMoneyOnIt(matches, winningPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(SHOULD_HAVE_PUT_MONEY_ON_IT_BADGE, winningPlayer, losingPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!loserBadgeKeys.includes(Achievement.A_LITTLE_EMBARRASSING)) {
-        if (checkForALittleEmbarrassing(matches, losingPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(A_LITTLE_EMBARRASSING_BADGE, losingPlayer, winningPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!loserBadgeKeys.includes(Achievement.HELPLESS)) {
-        if (checkForHelpless(matches, losingPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(HELPLESS_BADGE, losingPlayer, winningPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!loserBadgeKeys.includes(Achievement.HEART_BREAKER)) {
-        if (checkForHeartBreaker(matches, losingPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(HEART_BREAKER_BADGE, losingPlayer, winningPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
-
-    if (!loserBadgeKeys.includes(Achievement.CELLAR_DWELLAR)) {
-        if (checkForCellarDweller(matches, losingPlayer)) {
-            QuickHitAPI.addBadge(
-                decorateAchievementForUpload(CELLAR_DWELLAR_BADGE, losingPlayer, winningPlayer),
-                () => {
-                    return;
-                },
-                onError
-            );
-        }
-    }
+    }, onError);
 };
+
+export const getBadgeKeys = (player: DbPlayer, badges: DbBadge[]): string[] =>
+    badges
+        .filter((badge: DbBadge) => {
+            return badge.player_id === player.id;
+        })
+        .flatMap((badge) => badge.key);

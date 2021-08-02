@@ -6,7 +6,7 @@ import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { checkForTriggersAfterAMatch } from "../../Achievements/AchievementChecker";
+import { checkForAchievementTriggers } from "../../Achievements/AchievementChecker";
 import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
 import { NewGameStoreProps } from "../../../containers/NewGame/NewGame";
 import { TTRefreshDispatchType } from "../../../containers/shared";
@@ -30,7 +30,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     const sendCreateRequest = (addAnother: boolean): void => {
         const onSuccess = (): void => {
             makeSuccessToast("Game added!", "Back to work?");
-            checkForAchievementTriggers(addAnother);
+            calculateAchievements(addAnother);
         };
 
         const onError = (errorMsg: string): void => {
@@ -105,7 +105,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
         }, onError);
     };
 
-    const checkForAchievementTriggers = (addAnother: boolean): void => {
+    const calculateAchievements = (addAnother: boolean): void => {
         if (!(winningPlayer && losingPlayer)) {
             return;
         }
@@ -117,12 +117,9 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
         // After new match has been added, fetch the matches and badges...
         QuickHitAPI.getMatches((matches: DbMatch[]) => {
             QuickHitAPI.getBadges((badges: DbBadge[]) => {
-                checkForTriggersAfterAMatch(winningPlayer, losingPlayer, badges, matches, onError);
+                checkForAchievementTriggers(winningPlayer, losingPlayer, badges, matches, onError);
 
-                if (!addAnother) {
-                    setModalOpen(false);
-                }
-
+                setModalOpen(addAnother);
                 setWinningPlayer(undefined);
                 setLosingPlayer(undefined);
                 setWinningPlayerScore(undefined);
