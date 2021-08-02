@@ -117,7 +117,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
         // After new match has been added, fetch the matches and badges...
         QuickHitAPI.getMatches((matches: DbMatch[]) => {
             QuickHitAPI.getBadges((badges: DbBadge[]) => {
-                checkForAchievementTriggers(winningPlayer, losingPlayer, badges, matches, onError);
+                checkForAchievementTriggers(winningPlayer, losingPlayer, badges, matches, props.players, onError);
 
                 setModalOpen(addAnother);
                 setWinningPlayer(undefined);

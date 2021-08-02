@@ -38,7 +38,6 @@ export interface BadgeDesc {
     text: string;
     title: string;
     key: string;
-    check_for_requirements?(matches: DbMatch[], player: DbPlayer, count?: number): boolean;
 }
 
 export interface DbBadge extends BadgeDesc {
