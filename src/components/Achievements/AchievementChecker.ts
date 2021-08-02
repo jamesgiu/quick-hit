@@ -20,8 +20,10 @@ type badgeCheckFn = (matches: DbMatch[], player: DbPlayer) => string;
 
 export const BADGE_CHECK_MAP: Map<BadgeDesc, badgeCheckFn> = new Map([
     [FATALITY_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForFatality(matches, player)],
-    [CLUTCH_PERFORMER_BADGE,
-        (matches: DbMatch[], player: DbPlayer): string => checkForClutchPerformer(matches, player),],
+    [
+        CLUTCH_PERFORMER_BADGE,
+        (matches: DbMatch[], player: DbPlayer): string => checkForClutchPerformer(matches, player),
+    ],
     [HEART_BREAKER_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForHeartBreaker(matches, player)],
     [ON_A_ROLL_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForWinsInARow(matches, player, 3)],
     [UNSTOPPABLE_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForWinsInARow(matches, player, 5)],
@@ -62,7 +64,9 @@ export const checkForHeartBreaker = (matches: DbMatch[], player: DbPlayer): stri
     });
 
     // If the player has lost 5 or more games by 2 points or less, ya blew it schmuck! They earn this achievement.
-    return matchesThatWereLostBy2PointsOrLess.length >= 5 ? matchesThatWereLostBy2PointsOrLess[0].winning_player_id : "";
+    return matchesThatWereLostBy2PointsOrLess.length >= 5
+        ? matchesThatWereLostBy2PointsOrLess[0].winning_player_id
+        : "";
 };
 
 export const checkForWinsInARow = (matches: DbMatch[], player: DbPlayer, count: number): string => {
