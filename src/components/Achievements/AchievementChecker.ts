@@ -20,10 +20,8 @@ type badgeCheckFn = (matches: DbMatch[], player: DbPlayer) => string;
 
 export const BADGE_CHECK_MAP: Map<BadgeDesc, badgeCheckFn> = new Map([
     [FATALITY_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForFatality(matches, player)],
-    [
-        CLUTCH_PERFORMER_BADGE,
-        (matches: DbMatch[], player: DbPlayer): string => checkForClutchPerformer(matches, player),
-    ],
+    [CLUTCH_PERFORMER_BADGE,
+        (matches: DbMatch[], player: DbPlayer): string => checkForClutchPerformer(matches, player),],
     [HEART_BREAKER_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForHeartBreaker(matches, player)],
     [ON_A_ROLL_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForWinsInARow(matches, player, 3)],
     [UNSTOPPABLE_BADGE, (matches: DbMatch[], player: DbPlayer): string => checkForWinsInARow(matches, player, 5)],
