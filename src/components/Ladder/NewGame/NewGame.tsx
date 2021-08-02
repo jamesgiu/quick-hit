@@ -119,7 +119,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
             QuickHitAPI.getBadges((badges: DbBadge[]) => {
                 checkForAchievementTriggers(winningPlayer, losingPlayer, badges, matches, onError);
 
-                setModalOpen(!addAnother);
+                setModalOpen(addAnother);
                 setWinningPlayer(undefined);
                 setLosingPlayer(undefined);
                 setWinningPlayerScore(undefined);
