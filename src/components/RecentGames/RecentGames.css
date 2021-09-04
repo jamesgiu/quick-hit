@@ -33,3 +33,13 @@
   font-weight: 500;
   color: orange;
 }
+
+.ui.pagination.menu a {
+  background-color: rgba(53, 54, 58, 1);
+  color: white;
+}
+
+.ui.pagination.menu .active.item,
+.ui.pagination.menu a:hover {
+  background-color: rgb(196, 186, 183);
+}
