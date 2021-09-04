@@ -127,12 +127,12 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         if (intervalRef.current) {
             props.setLoading(false);
         }
-    }, [props.players, props.matches, props.badges, props.happyHour]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [props.players, props.matches, props.badges, props.happyHour]);
 
     // On component mount.
     useEffect(() => {
         getData();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []);
 
     // Set the data loop, and on prop change, reset the loop as the Interval function will retain the props
     // present at the time of invocation.
@@ -150,7 +150,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
             getData();
             props.setForceRefresh(false);
         }
-    }, [props, polling]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [props, polling]);
 
     return (
         <div className={"data-loader"}>
