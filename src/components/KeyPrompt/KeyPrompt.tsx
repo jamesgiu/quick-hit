@@ -18,6 +18,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
             onClose={(): void => setIsOpen(false)}
             onOpen={(): void => setIsOpen(true)}
             trigger={<Menu.Item as={"a"} icon={"key"} />}
+            closeIcon
         >
             <Modal.Header>
                 <Icon name="key" />
@@ -32,6 +33,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                 label="Key required to proceed"
                                 required
                                 placeholder="Key for table tennis service account"
+                                type="password"
                                 onChange={(event, data): void => setKey(data.value)}
                             />
                         </Form.Field>
