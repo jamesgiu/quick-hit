@@ -24,15 +24,15 @@ Will deploy the application to `github-pages` to be hosted.
 See more: https://github.com/jamesgiu/quick-hit/deployments/activity_log?environment=github-pages
 
 ### Other
-* `npm run lint` and `npm run lint:fix`
+#### `npm run lint` and `npm run lint:fix`
 
 Runs `eslint` over the project.
 
-* `npm run lint:css` and `npm run lint:css:fix` 
+#### `npm run lint:css` and `npm run lint:css:fix` 
 
 Runs `stylelint` over the project.
 
-* `npm run style` and `npm run style:fix`
+#### `npm run style` and `npm run style:fix`
 
 Runs `prettier` over the project.
 
