@@ -6,6 +6,7 @@ import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
 import KeyPrompt from "../../containers/KeyPrompt";
 import NewGame from "../../containers/NewGame";
+import Settings from "../../containers/Settings";
 
 /**
  * QuickHit's navbar.
@@ -18,7 +19,7 @@ function Navbar(): JSX.Element {
                     <Menu.Item as={"a"} header className={"header"}>
                         <Icon name={"table tennis"} size={"big"} />
                         <Icon name={"chevron right"} size={"tiny"} />
-                        Quick<span className={"header-hit"}>HIT</span>
+                        Quick<span className={"header-hit"}>Hit</span>
                     </Menu.Item>
                 </Link>
                 <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}>
@@ -57,6 +58,7 @@ function Navbar(): JSX.Element {
                             </Menu.Item>
                         }
                     />
+                    <Settings />
                     <KeyPrompt />
                 </Menu.Menu>
             </Menu>

@@ -1,6 +1,6 @@
 import React from "react";
 import "./Home.css";
-import { ButtonGroup, Header, Icon, Transition } from "semantic-ui-react";
+import { Button, ButtonGroup, Header, Icon, Segment, Transition } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import NewGame from "../../containers/NewGame";
 import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
@@ -30,11 +30,14 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
     return (
         <div className="home">
             <Transition transitionOnMount={true}>
-                <Header as={"h2"} icon inverted>
+                <Header as={"h2"} icon inverted className={"welcome-header"}>
                     <Icon name="table tennis" circular />
-                    Welcome to <Icon name={"chevron right"} size={"tiny"} />
-                    Quick
-                    <span className={"header-hit"}>HIT</span>
+                    <div>Welcome to</div>
+                    <div className={"quick-hit-splash"}>
+                        <Icon name={"chevron right"} size={"tiny"} />
+                        Quick<span className={"header-hit"}>Hit</span>
+                    </div>
+                    <Header.Subheader>A table tennis ELO-tracking application</Header.Subheader>
                 </Header>
             </Transition>
             <Transition transitionOnMount={true}>
@@ -76,22 +79,38 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     />
                 </ButtonGroup>
             </Transition>
+            <Segment inverted className={"github-area"}>
+                <Header as={"h3"} icon circular inverted>
+                    <Icon name="github" />
+                </Header>
+                <Header.Content>
+                    QuickHit is an open source project made by{" "}
+                    <a href={"https://github.com/jamesgiu/quick-hit/graphs/contributors"}>cool people</a>.
+                </Header.Content>
+                <ButtonGroup className={"github-buttons"}>
+                    <a href={"https://github.com/jamesgiu/quick-hit#getting-started-with-firebase"}>
+                        <Button color={"teal"}>Host it yourself</Button>
+                    </a>
+                    <a href={"https://github.com/jamesgiu/quick-hit/issues/new/choose"}>
+                        <Button color={"red"}>Report an issue</Button>
+                    </a>
+                </ButtonGroup>
+            </Segment>
             <Transition visible={!props.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
-                <div className={"champion-area"}>
-                    <Header as={"h4"} inverted>
-                        {props.players.length > 0 && <PlayerCard player={getCurrentChampion()} />}
-                    </Header>
-                    <Header.Subheader>
-                        is the current <span className={"champion-text"}> champion </span>
-                    </Header.Subheader>
-                </div>
+                <Segment inverted className={"champion-area"}>
+                    <div>
+                        {props.players.length > 0 && <PlayerCard player={getCurrentChampion()} />} is the current{" "}
+                        <span className={"champion-text"}> champion </span>
+                    </div>
+                </Segment>
             </Transition>
-            <Transition visible={!props.loading} animation={"fade"} duration={500} unmountOnHide={true}>
+            <Transition visible={!props.loading} animation={"fade"} duration={2000} unmountOnHide={true}>
                 <span className={"happy-hour"}>
                     <Header>{props.happyHour?.multiplier}x happy hour!</Header>
-                    <Header.Subheader>
-                        Today's happy hour is starting at {renderDateString(props.happyHour)}
-                    </Header.Subheader>
+                    <span>
+                        Today's <span className={"happy-hour-highlight"}>happy hour</span> is starting at{" "}
+                        <span className={"happy-hour-highlight"}>{renderDateString(props.happyHour)}</span>
+                    </span>
                 </span>
             </Transition>
         </div>

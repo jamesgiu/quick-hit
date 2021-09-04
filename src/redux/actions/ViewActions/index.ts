@@ -10,6 +10,11 @@ export interface SetShowCardsAction {
     value: boolean;
 }
 
+export interface SetDisableMusicAction {
+    type: constants.SET_DISABLE_MUSIC_TYPE;
+    value: boolean;
+}
+
 export function setZeroGamesFilter(hideZeroGamesPlayers: boolean): SetZeroGamesFilterAction {
     return {
         type: constants.SET_HIDE_ZERO_GAME_PLAYERS,
@@ -21,5 +26,12 @@ export function setShowCards(showCards: boolean): SetShowCardsAction {
     return {
         type: constants.SET_SHOW_CARDS,
         value: showCards,
+    };
+}
+
+export function setDisableMusic(disableMusic: boolean): SetDisableMusicAction {
+    return {
+        type: constants.SET_DISABLE_MUSIC,
+        value: disableMusic,
     };
 }

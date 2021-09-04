@@ -13,4 +13,9 @@
 
 .tt-navbar .new-game-icon-navbar {
   margin: auto;
+  width: 20px;
+}
+
+.tt-navbar .new-game-icon-navbar i {
+  display: inline;
 }

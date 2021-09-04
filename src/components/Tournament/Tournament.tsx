@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Button, Dropdown, Header, Icon, Label, Message, Modal, Table } from "semantic-ui-react";
-import { TTDataPropsTypeCombined } from "../../containers/shared";
+import { TTRefreshDispatchType } from "../../containers/shared";
 import { DbPlayer, DbTournament, DbTournamentMatch, getTodaysDate } from "../../types/database/models";
 import "./Tournament.css";
 import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
 import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 import { TournamentParticipantsType, TournamentType } from "../../types/types";
+import { TournamentReduxProps } from "../../containers/Tournament/Tournament";
 
-function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
+function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);
     const [recapModalOpen, openRecapModal] = useState<boolean>(false);
@@ -30,11 +31,11 @@ function Tournament(props: TTDataPropsTypeCombined): JSX.Element {
     const [arcadeAudioSynth] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/arcade-synth.mp3"));
     // Music by Kannibal.
     const [arcadeAudioVapour] = useState<HTMLAudioElement>(new Audio(process.env.PUBLIC_URL + "/arcade-vapour.mp3"));
-    pastTournamentsAudioSynth.volume = 0.2;
-    pastTournamentsAudioVapour.volume = 0.2;
-    recapAudio.volume = 0.5;
-    arcadeAudioSynth.volume = 0.2;
-    arcadeAudioVapour.volume = 0.2;
+    pastTournamentsAudioSynth.volume = props.disableMusic ? 0 : 0.2;
+    pastTournamentsAudioVapour.volume = props.disableMusic ? 0 : 0.2;
+    recapAudio.volume = props.disableMusic ? 0 : 0.5;
+    arcadeAudioSynth.volume = props.disableMusic ? 0 : 0.2;
+    arcadeAudioVapour.volume = props.disableMusic ? 0 : 0.2;
     pastTournamentsAudioVapour.loop = true;
     pastTournamentsAudioSynth.loop = true;
     recapAudio.loop = true;

@@ -11,6 +11,7 @@ import { QuickHitReduxStores } from "../../redux/types/store";
 export interface ViewDispatchType {
     setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => void;
     setShowCards: (showCards: boolean) => void;
+    setDisableMusic: (disableMusic: boolean) => void;
 }
 
 export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & ViewStoreState {
@@ -24,12 +25,16 @@ export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & View
         tournaments: store.ttData.tournaments,
         hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
         showCards: store.viewStore.showCards,
+        disableMusic: store.viewStore.disableMusic,
     };
 }
 
 export function mapDispatchToProps(
     dispatch: Dispatch<
-        ttActions.SetForceRefreshAction | viewActions.SetZeroGamesFilterAction | viewActions.SetShowCardsAction
+        | ttActions.SetForceRefreshAction
+        | viewActions.SetZeroGamesFilterAction
+        | viewActions.SetShowCardsAction
+        | viewActions.SetDisableMusicAction
     >
 ): TTRefreshDispatchType & ViewDispatchType {
     return {
@@ -39,6 +44,8 @@ export function mapDispatchToProps(
             dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers)),
         setShowCards: (showCards: boolean): viewActions.SetShowCardsAction =>
             dispatch(viewActions.setShowCards(showCards)),
+        setDisableMusic: (disableMusic: boolean): viewActions.SetDisableMusicAction =>
+            dispatch(viewActions.setDisableMusic(disableMusic)),
     };
 }
 
