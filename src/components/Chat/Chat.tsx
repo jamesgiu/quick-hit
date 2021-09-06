@@ -43,7 +43,7 @@ function Chat(props: ChatProps): JSX.Element {
                             id: uuidv4(),
                             text: `Welcome to the daily chat for ${getTodaysDate()}`,
                             date: new Date().toISOString(),
-                        }
+                        },
                     },
                 };
 
@@ -78,7 +78,8 @@ function Chat(props: ChatProps): JSX.Element {
             events.push({
                 date: (
                     <div className={"event-date"}>
-                        <span className={"author"}>{message.author}</span> <ReactTimeAgo date={new Date(message.date)} />
+                        <span className={"author"}>{message.author}</span>{" "}
+                        <ReactTimeAgo date={new Date(message.date)} />
                         ...
                     </div>
                 ),
