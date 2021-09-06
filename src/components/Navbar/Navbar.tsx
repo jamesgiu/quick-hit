@@ -3,10 +3,11 @@ import "./Navbar.css";
 import { Icon, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
-import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
+import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import KeyPrompt from "../../containers/KeyPrompt";
 import NewGame from "../../containers/NewGame";
 import Settings from "../../containers/Settings";
+import Chat from "../../containers/Chat/Chat";
 
 /**
  * QuickHit's navbar.
@@ -47,6 +48,7 @@ function Navbar(): JSX.Element {
                     </Menu.Item>
                 </Link>
                 <Menu.Menu position={"right"}>
+                    <Chat />
                     <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"} />} />
                     <NewGame
                         customModalOpenElement={

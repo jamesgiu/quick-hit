@@ -1,7 +1,7 @@
 import "./Ladder.css";
 import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
-import NewEditPlayer from "./NewEditPlayer/NewEditPlayer";
+import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import NewGame from "../../containers/NewGame";
 import { getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
 import { TTDataPropsTypeCombined } from "../../containers/shared";

@@ -6,3 +6,6 @@ export type SET_SHOW_CARDS_TYPE = typeof SET_SHOW_CARDS;
 
 export const SET_DISABLE_MUSIC = "SET_DISABLE_MUSIC";
 export type SET_DISABLE_MUSIC_TYPE = typeof SET_DISABLE_MUSIC;
+
+export const SET_USERNAME = "SET_USERNAME";
+export type SET_USERNAME_TYPE = typeof SET_USERNAME;

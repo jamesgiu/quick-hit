@@ -39,9 +39,10 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                     multiplier: randomIntFromInterval(2, 6),
                 };
 
-                QuickHitAPI.setHappyHourToday(
+                QuickHitAPI.setHappyHour(
                     newHappyHour,
                     () => {
+                        props.setHappyHour(newHappyHour);
                         return;
                     },
                     onFailure

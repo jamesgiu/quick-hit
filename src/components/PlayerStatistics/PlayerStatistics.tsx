@@ -6,7 +6,7 @@ import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
 import { getExtraPlayerStats, getPlayersMap, getRecordAgainstPlayer } from "../QHDataLoader/QHDataLoader";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
-import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
+import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import AchievementFeed from "../../containers/AchievementFeed";
 
 interface PlayerStatisticsParams {

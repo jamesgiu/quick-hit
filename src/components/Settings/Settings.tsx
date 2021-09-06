@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { Button, Form, Icon, Menu, Modal } from "semantic-ui-react";
-import { ViewDispatchType } from "../../containers/Ladder/Ladder";
+import { SettingsDispatchType } from "../../containers/Settings/Settings";
 
 export interface SettingsProps {
     hideZeroGamePlayers: boolean;
     showCards: boolean;
     disableMusic: boolean;
+    username: string;
 }
 
 /**
  * QuickHit Settings menu.
  */
-function Settings(props: SettingsProps & ViewDispatchType): JSX.Element {
+function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+
     return (
         <Modal
             open={isOpen}
@@ -26,7 +28,18 @@ function Settings(props: SettingsProps & ViewDispatchType): JSX.Element {
                 Settings
             </Modal.Header>
             <Modal.Content className={"options-form"}>
-                <Form warning>
+                <Form>
+                    <Form.Group>
+                        <Form.Field>
+                            <Form.Input
+                                label={"Set username (e.g. for chat)"}
+                                onChange={(event, data): void => {
+                                    props.setUsername(data.value);
+                                }}
+                                value={props.username}
+                            />
+                        </Form.Field>
+                    </Form.Group>
                     <Form.Group>
                         <Form.Radio
                             toggle

@@ -1,4 +1,12 @@
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament, getTodaysDate } from "../types/database/models";
+import {
+    DbBadge,
+    DbChatRoom,
+    DbHappyHour,
+    DbMatch,
+    DbPlayer,
+    DbTournament,
+    getTodaysDate,
+} from "../types/database/models";
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
@@ -98,7 +106,7 @@ export class QuickHitAPI {
             });
     }
 
-    public static setHappyHourToday(
+    public static setHappyHour(
         happyHour: DbHappyHour,
         onSuccess: () => void,
         onFailure: (errorString: string) => void
@@ -107,6 +115,37 @@ export class QuickHitAPI {
             ApiActions.HAPPY_HOUR,
             HttpMethod.PATCH,
             `{"${happyHour.date}" : ${JSON.stringify(happyHour)}}`
+        )
+            .then(() => {
+                onSuccess();
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static getTodaysChatRoom(
+        onSuccess: (chatRoom?: DbChatRoom) => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(`${ApiActions.CHAT}?orderBy="$key"&startAt="${getTodaysDate()}"&`, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data[getTodaysDate()]);
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static setChatRoom(
+        chatRoom: DbChatRoom,
+        onSuccess: () => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.CHAT,
+            HttpMethod.PATCH,
+            `{"${chatRoom.date}" : ${JSON.stringify(chatRoom)}}`
         )
             .then(() => {
                 onSuccess();
