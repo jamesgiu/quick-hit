@@ -1,15 +1,15 @@
 import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import { DbBadge, DbMatch, DbPlayer } from "../../../types/database/models";
-import { makeErrorToast, makeSuccessToast } from "../../Toast/Toast";
+import { DbBadge, DbMatch, DbPlayer } from "../../types/database/models";
+import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
-import { QuickHitAPI } from "../../../api/QuickHitAPI";
-import { checkForAchievementTriggers } from "../../Achievements/AchievementChecker";
-import { getPlayersMap } from "../../QHDataLoader/QHDataLoader";
-import { NewGameStoreProps } from "../../../containers/NewGame/NewGame";
-import { TTRefreshDispatchType } from "../../../containers/shared";
+import { QuickHitAPI } from "../../api/QuickHitAPI";
+import { checkForAchievementTriggers } from "../Achievements/AchievementChecker";
+import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
+import { NewGameStoreProps } from "../../containers/NewGame/NewGame";
+import { TTRefreshDispatchType } from "../../containers/shared";
 
 export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;

@@ -1,0 +1,23 @@
+.ui.segment.chat-portal-element {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  z-index: 1000;
+  width: 20%;
+  opacity: 0.8;
+  background-color: #0a0c0c;
+  color: white;
+}
+
+.chat-portal-element .ui.feed.chat-feed {
+  overflow: auto;
+  height: 400px;
+  flex-direction: column-reverse;
+  display: flex;
+}
+
+.chat-portal-element .message-form .ui.inverted.input,
+.chat-portal-element .message-form .ui.inverted.input input {
+  display: inline;
+  width: 98%;
+}

@@ -15,6 +15,11 @@ export interface SetDisableMusicAction {
     value: boolean;
 }
 
+export interface SetUsernameAction {
+    type: constants.SET_USERNAME_TYPE;
+    value: string;
+}
+
 export function setZeroGamesFilter(hideZeroGamesPlayers: boolean): SetZeroGamesFilterAction {
     return {
         type: constants.SET_HIDE_ZERO_GAME_PLAYERS,
@@ -33,5 +38,12 @@ export function setDisableMusic(disableMusic: boolean): SetDisableMusicAction {
     return {
         type: constants.SET_DISABLE_MUSIC,
         value: disableMusic,
+    };
+}
+
+export function setUsername(username: string): SetUsernameAction {
+    return {
+        type: constants.SET_USERNAME,
+        value: username,
     };
 }

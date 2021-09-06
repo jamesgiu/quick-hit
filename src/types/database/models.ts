@@ -33,6 +33,19 @@ export interface DbHappyHour {
     multiplier: number;
 }
 
+export interface DbChatRoom {
+    /* yyyy-mm-dd */
+    date: string;
+    messages: { [s: string]: DbChatRoomMessage };
+}
+
+export interface DbChatRoomMessage {
+    id: string;
+    date: string;
+    author: string;
+    text: string;
+}
+
 export interface BadgeDesc {
     icon: string;
     text: string;

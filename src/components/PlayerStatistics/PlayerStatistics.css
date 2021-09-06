@@ -105,3 +105,7 @@
   font-size: 1.2rem;
   float: left;
 }
+
+.player-statistics .ui.pagination.menu {
+  font-size: 0.8rem;
+}

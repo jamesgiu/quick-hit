@@ -3,7 +3,7 @@ import "./Home.css";
 import { Button, ButtonGroup, Header, Icon, Segment, Transition } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import NewGame from "../../containers/NewGame";
-import NewEditPlayer from "../Ladder/NewEditPlayer/NewEditPlayer";
+import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DbHappyHour, DbPlayer } from "../../types/database/models";
@@ -96,7 +96,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     </a>
                 </ButtonGroup>
             </Segment>
-            <Transition visible={!props.loading} animation={"fly up"} duration={2000} unmountOnHide={true}>
+            <Transition visible={!props.loading} animation={"fade up"} duration={2000} unmountOnHide={true}>
                 <Segment inverted className={"champion-area"}>
                     <div>
                         {props.players.length > 0 && <PlayerCard player={getCurrentChampion()} />} is the current{" "}
@@ -104,7 +104,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     </div>
                 </Segment>
             </Transition>
-            <Transition visible={!props.loading} animation={"fade"} duration={2000} unmountOnHide={true}>
+            <Transition visible={!props.loading} animation={"fade up"} duration={2000} unmountOnHide={true}>
                 <span className={"happy-hour"}>
                     <Header>{props.happyHour?.multiplier}x happy hour!</Header>
                     <span>
