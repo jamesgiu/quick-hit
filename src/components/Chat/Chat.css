@@ -3,7 +3,7 @@
   top: 50px;
   right: 20px;
   z-index: 1000;
-  width: 20%;
+  min-width: 20%;
   opacity: 0.8;
   background-color: #0a0c0c;
   color: white;

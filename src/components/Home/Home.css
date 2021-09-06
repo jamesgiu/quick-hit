@@ -66,14 +66,13 @@
 }
 
 .home .happy-hour {
-  max-width: 40vw;
   font-size: 0.8rem;
   border-radius: 30px;
   padding: 10px;
   margin: auto;
   background-color: #0a0c0c;
   opacity: 0.8;
-  position: absolute;
+  position: fixed;
   left: 20px;
   bottom: 50px;
   color: white;
