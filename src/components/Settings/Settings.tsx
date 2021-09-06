@@ -34,9 +34,12 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                             <Form.Input
                                 label={"Set username (e.g. for chat)"}
                                 onChange={(event, data): void => {
-                                    props.setUsername(encodeURIComponent(data.value));
+                                    if (data.value.length <= 128) {
+                                        props.setUsername(data.value);
+                                    }
                                 }}
-                                value={props.username}
+                                value={decodeURIComponent(props.username)}
+                                maxlength="128"
                             />
                         </Form.Field>
                     </Form.Group>

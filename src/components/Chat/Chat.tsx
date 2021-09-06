@@ -78,13 +78,13 @@ function Chat(props: ChatProps): JSX.Element {
             events.push({
                 date: (
                     <div className={"event-date"}>
-                        <span className={"author"}>{message.author}</span>{" "}
+                        <span className={"author"}>{decodeURIComponent(message.author)}</span>{" "}
                         <ReactTimeAgo date={new Date(message.date)} />
                         ...
                     </div>
                 ),
                 meta: <Divider />,
-                content: message.text,
+                content: decodeURIComponent(message.text),
             });
         });
 
@@ -102,11 +102,17 @@ function Chat(props: ChatProps): JSX.Element {
         };
 
         if (chatRoom && messageField && messageField.trim() !== "") {
+            if (props.username.length > 128) {
+                makeErrorToast("Name too long!", "Gib shorter name");
+                return;
+            }
+
             const updatedChatRoom = chatRoom;
             const newMessage: DbChatRoomMessage = {
                 id: uuidv4(),
-                text: encodeURI(messageField.trim()),
-                author: !props.username || props.username.trim() === "" ? "Anonymous" : props.username,
+                text: messageField.length > 255 ? "<long message goes splat>" : encodeURIComponent(messageField.trim()),
+                author:
+                    !props.username || props.username.trim() === "" ? "Anonymous" : encodeURIComponent(props.username),
                 date: new Date().toISOString(),
             };
 
@@ -161,7 +167,7 @@ function Chat(props: ChatProps): JSX.Element {
                         <Header>QuickHit Daily Chat</Header>
                         <p>Chat for {chatRoom.date}</p>
                         <p>
-                            Username: {props.username} <Settings />{" "}
+                            Username: {decodeURIComponent(props.username)} <Settings />{" "}
                         </p>
                         <Feed className={"chat-feed"} events={getMessages()} />
                         <Form className={"message-form"}>
@@ -172,7 +178,7 @@ function Chat(props: ChatProps): JSX.Element {
                                         sendMessage();
                                     }
                                 }}
-                            ></span>
+                            />
                             <Form.Input
                                 inverted
                                 inline
