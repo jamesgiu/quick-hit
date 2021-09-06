@@ -4,16 +4,19 @@
   right: 20px;
   z-index: 1000;
   min-width: 20%;
+  max-width: 600px;
   opacity: 0.8;
   background-color: #0a0c0c;
   color: white;
 }
 
 .chat-portal-element .ui.feed.chat-feed {
-  overflow: auto;
+  overflow-y: auto;
   height: 400px;
   flex-direction: column-reverse;
   display: flex;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .chat-portal-element .message-form .ui.inverted.input,
