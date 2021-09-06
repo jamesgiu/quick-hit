@@ -14,7 +14,7 @@ export interface RecentGamesProps {
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
 function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
-    const PAGE_SIZE = 1;
+    const PAGE_SIZE = 5;
     // Track this in state, as we may potentially filter the matches to only be focused ones.
     const [matches, setMatches] = React.useState<DbMatch[]>(props.matches);
     const [currentPage, setCurrentPage] = React.useState<number>(1);

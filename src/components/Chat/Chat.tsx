@@ -37,7 +37,14 @@ function Chat(props: ChatProps): JSX.Element {
                 const newChatroom: DbChatRoom = {
                     date: getTodaysDate(),
                     // Initialise the chat room.
-                    messages: {},
+                    messages: {
+                        "welcome-message": {
+                            author: "QuickHit",
+                            id: uuidv4(),
+                            text: `Welcome to the daily chat for ${getTodaysDate()}`,
+                            date: new Date().toISOString(),
+                        },
+                    },
                 };
 
                 QuickHitAPI.setChatRoom(
@@ -71,7 +78,8 @@ function Chat(props: ChatProps): JSX.Element {
             events.push({
                 date: (
                     <div className={"event-date"}>
-                        {message.author} <ReactTimeAgo date={new Date(message.date)} />
+                        <span className={"author"}>{message.author}</span>{" "}
+                        <ReactTimeAgo date={new Date(message.date)} />
                         ...
                     </div>
                 ),
@@ -98,7 +106,7 @@ function Chat(props: ChatProps): JSX.Element {
             const newMessage: DbChatRoomMessage = {
                 id: uuidv4(),
                 text: encodeURI(messageField.trim()),
-                author: props.username,
+                author: !props.username || props.username.trim() === "" ? "Anonymous" : props.username,
                 date: new Date().toISOString(),
             };
 

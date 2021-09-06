@@ -3,7 +3,7 @@
   top: 50px;
   right: 20px;
   z-index: 1000;
-  width: 20%;
+  min-width: 20%;
   opacity: 0.8;
   background-color: #0a0c0c;
   color: white;
@@ -20,4 +20,12 @@
 .chat-portal-element .message-form .ui.inverted.input input {
   display: inline;
   width: 98%;
+}
+
+.chat-portal-element .chat-feed .event-date {
+  color: darkgrey;
+}
+
+.chat-portal-element .chat-feed .author {
+  color: darkorange;
 }

@@ -34,7 +34,7 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                             <Form.Input
                                 label={"Set username (e.g. for chat)"}
                                 onChange={(event, data): void => {
-                                    props.setUsername(data.value);
+                                    props.setUsername(encodeURIComponent(data.value));
                                 }}
                                 value={props.username}
                             />

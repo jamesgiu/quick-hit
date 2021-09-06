@@ -16,6 +16,10 @@
   width: 20px;
 }
 
+.tt-navbar .chat-icon {
+  margin: auto;
+}
+
 .tt-navbar .new-game-icon-navbar i {
   display: inline;
 }
