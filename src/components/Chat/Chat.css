@@ -21,3 +21,11 @@
   display: inline;
   width: 98%;
 }
+
+.chat-portal-element .chat-feed .event-date {
+  color: darkgrey;
+}
+
+.chat-portal-element .chat-feed .author {
+  color: darkorange;
+}

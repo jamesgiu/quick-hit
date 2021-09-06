@@ -78,7 +78,7 @@ function Chat(props: ChatProps): JSX.Element {
             events.push({
                 date: (
                     <div className={"event-date"}>
-                        {message.author} <ReactTimeAgo date={new Date(message.date)} />
+                        <span className={"author"}>{message.author}</span> <ReactTimeAgo date={new Date(message.date)} />
                         ...
                     </div>
                 ),
