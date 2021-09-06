@@ -8,7 +8,6 @@ import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedE
 import ReactTimeAgo from "react-time-ago";
 import { v4 as uuidv4 } from "uuid";
 import Settings from "../../containers/Settings";
-import {setUsername} from "../../redux/actions/ViewActions";
 
 export interface ChatProps {
     username: string;
@@ -103,15 +102,15 @@ function Chat(props: ChatProps): JSX.Element {
         };
 
         if (chatRoom && messageField && messageField.trim() !== "") {
-
-            if (props.username.length > 255) {
-                setUsername("Long-named bastard");
+            if (props.username.length > 128) {
+                makeErrorToast("Name too long!", "Gib shorter name");
+                return;
             }
 
             const updatedChatRoom = chatRoom;
             const newMessage: DbChatRoomMessage = {
                 id: uuidv4(),
-                text: messageField.length > 255 ? "I wrote a really really long message for some reason." : encodeURIComponent(messageField.trim()),
+                text: messageField.length > 255 ? "<long message goes splat>" : encodeURIComponent(messageField.trim()),
                 author:
                     !props.username || props.username.trim() === "" ? "Anonymous" : encodeURIComponent(props.username),
                 date: new Date().toISOString(),

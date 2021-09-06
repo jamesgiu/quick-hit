@@ -8,6 +8,7 @@
   opacity: 0.8;
   background-color: #0a0c0c;
   color: white;
+  overflow: hidden;
 }
 
 .chat-portal-element .ui.feed.chat-feed {
