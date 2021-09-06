@@ -106,7 +106,7 @@ function Chat(props: ChatProps): JSX.Element {
             const newMessage: DbChatRoomMessage = {
                 id: uuidv4(),
                 text: encodeURI(messageField.trim()),
-                author: props.username.trim() === "" ? "Anonymous" : props.username,
+                author: !props.username || props.username.trim() === "" ? "Anonymous" : props.username,
                 date: new Date().toISOString(),
             };
 
