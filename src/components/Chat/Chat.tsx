@@ -37,7 +37,14 @@ function Chat(props: ChatProps): JSX.Element {
                 const newChatroom: DbChatRoom = {
                     date: getTodaysDate(),
                     // Initialise the chat room.
-                    messages: {},
+                    messages: {
+                        "welcome-message": {
+                            author: "QuickHit",
+                            id: uuidv4(),
+                            text: `Welcome to the daily chat for ${getTodaysDate()}`,
+                            date: new Date().toISOString(),
+                        }
+                    },
                 };
 
                 QuickHitAPI.setChatRoom(
