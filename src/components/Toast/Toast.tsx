@@ -1,6 +1,6 @@
 import React from "react";
+import { SemanticToastContainer, toast, ToastOptions } from "react-semantic-toasts-extended";
 import "./Toast.css";
-import { SemanticToastContainer, toast, ToastOptions } from "react-semantic-toasts";
 
 const TOAST_DEFAULT_OPTS = {
     animation: "bounce",
@@ -11,7 +11,7 @@ const TOAST_DEFAULT_OPTS = {
  * QuickHit Toast
  */
 function Toaster(): JSX.Element {
-    return <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"} />;
+    return <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"} maxToasts={3} />;
 }
 
 export const makeSuccessToast = (title: string, message: string): void => {
