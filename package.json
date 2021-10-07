@@ -23,7 +23,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-semantic-toasts-extended": "^0.6.9",
+    "react-semantic-toasts-extended": "^0.6.12",
     "react-time-ago": "^6.2.2",
     "redux": "^4.1.0",
     "redux-persist": "^6.0.0",
