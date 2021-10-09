@@ -10,7 +10,7 @@ import { Loader, Transition } from "semantic-ui-react";
 import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament, getTodaysDate } from "../../types/database/models";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
-import { ExtraPlayerStats, WinLoss } from "../../types/types";
+import { ELOGraphStats, ExtraPlayerStats, WinLoss } from "../../types/types";
 
 type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
 
@@ -36,7 +36,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                     date: getTodaysDate(),
                     // Force set the happy hour to either be 12 or 16 (lunch time or 4pm).
                     hourStart: randomIntFromInterval(0, 1) === 0 ? 12 : 16,
-                    multiplier: randomIntFromInterval(2, 6),
+                    multiplier: randomIntFromInterval(2, 6)
                 };
 
                 QuickHitAPI.setHappyHour(
@@ -165,7 +165,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
 export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
-        losses: 0,
+        losses: 0
     };
 
     matches.forEach((match) => {
@@ -192,6 +192,36 @@ export const getRecordAgainstPlayer = (playerId: string, opponentId: string, mat
     });
 
     return { wins, losses };
+};
+
+export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): ELOGraphStats[] => {
+    const eloGraphStats: ELOGraphStats[] = [];
+
+    // Build up array of all matches, plus their resulting ELO for the player id given.
+    for (let i = 0; i < matches.length; i++) {
+        const match: DbMatch = matches[i];
+
+        // Ensure the player was in this match
+        if (match.winning_player_id == playerId || match.losing_player_id == playerId) {
+            const won = playerId == match.winning_player_id;
+            const ELO = won ? match.winner_new_elo : match.loser_new_elo;
+            const date = new Date(match.date);
+
+            const eloGraphStatsEntry: ELOGraphStats = {
+                ELO,
+                date
+            };
+
+            eloGraphStats.push(eloGraphStatsEntry);
+        }
+    }
+
+    // Sort the results by date.
+    eloGraphStats.sort(function(a, b) {
+        return a.date.getTime() - b.date.getTime();
+    });
+
+    return eloGraphStats;
 };
 
 export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): ExtraPlayerStats => {

@@ -12,6 +12,11 @@ export interface ExtraPlayerStats {
     nemesis?: string;
 }
 
+export interface ELOGraphStats {
+    ELO: number;
+    date: Date;
+}
+
 export enum TournamentParticipantsType {
     STANDARD = "Standard",
     REVERSE = "Reverse",
