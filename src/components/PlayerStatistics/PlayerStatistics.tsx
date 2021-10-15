@@ -48,7 +48,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
-                            <ELOGraph player={player} matches={props.matches}/>
+                            <ELOGraph player={player} matches={props.matches} />
                             <div className={"tournament-win-count"}>
                                 <Popup
                                     content={"Tournament wins"}

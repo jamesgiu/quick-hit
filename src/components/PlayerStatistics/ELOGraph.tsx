@@ -4,7 +4,7 @@ import { DbMatch, DbPlayer } from "../../types/database/models";
 import { ELOGraphStats } from "../../types/types";
 
 interface GraphParams {
-    player: DbPlayer,
+    player: DbPlayer;
     matches: DbMatch[];
 }
 
@@ -24,8 +24,8 @@ const CustomTooltip = ({ active, payload, label }: any): JSX.Element | null => {
 
 export default function ELOGraph(props: GraphParams): JSX.Element {
     const graphStats: ELOGraphStats[] = getGraphStatsForPlayer(props.player.id, props.matches);
-    const minELO = Math.min(...graphStats.map(stat => stat.ELO));
-    const maxELO = Math.max(...graphStats.map(stat => stat.ELO));
+    const minELO = Math.min(...graphStats.map((stat) => stat.ELO));
+    const maxELO = Math.max(...graphStats.map((stat) => stat.ELO));
 
     return (
         <div>

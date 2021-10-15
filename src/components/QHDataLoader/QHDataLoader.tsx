@@ -36,7 +36,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                     date: getTodaysDate(),
                     // Force set the happy hour to either be 12 or 16 (lunch time or 4pm).
                     hourStart: randomIntFromInterval(0, 1) === 0 ? 12 : 16,
-                    multiplier: randomIntFromInterval(2, 6)
+                    multiplier: randomIntFromInterval(2, 6),
                 };
 
                 QuickHitAPI.setHappyHour(
@@ -165,7 +165,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
 export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
-        losses: 0
+        losses: 0,
     };
 
     matches.forEach((match) => {
@@ -209,7 +209,7 @@ export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): EL
 
             const eloGraphStatsEntry: ELOGraphStats = {
                 ELO,
-                date
+                date,
             };
 
             eloGraphStats.push(eloGraphStatsEntry);
@@ -217,7 +217,7 @@ export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): EL
     }
 
     // Sort the results by date.
-    eloGraphStats.sort(function(a, b) {
+    eloGraphStats.sort(function (a, b) {
         return a.date.getTime() - b.date.getTime();
     });
 
