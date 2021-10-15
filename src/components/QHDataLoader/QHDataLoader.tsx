@@ -202,8 +202,8 @@ export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): EL
         const match: DbMatch = matches[i];
 
         // Ensure the player was in this match
-        if (match.winning_player_id == playerId || match.losing_player_id == playerId) {
-            const won = playerId == match.winning_player_id;
+        if (match.winning_player_id === playerId || match.losing_player_id === playerId) {
+            const won = playerId === match.winning_player_id;
             const ELO = won ? match.winner_new_elo : match.loser_new_elo;
             const date = new Date(match.date);
 

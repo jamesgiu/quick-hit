@@ -1,15 +1,15 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { getGraphStatsForPlayer } from "../QHDataLoader/QHDataLoader";
 import { DbMatch, DbPlayer } from "../../types/database/models";
 import { ELOGraphStats } from "../../types/types";
+import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 
 interface GraphParams {
     player: DbPlayer;
     matches: DbMatch[];
 }
 
-// eslint-disable-next-line
-const CustomTooltip = ({ active, payload, label }: any): JSX.Element | null => {
+const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>): JSX.Element | null => {
     if (active) {
         return (
             <div className="custom-tooltip">

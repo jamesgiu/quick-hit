@@ -112,4 +112,5 @@
 
 .player-statistics .elo-graph {
   width: 50vw;
+  aspect-ratio: 2;
 }
