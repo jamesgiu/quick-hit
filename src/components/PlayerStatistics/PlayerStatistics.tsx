@@ -8,6 +8,7 @@ import { getExtraPlayerStats, getPlayersMap, getRecordAgainstPlayer } from "../Q
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import AchievementFeed from "../../containers/AchievementFeed";
+import ELOGraph from "./ELOGraph";
 
 interface PlayerStatisticsParams {
     playerId: string;
@@ -47,6 +48,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
+                            <ELOGraph player={player} matches={props.matches} />
                             <div className={"tournament-win-count"}>
                                 <Popup
                                     content={"Tournament wins"}
