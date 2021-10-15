@@ -55,13 +55,14 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                         </Header>
                         <div className={"player-stats-wrapper"}>
                             <Accordion className={"elo-graph-acc"}>
-                            <Accordion.Title active={showEloGraph}
-                                             onClick={toggleEloGraph}>
-                                <span className={"elo-graph-label"}><Icon name='dropdown' /> Elo/Time <Icon name='line graph' /></span>
-                            </Accordion.Title>
-                            <Accordion.Content active={showEloGraph}>
-                                <ELOGraph player={player} matches={props.matches} />
-                            </Accordion.Content>
+                                <Accordion.Title active={showEloGraph} onClick={toggleEloGraph}>
+                                    <span className={"elo-graph-label"}>
+                                        <Icon name="dropdown" /> Elo/Time <Icon name="line graph" />
+                                    </span>
+                                </Accordion.Title>
+                                <Accordion.Content active={showEloGraph}>
+                                    <ELOGraph player={player} matches={props.matches} />
+                                </Accordion.Content>
                             </Accordion>
                             <div className={"tournament-win-count"}>
                                 <Popup
