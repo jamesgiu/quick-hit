@@ -109,3 +109,7 @@
 .player-statistics .ui.pagination.menu {
   font-size: 0.8rem;
 }
+
+.player-statistics .elo-graph {
+  width: 50vw;
+}

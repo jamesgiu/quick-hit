@@ -1,5 +1,4 @@
-import React from "react";
-import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { getGraphStatsForPlayer } from "../QHDataLoader/QHDataLoader";
 import { DbMatch, DbPlayer } from "../../types/database/models";
 import { ELOGraphStats } from "../../types/types";
@@ -10,7 +9,7 @@ interface GraphParams {
 }
 
 // eslint-disable-next-line
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: any): JSX.Element | null => {
     if (active) {
         return (
             <div className="custom-tooltip">
@@ -25,17 +24,20 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function ELOGraph(props: GraphParams): JSX.Element {
     const graphStats: ELOGraphStats[] = getGraphStatsForPlayer(props.player.id, props.matches);
+    const minELO = Math.min(...graphStats.map(stat => stat.ELO));
+    const maxELO = Math.max(...graphStats.map(stat => stat.ELO));
 
     return (
         <div>
             <div className={"elo-graph"}>
-                <LineChart width={800} height={400} data={graphStats}
-                           margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                    <XAxis dataKey={"date"} type={"category"} />
-                    <YAxis yAxisId={"1"} />
-                    <Line type={"monotone"} dataKey={"ELO"} stroke={"#8884d8"} yAxisId={"1"} />
-                    <Tooltip content={<CustomTooltip />} />
-                </LineChart>
+                <ResponsiveContainer width={"80%"} height={"100%"}>
+                    <LineChart data={graphStats}>
+                        <XAxis dataKey={"date"} type={"category"} />
+                        <YAxis yAxisId={"1"} domain={[minELO - 50, maxELO + 50]} />
+                        <Line type={"monotone"} dataKey={"ELO"} stroke={"#8884d8"} yAxisId={"1"} />
+                        <Tooltip content={<CustomTooltip />} />
+                    </LineChart>
+                </ResponsiveContainer>
             </div>
         </div>
     );
