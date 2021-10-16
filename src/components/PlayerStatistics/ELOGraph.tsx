@@ -32,10 +32,12 @@ export default function ELOGraph(props: GraphParams): JSX.Element {
             <div className={"elo-graph"}>
                 <ResponsiveContainer width={"80%"} height={"100%"}>
                     <LineChart data={graphStats}>
-                        <XAxis dataKey={"date"}
-                               type={"category"}
-                               minTickGap={500}
-                               tickFormatter={(tickItem): string => new Date(tickItem).toLocaleString()} />
+                        <XAxis
+                            dataKey={"date"}
+                            type={"category"}
+                            minTickGap={500}
+                            tickFormatter={(tickItem): string => new Date(tickItem).toLocaleString()}
+                        />
                         <YAxis yAxisId={"1"} domain={[minELO - 50, maxELO + 50]} />
                         <Line type={"monotone"} dataKey={"ELO"} stroke={"#8884d8"} yAxisId={"1"} />
                         <Tooltip content={<CustomTooltip />} />
