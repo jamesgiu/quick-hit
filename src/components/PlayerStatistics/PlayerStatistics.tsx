@@ -1,6 +1,6 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import { Grid, Header, Icon, Popup, Statistic, Transition } from "semantic-ui-react";
+import { Accordion, Grid, Header, Icon, Popup, Statistic, Transition } from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
@@ -9,6 +9,7 @@ import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import AchievementFeed from "../../containers/AchievementFeed";
 import ELOGraph from "./ELOGraph";
+import { useState } from "react";
 
 interface PlayerStatisticsParams {
     playerId: string;
@@ -24,6 +25,11 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
         : { wins: 0, losses: 0, minELO: 0, maxELO: 0 };
     const victim = extraStats.victim ? playersMap.get(extraStats.victim) : undefined;
     const nemesis = extraStats.nemesis ? playersMap.get(extraStats.nemesis) : undefined;
+
+    const [showEloGraph, setShowEloGraph] = useState<boolean>(true);
+    function toggleEloGraph(): void {
+        setShowEloGraph(!showEloGraph);
+    }
 
     return (
         <div className="player-statistics">
@@ -48,7 +54,16 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
-                            <ELOGraph player={player} matches={props.matches} />
+                            <Accordion className={"elo-graph-acc"}>
+                                <Accordion.Title active={showEloGraph} onClick={toggleEloGraph}>
+                                    <span className={"elo-graph-label"}>
+                                        <Icon name="dropdown" /> Elo/Time <Icon name="line graph" />
+                                    </span>
+                                </Accordion.Title>
+                                <Accordion.Content active={showEloGraph}>
+                                    <ELOGraph player={player} matches={props.matches} />
+                                </Accordion.Content>
+                            </Accordion>
                             <div className={"tournament-win-count"}>
                                 <Popup
                                     content={"Tournament wins"}

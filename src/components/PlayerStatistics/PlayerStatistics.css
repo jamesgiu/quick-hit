@@ -71,6 +71,7 @@
 .player-statistics .player-stats-wrapper .tournament-win-count {
   font-size: large;
   margin-bottom: 10px;
+  clear: both;
 }
 
 .player-statistics .player-stats-wrapper .tournament-win-count span {
@@ -113,4 +114,9 @@
 .player-statistics .elo-graph {
   width: 50vw;
   aspect-ratio: 2;
+}
+
+.player-statistics .elo-graph-label {
+  color: white;
+  float: left;
 }
