@@ -1,4 +1,4 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
+import { Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { getGraphStatsForPlayer } from "../QHDataLoader/QHDataLoader";
 import { DbMatch, DbPlayer } from "../../types/database/models";
 import { ELOGraphStats } from "../../types/types";
@@ -40,6 +40,20 @@ export default function ELOGraph(props: GraphParams): JSX.Element {
                         />
                         <YAxis yAxisId={"1"} domain={[minELO - 50, maxELO + 50]} />
                         <Line type={"monotone"} dataKey={"ELO"} stroke={"#8884d8"} yAxisId={"1"} />
+                        <ReferenceLine
+                            yAxisId={"1"}
+                            y={maxELO}
+                            label={{value: "All time high", fill: "white"}}
+                            stroke={"green"}
+                            strokeDasharray={"3 3"}
+                        />
+                        <ReferenceLine
+                            yAxisId={"1"}
+                            y={minELO}
+                            label={{value: "All time low", fill: "white"}}
+                            stroke={"red"}
+                            strokeDasharray={"3 3"}
+                        />
                         <Tooltip content={<CustomTooltip />} />
                     </LineChart>
                 </ResponsiveContainer>
