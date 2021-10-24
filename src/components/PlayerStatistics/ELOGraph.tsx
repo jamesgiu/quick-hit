@@ -62,7 +62,7 @@ export default function ELOGraph(props: GraphParams): JSX.Element {
                                         yAxisId={"1"}
                                         y={maxELO}
                                         label={{ value: "All time high", fill: "white" }}
-                                        stroke={"green"}
+                                        stroke={"#21ba45"}
                                         strokeDasharray={"3 3"}
                                     />
                                 )}
