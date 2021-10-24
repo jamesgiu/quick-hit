@@ -1,11 +1,13 @@
 export interface WinLoss {
     wins: number;
     losses: number;
+    formGuide: string;
 }
 
 export interface ExtraPlayerStats {
     wins: number;
     losses: number;
+    formGuide: string;
     minELO: number;
     maxELO: number;
     victim?: string;
