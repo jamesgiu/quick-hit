@@ -9,8 +9,10 @@ import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import { Link } from "react-router-dom";
 import { ViewDispatchType } from "../../containers/Ladder/Ladder";
 import { ViewStoreState } from "../../redux/types/ViewTypes";
+import { DbPlayer } from "../../types/database/models";
 
 export type LadderProps = ViewStoreState & TTDataPropsTypeCombined & ViewDispatchType;
+export const NUM_OF_FORM_GUIDE_MATCHES = 5;
 
 /**
  * QuickHit Ladder page.
@@ -50,13 +52,18 @@ function Ladder(props: LadderProps): JSX.Element {
             return player2.elo - player1.elo;
         });
 
-        sortedPlayers.forEach((player) => {
+        for (let i = 0; i < sortedPlayers.length; i++) {
+            const player = sortedPlayers[i];
             const winLoss = getWinLossForPlayer(player.id, props.matches);
             let addPlayer = true;
+
             if (props.hideZeroGamePlayers && winLoss.losses + winLoss.wins == 0) {
                 addPlayer = false;
             }
+
             if (addPlayer) {
+                const formStr =
+                    winLoss && winLoss.formGuide.substr(0, NUM_OF_FORM_GUIDE_MATCHES).split("").reverse().join("");
                 playerTableRows.push(
                     <Table.Row className={"player-row"}>
                         <Table.Cell className={"player-cell"}>
@@ -65,6 +72,7 @@ function Ladder(props: LadderProps): JSX.Element {
                                 to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}
                             >
                                 <span>
+                                    {generateLadderTrendIcon(player, i, sortedPlayers)}
                                     <Icon name={player.icon} size={"small"} />
                                     {player.name}
                                 </span>
@@ -74,10 +82,11 @@ function Ladder(props: LadderProps): JSX.Element {
                         <Table.Cell>
                             {winLoss.wins}-{winLoss.losses}
                         </Table.Cell>
+                        <Table.Cell>{formStr !== "" ? formStr : "N/A"}</Table.Cell>
                     </Table.Row>
                 );
             }
-        });
+        }
 
         playersLadder.push(
             <Table unstackable celled>
@@ -86,12 +95,92 @@ function Ladder(props: LadderProps): JSX.Element {
                         <Table.HeaderCell>Player</Table.HeaderCell>
                         <Table.HeaderCell>ELO</Table.HeaderCell>
                         <Table.HeaderCell>W-L</Table.HeaderCell>
+                        <Table.HeaderCell>Form</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>{playerTableRows}</Table.Body>
             </Table>
         );
         return playersLadder;
+    };
+
+    const generateLadderTrendIcon = (
+        player: DbPlayer,
+        positionOnLadder: number,
+        sortedPlayers: DbPlayer[]
+    ): JSX.Element => {
+        let mostRecentMatch;
+        let iconToReturn: JSX.Element = <Icon color={"orange"} name={"minus"} />;
+
+        // Find player's most recent match (assumes matches already sorted by newest)
+        for (let i = 0; i < props.matches.length; i++) {
+            const match = props.matches[i];
+            if (match.winning_player_id === player.id || match.losing_player_id === player.id) {
+                mostRecentMatch = match;
+                break;
+            }
+        }
+
+        if (mostRecentMatch) {
+            // If the most recent match was a loss
+            if (mostRecentMatch.losing_player_id === player.id) {
+                if (positionOnLadder !== 0) {
+                    let wentDown = false;
+                    // Get the player above them
+                    const playerAboveOnLadder = sortedPlayers[positionOnLadder - 1];
+
+                    // If the player above them was the player they versed, then use that player's original elo.
+                    if (
+                        playerAboveOnLadder.id === mostRecentMatch.winning_player_id &&
+                        // If the pre-match elo was higher than the player above, and now it's not, then this means the
+                        // target player went down on the ladder.
+                        mostRecentMatch.losing_player_original_elo >= mostRecentMatch.winning_player_original_elo
+                    ) {
+                        wentDown = true;
+                    }
+                    // Otherwise just use the above player's current elo.
+                    else {
+                        // If the pre-match elo was higher than the player above, and now it's not, then this means the
+                        // target player went down on the ladder.
+                        if (mostRecentMatch.losing_player_original_elo >= playerAboveOnLadder.elo) {
+                            wentDown = true;
+                        }
+                    }
+
+                    if (wentDown) {
+                        iconToReturn = <Icon color={"red"} name={"arrow down"} />;
+                    }
+                }
+            }
+            // Otherwise, match was a win
+            else {
+                // Get the player below them
+                const playerBelowOnLadder = sortedPlayers[positionOnLadder + 1];
+                let wentUp = false;
+
+                // If the player below them was the player they versed, then use that player's original elo.
+                if (
+                    playerBelowOnLadder.id === mostRecentMatch.losing_player_id &&
+                    // If the pre-match elo was lower than the player below, and now it's not, then this means the
+                    // target player went up on the ladder.
+                    mostRecentMatch.winning_player_original_elo <= mostRecentMatch.losing_player_original_elo
+                ) {
+                    wentUp = true;
+                } else {
+                    // If the pre-match elo was lower than the player below, and now it's not, then this means
+                    // the target player went up the ladder.
+                    if (playerBelowOnLadder.elo >= mostRecentMatch.winning_player_original_elo) {
+                        wentUp = true;
+                    }
+                }
+
+                if (wentUp) {
+                    iconToReturn = <Icon color={"green"} name={"arrow up"} />;
+                }
+            }
+        }
+
+        return iconToReturn;
     };
 
     const renderPlayers = (): JSX.Element[] => {

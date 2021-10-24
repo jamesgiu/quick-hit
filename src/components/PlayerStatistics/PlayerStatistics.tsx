@@ -21,7 +21,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
     const player = playersMap.get(props.match.params.playerId);
     const extraStats: ExtraPlayerStats = player
         ? getExtraPlayerStats(player.id, props.matches)
-        : { wins: 0, losses: 0, minELO: 0, maxELO: 0 };
+        : { wins: 0, losses: 0, minELO: 0, maxELO: 0, formGuide: "" };
     const victim = extraStats.victim ? playersMap.get(extraStats.victim) : undefined;
     const nemesis = extraStats.nemesis ? playersMap.get(extraStats.nemesis) : undefined;
 
@@ -97,7 +97,11 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                         ) : (
                                             <PlayerCard
                                                 player={player}
-                                                winLoss={{ wins: extraStats.wins, losses: extraStats.losses }}
+                                                winLoss={{
+                                                    wins: extraStats.wins,
+                                                    losses: extraStats.losses,
+                                                    formGuide: extraStats.formGuide,
+                                                }}
                                             />
                                         )
                                     }
@@ -115,7 +119,11 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                         ) : (
                                             <PlayerCard
                                                 player={player}
-                                                winLoss={{ wins: extraStats.wins, losses: extraStats.losses }}
+                                                winLoss={{
+                                                    wins: extraStats.wins,
+                                                    losses: extraStats.losses,
+                                                    formGuide: extraStats.formGuide,
+                                                }}
                                             />
                                         )
                                     }
