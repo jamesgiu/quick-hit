@@ -110,13 +110,3 @@
 .player-statistics .ui.pagination.menu {
   font-size: 0.8rem;
 }
-
-.player-statistics .elo-graph {
-  width: 50vw;
-  aspect-ratio: 2;
-}
-
-.player-statistics .elo-graph-label {
-  color: white;
-  float: left;
-}

@@ -3,6 +3,9 @@ import { getGraphStatsForPlayer } from "../QHDataLoader/QHDataLoader";
 import { DbMatch, DbPlayer } from "../../types/database/models";
 import { ELOGraphStats } from "../../types/types";
 import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
+import {Accordion, Icon} from "semantic-ui-react";
+import {useState} from "react";
+import "./ELOGraph.css";
 
 interface GraphParams {
     player: DbPlayer;
@@ -27,9 +30,24 @@ export default function ELOGraph(props: GraphParams): JSX.Element {
     const minELO = Math.min(...graphStats.map((stat) => stat.ELO));
     const maxELO = Math.max(...graphStats.map((stat) => stat.ELO));
 
+    const [showEloGraph, setShowEloGraph] = useState<boolean>(true);
+    function toggleEloGraph(): void {
+        setShowEloGraph(!showEloGraph);
+    }
+
     return (
         <div>
-            <div className={"elo-graph"}>
+            <Accordion className={"elo-graph-acc"}>
+                <Accordion.Title active={showEloGraph}
+                                 onClick={toggleEloGraph}>
+                                <span className={"elo-graph-label"}>
+                                    <Icon name='dropdown' />
+                                    Elo/Time
+                                    <Icon name='line graph' />
+                                </span>
+                </Accordion.Title>
+                <Accordion.Content active={showEloGraph}>
+                    <div className={"elo-graph"}>
                 <ResponsiveContainer width={"80%"} height={"100%"}>
                     <LineChart data={graphStats}>
                         <XAxis
@@ -58,10 +76,12 @@ export default function ELOGraph(props: GraphParams): JSX.Element {
                                 strokeDasharray={"3 3"}
                             />
                         )}
-                        <Tooltip content={<CustomTooltip />} />
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
+                                <Tooltip content={<CustomTooltip />} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </Accordion.Content>
+            </Accordion>
         </div>
     );
 }
