@@ -1,0 +1,14 @@
+.elo-graph {
+  width: 50vw;
+  height: 50vh;
+  min-width: 300px;
+}
+
+.elo-graph-label {
+  color: white;
+  float: left;
+}
+
+.elo-graph .recharts-text {
+  font-size: 0.8rem;
+}
