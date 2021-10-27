@@ -65,6 +65,12 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                 props.setLoading(true);
             } else {
                 props.setLoading(false);
+
+                // Sort matches by date (newest to oldest)
+                receivedMatches.sort(function (a, b) {
+                    return new Date(b.date).getTime() - new Date(a.date).getTime();
+                });
+
                 props.setMatches(receivedMatches);
             }
         };
@@ -166,13 +172,16 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
     const winLoss: WinLoss = {
         wins: 0,
         losses: 0,
+        formGuide: "",
     };
 
     matches.forEach((match) => {
         if (match.winning_player_id === playerId) {
             winLoss.wins++;
+            winLoss.formGuide += "W";
         } else if (match.losing_player_id === playerId) {
             winLoss.losses++;
+            winLoss.formGuide += "L";
         }
     });
 
@@ -182,16 +191,19 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
 export const getRecordAgainstPlayer = (playerId: string, opponentId: string, matches: DbMatch[]): WinLoss => {
     let wins = 0;
     let losses = 0;
+    let formGuide = "";
 
     matches.forEach((match) => {
         if (match.winning_player_id === playerId && match.losing_player_id === opponentId) {
             ++wins;
+            formGuide += "W";
         } else if (match.losing_player_id === playerId && match.winning_player_id === opponentId) {
             ++losses;
+            formGuide += "L";
         }
     });
 
-    return { wins, losses };
+    return { wins, losses, formGuide };
 };
 
 export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): ELOGraphStats[] => {
@@ -229,6 +241,7 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
     let maxELO = 1200;
     let wins = 0;
     let losses = 0;
+    let formGuide = "";
     const winsMap = new Map<string, number>();
     const lossesMap = new Map<string, number>();
     let victim: string | undefined = undefined;
@@ -237,6 +250,7 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
     matches.forEach((match) => {
         if (match.winning_player_id === playerId) {
             ++wins;
+            formGuide += "W";
             if (match.winning_player_original_elo < minELO) {
                 minELO = match.winning_player_original_elo;
             }
@@ -253,6 +267,7 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
             }
         } else if (match.losing_player_id === playerId) {
             ++losses;
+            formGuide += "L";
             if (match.loser_new_elo < minELO) {
                 minELO = match.loser_new_elo;
             }
@@ -308,7 +323,7 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
         }
     }
 
-    return { wins, losses, minELO, maxELO, victim, nemesis };
+    return { wins, losses, formGuide, minELO, maxELO, victim, nemesis };
 };
 
 export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {

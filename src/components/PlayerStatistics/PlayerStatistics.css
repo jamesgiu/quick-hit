@@ -89,7 +89,7 @@
 }
 
 .player-statistics .achievements .event .label .icon {
-  color: green;
+  color: #21ba45;
   font-size: 2rem;
   margin-top: 20%;
 }
@@ -109,14 +109,4 @@
 
 .player-statistics .ui.pagination.menu {
   font-size: 0.8rem;
-}
-
-.player-statistics .elo-graph {
-  width: 50vw;
-  aspect-ratio: 2;
-}
-
-.player-statistics .elo-graph-label {
-  color: white;
-  float: left;
 }

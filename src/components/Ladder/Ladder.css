@@ -53,6 +53,8 @@
   background-color: rgba(75, 80, 85, 1);
   color: orange;
   border-bottom: 1px solid orange;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 .players-area .ui.table tr {
@@ -68,22 +70,27 @@
   border: 1px solid orange;
   text-align: center;
   min-width: 300px;
-  max-width: 30vw;
+  max-width: 35vw;
   margin: auto;
+  box-shadow: 10px 10px 5px rgba(20, 24, 38, 1);
 }
 
 .players-area .ui.table tr:first-child {
   background-color: goldenrod;
+  font-size: 1.15rem;
+  font-weight: 600;
   color: black;
 }
 
 .players-area .ui.table tr:nth-child(2) {
   background-color: silver;
+  font-size: 1.1rem;
   color: black;
 }
 
 .players-area .ui.table tr:nth-child(3) {
   background-color: sandybrown;
+  font-size: 1.05rem;
   color: black;
 }
 

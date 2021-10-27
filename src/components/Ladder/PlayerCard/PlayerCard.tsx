@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { DbPlayer } from "../../../types/database/models";
 import { WinLoss } from "../../../types/types";
 import { BASE_PATH, QuickHitPage } from "../../../util/QuickHitPage";
+import { NUM_OF_FORM_GUIDE_MATCHES } from "../Ladder";
 
 interface PlayerCardProps {
     player: DbPlayer;
@@ -14,6 +15,9 @@ interface PlayerCardProps {
  * QuickHit PlayerCard component.
  */
 function PlayerCard(props: PlayerCardProps): JSX.Element {
+    const formStr =
+        props.winLoss && props.winLoss.formGuide.substr(0, NUM_OF_FORM_GUIDE_MATCHES).split("").reverse().join("");
+
     return (
         <Card as={"span"} className="player-card">
             <Card.Content>
@@ -32,6 +36,7 @@ function PlayerCard(props: PlayerCardProps): JSX.Element {
                     <span>
                         Wins: {props.winLoss.wins} Losses: {props.winLoss.losses}
                     </span>
+                    <div>Form: {formStr !== "" ? formStr : "N/A"}</div>
                 </Card.Content>
             )}
         </Card>
