@@ -83,6 +83,7 @@ REACT_APP_FB_SRV_ACC_NAME="<YOUR-SVC-ACC-USERNAME>"
 2. Enable the Email/Password Sign-in method
 3. Go to "Users" then click "Add user"
 4. Add a service account and a password for it, this password will be prompted for when a user first uses the application.
+5. The service account user name will be used for `REACT_APP_FB_SRV_ACC_NAME` in `.env`.
 
 ### Protecting the database
 
