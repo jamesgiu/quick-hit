@@ -221,9 +221,13 @@ export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[], pla
             const date = new Date(match.date);
             let matchStr;
             if (won) {
-                matchStr = `W (${match.winning_player_score}-${match.losing_player_score}) vs ${playersMap.get(match.losing_player_id)?.name}`;
+                matchStr = `W (${match.winning_player_score}-${match.losing_player_score}) vs ${
+                    playersMap.get(match.losing_player_id)?.name
+                }`;
             } else {
-                matchStr = `L (${match.losing_player_score}-${match.winning_player_score}) vs ${playersMap.get(match.winning_player_id)?.name}`;
+                matchStr = `L (${match.losing_player_score}-${match.winning_player_score}) vs ${
+                    playersMap.get(match.winning_player_id)?.name
+                }`;
             }
 
             const eloGraphStatsEntry: ELOGraphStats = {
