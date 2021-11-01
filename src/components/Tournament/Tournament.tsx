@@ -124,16 +124,20 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
         homeTbdText?: string,
         awayTbdText?: string
     ): JSX.Element => {
-        const vicChance = getChanceOfVictory(playersMap.get(match.home_player_id), playersMap.get(match.away_player_id), props.matches);
+        const vicChance = getChanceOfVictory(
+            playersMap.get(match.home_player_id),
+            playersMap.get(match.away_player_id),
+            props.matches
+        );
 
         return (
             <div>
                 <span className={homeWon(match) === false ? "match-loser home-player" : "home-player"}>
                     {match?.home_player_id ? (
                         <span>
-                            ({getPlayerRank(tournament, match.home_player_id)}) {
-                                playersMap.get(match.home_player_id)?.name
-                            } <span className={"vic-chance"}>[{vicChance}%]</span>
+                            ({getPlayerRank(tournament, match.home_player_id)}){" "}
+                            {playersMap.get(match.home_player_id)?.name}{" "}
+                            <span className={"vic-chance"}>[{vicChance}%]</span>
                         </span>
                     ) : homeTbdText ? (
                         <span className={"custom-tbd"}>{homeTbdText}</span>
@@ -153,9 +157,9 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
                 <span className={homeWon(match) === true ? "match-loser" : undefined}>
                     {match?.away_player_id ? (
                         <span>
-                            ({getPlayerRank(tournament, match.away_player_id)}) {
-                                playersMap.get(match.away_player_id)?.name
-                            } <span className={"vic-chance"}>[{100 - vicChance}%]</span>
+                            ({getPlayerRank(tournament, match.away_player_id)}){" "}
+                            {playersMap.get(match.away_player_id)?.name}{" "}
+                            <span className={"vic-chance"}>[{100 - vicChance}%]</span>
                         </span>
                     ) : awayTbdText ? (
                         <span className={"custom-tbd"}>{awayTbdText}</span>

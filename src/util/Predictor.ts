@@ -31,7 +31,7 @@ export const getChanceOfVictory = (p1: DbPlayer | undefined, p2: DbPlayer | unde
         // If the two players have played before, use their past matches too.
         if (record.wins + record.losses > 0) {
             const winPerc = 100 * (record.wins / (record.wins + record.losses));
-            const prediction = (winPerc * 0.5) + (standardised * 0.5);
+            const prediction = winPerc * 0.5 + standardised * 0.5;
             // Clamp the chance between 5% and 95%, because nothing's ever certain.
             return Math.round(clamp(prediction, 5, 95) * 100 + Number.EPSILON) / 100;
         } else {

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import "./Comparator.css";
 import { DbPlayer } from "../../types/database/models";
 import { ComparatorStoreProps } from "../../containers/Comparator/Comparator";
-import { TTRefreshDispatchType } from "../../containers/shared";
 import { WinLoss } from "../../types/types";
 import { getRecordAgainstPlayer } from "../QHDataLoader/QHDataLoader";
 import { getChanceOfVictory } from "../../util/Predictor";
@@ -11,7 +10,7 @@ import { getChanceOfVictory } from "../../util/Predictor";
 /**
  * QuickHit Comparator component.
  */
-function Comparator(props: ComparatorStoreProps & TTRefreshDispatchType): JSX.Element {
+function Comparator(props: ComparatorStoreProps): JSX.Element {
     const [open, setModalOpen] = useState<boolean>(false);
     const [playerOne, setPlayerOne] = useState<DbPlayer>();
     const [playerTwo, setPlayerTwo] = useState<DbPlayer>();
