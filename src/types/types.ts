@@ -17,6 +17,7 @@ export interface ExtraPlayerStats {
 export interface ELOGraphStats {
     ELO: number;
     date: Date;
+    matchStr: string;
 }
 
 export enum TournamentParticipantsType {

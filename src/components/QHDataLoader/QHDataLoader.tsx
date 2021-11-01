@@ -206,8 +206,9 @@ export const getRecordAgainstPlayer = (playerId: string, opponentId: string, mat
     return { wins, losses, formGuide };
 };
 
-export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): ELOGraphStats[] => {
+export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[], players: DbPlayer[]): ELOGraphStats[] => {
     const eloGraphStats: ELOGraphStats[] = [];
+    const playersMap = getPlayersMap(players);
 
     // Build up array of all matches, plus their resulting ELO for the player id given.
     for (let i = 0; i < matches.length; i++) {
@@ -218,10 +219,17 @@ export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[]): EL
             const won = playerId === match.winning_player_id;
             const ELO = won ? match.winner_new_elo : match.loser_new_elo;
             const date = new Date(match.date);
+            let matchStr;
+            if (won) {
+                matchStr = `W (${match.winning_player_score}-${match.losing_player_score}) vs ${playersMap.get(match.losing_player_id)?.name}`;
+            } else {
+                matchStr = `L (${match.losing_player_score}-${match.winning_player_score}) vs ${playersMap.get(match.winning_player_id)?.name}`;
+            }
 
             const eloGraphStatsEntry: ELOGraphStats = {
                 ELO,
                 date,
+                matchStr,
             };
 
             eloGraphStats.push(eloGraphStatsEntry);

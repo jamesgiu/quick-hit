@@ -12,3 +12,9 @@
 .elo-graph .recharts-text {
   font-size: 0.8rem;
 }
+
+.elo-graph .recharts-tooltip-wrapper {
+  background-color: rgba(150, 150, 150, 0.5);
+  padding: 5px;
+  border-radius: 3px;
+}
