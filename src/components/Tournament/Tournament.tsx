@@ -125,8 +125,8 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
         awayTbdText?: string
     ): JSX.Element => {
         const vicChance = getChanceOfVictory(
-            playersMap.get(match.home_player_id),
-            playersMap.get(match.away_player_id),
+            playersMap.get(match?.home_player_id),
+            playersMap.get(match?.away_player_id),
             props.matches
         );
 
