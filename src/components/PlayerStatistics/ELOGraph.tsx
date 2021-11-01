@@ -10,6 +10,7 @@ import "./ELOGraph.css";
 interface GraphParams {
     player: DbPlayer;
     matches: DbMatch[];
+    players: DbPlayer[];
 }
 
 const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>): JSX.Element | null => {
@@ -18,6 +19,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
             <div className="custom-tooltip">
                 <p className="label">{`Date: ${new Date(label).toLocaleString()}`}</p>
                 <p className="info">{`ELO: ${payload?.[0].value}`}</p>
+                <p className={"info"}>{payload?.[0].payload.matchStr}</p>
             </div>
         );
     }
@@ -26,7 +28,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
 };
 
 export default function ELOGraph(props: GraphParams): JSX.Element {
-    const graphStats: ELOGraphStats[] = getGraphStatsForPlayer(props.player.id, props.matches);
+    const graphStats: ELOGraphStats[] = getGraphStatsForPlayer(props.player.id, props.matches, props.players);
     const minELO = Math.min(...graphStats.map((stat) => stat.ELO));
     const maxELO = Math.max(...graphStats.map((stat) => stat.ELO));
 
