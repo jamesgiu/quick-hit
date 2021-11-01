@@ -79,6 +79,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             }
 
             events.push({
+                key: match.id,
                 meta: (
                     <div className={"event-content"}>
                         {winningPlayer.name} ({match.winning_player_original_elo}

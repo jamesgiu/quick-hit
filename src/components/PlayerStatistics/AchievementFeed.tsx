@@ -69,6 +69,7 @@ function AchievementFeed(props: AchievementFeedProps & TTDataPropsTypeCombined):
             const attainmentPercentage = calculateAttainmentPercentage(badge);
 
             events.push({
+                key: badge.id,
                 meta: (
                     <div className={"event-summary"}>
                         {badge.text}
