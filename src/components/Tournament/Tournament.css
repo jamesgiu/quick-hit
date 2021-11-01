@@ -632,3 +632,8 @@
 #highScoresTable td {
   padding: 5px;
 }
+
+.vic-chance {
+  color: white;
+  opacity: 0.5;
+}
