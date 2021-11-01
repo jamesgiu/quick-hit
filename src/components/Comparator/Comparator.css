@@ -1,0 +1,18 @@
+.comparison-grid.ui.grid .column.centre-column {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-grid.ui.grid {
+  text-align: center;
+}
+
+.player-select.ui.dropdown {
+  text-align: center;
+}
+
+.prediction-row {
+  color: red;
+}

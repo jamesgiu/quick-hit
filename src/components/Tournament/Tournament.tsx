@@ -8,6 +8,7 @@ import NewTournament from "./NewTournament/NewTournament";
 import EnterTournamentGame from "./EnterTournamentGame/EnterTournamentGame";
 import { TournamentParticipantsType, TournamentType } from "../../types/types";
 import { TournamentReduxProps } from "../../containers/Tournament/Tournament";
+import { getChanceOfVictory } from "../../util/Predictor";
 
 function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.Element {
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
@@ -123,13 +124,17 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
         homeTbdText?: string,
         awayTbdText?: string
     ): JSX.Element => {
+        const vicChance = getChanceOfVictory(playersMap.get(match.home_player_id), playersMap.get(match.away_player_id), props.matches);
+
         return (
             <div>
                 <span className={homeWon(match) === false ? "match-loser home-player" : "home-player"}>
                     {match?.home_player_id ? (
-                        `(${getPlayerRank(tournament, match.home_player_id)}) ${
-                            playersMap.get(match.home_player_id)?.name
-                        }`
+                        <span>
+                            ({getPlayerRank(tournament, match.home_player_id)}) {
+                                playersMap.get(match.home_player_id)?.name
+                            } <span className={"vic-chance"}>[{vicChance}%]</span>
+                        </span>
                     ) : homeTbdText ? (
                         <span className={"custom-tbd"}>{homeTbdText}</span>
                     ) : (
@@ -147,9 +152,11 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
                 </span>
                 <span className={homeWon(match) === true ? "match-loser" : undefined}>
                     {match?.away_player_id ? (
-                        `(${getPlayerRank(tournament, match.away_player_id)}) ${
-                            playersMap.get(match.away_player_id)?.name
-                        }`
+                        <span>
+                            ({getPlayerRank(tournament, match.away_player_id)}) {
+                                playersMap.get(match.away_player_id)?.name
+                            } <span className={"vic-chance"}>[{100 - vicChance}%]</span>
+                        </span>
                     ) : awayTbdText ? (
                         <span className={"custom-tbd"}>{awayTbdText}</span>
                     ) : (

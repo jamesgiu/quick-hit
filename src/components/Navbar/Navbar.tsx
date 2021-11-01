@@ -8,6 +8,7 @@ import KeyPrompt from "../../containers/KeyPrompt";
 import NewGame from "../../containers/NewGame";
 import Settings from "../../containers/Settings";
 import Chat from "../../containers/Chat/Chat";
+import Comparator from "../../containers/Comparator";
 
 /**
  * QuickHit's navbar.
@@ -60,6 +61,7 @@ function Navbar(): JSX.Element {
                             </Menu.Item>
                         }
                     />
+                    <Comparator />
                     <Settings />
                     <KeyPrompt />
                 </Menu.Menu>
