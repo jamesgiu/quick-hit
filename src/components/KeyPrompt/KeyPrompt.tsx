@@ -28,7 +28,6 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
 
         const onSuccess = (instances: DbInstance[]): void => {
             setInstances(instances);
-            console.log(instances);
         };
 
         QuickHitAPI.getInstances(onSuccess, onFailure);
