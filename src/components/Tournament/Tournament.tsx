@@ -641,14 +641,14 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
         return tableRows;
     };
 
-    if(!props.chosenInstance?.tournaments) {
+    if (!props.chosenInstance?.tournaments) {
         return (
             <div>
                 <Message error={true}>
                     Tournaments are currently disabled in this instance. Contact your administrator to find out more.
                 </Message>
             </div>
-        )
+        );
     }
 
     return (

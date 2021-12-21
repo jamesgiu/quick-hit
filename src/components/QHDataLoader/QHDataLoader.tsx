@@ -14,13 +14,13 @@ import {
     DbMatch,
     DbPlayer,
     DbTournament,
-    getTodaysDate
+    getTodaysDate,
 } from "../../types/database/models";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
 import { ELOGraphStats, ExtraPlayerStats, WinLoss } from "../../types/types";
 
-type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType & {chosenInstance?: DbInstance};
+type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType & { chosenInstance?: DbInstance };
 
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
@@ -43,7 +43,11 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                 const newHappyHour: DbHappyHour = {
                     date: getTodaysDate(),
                     // If happy hour is restricted, force set the happy hour to either be 12 or 16 (lunch time or 4pm).
-                    hourStart: props.chosenInstance?.restricted_happy_hour ? (randomIntFromInterval(0, 1) === 0 ? 12 : 16) : randomIntFromInterval(9,19),
+                    hourStart: props.chosenInstance?.restricted_happy_hour
+                        ? randomIntFromInterval(0, 1) === 0
+                            ? 12
+                            : 16
+                        : randomIntFromInterval(9, 19),
                     multiplier: randomIntFromInterval(2, 6),
                 };
 

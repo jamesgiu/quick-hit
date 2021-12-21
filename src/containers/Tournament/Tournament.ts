@@ -3,9 +3,9 @@ import Tournament from "../../components/Tournament/Tournament";
 import { mapTTDispatchToProps } from "../shared";
 import { QuickHitReduxStores } from "../../redux/types/store";
 import { TTStoreState } from "../../redux/types/TTTypes";
-import {DbInstance} from "../../types/database/models";
+import { DbInstance } from "../../types/database/models";
 
-export type TournamentReduxProps = TTStoreState & { disableMusic: boolean, chosenInstance?: DbInstance };
+export type TournamentReduxProps = TTStoreState & { disableMusic: boolean; chosenInstance?: DbInstance };
 
 export function mapStateToProps(store: QuickHitReduxStores): TournamentReduxProps {
     return {
