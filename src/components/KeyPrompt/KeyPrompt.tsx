@@ -22,6 +22,8 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     const [chosenInstance, setChosenInstance] = useState<DbInstance>(props.chosenInstance as DbInstance);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [instances, setInstances] = useState<DbInstance[]>([]);
+    const [token, setToken] = useState<string>();
+    const [userName, setUserName] = useState<string>("");
 
     const getInstances = (): void => {
         const onFailure = (error: string): void => {
@@ -61,8 +63,8 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         .then((result) => {
           makeSuccessToast("Authenticated", "Signed in as " + result.user?.displayName);
           result.user?.getIdToken().then((token) => {
-              props.setToken(token);
-              location.reload();
+              setToken(token);
+              setUserName(result.user?.displayName as string);
           });
         }).catch((error) => {
            makeErrorToast("Unable to authenticate", "Could not sign in via Google! " + error.message);
@@ -128,7 +130,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                 chosenInstance?.google_auth &&
                                 <Form.Field>
                                     <Form.Button className="button" onClick={signInWithGoogle} color={"google plus"}><Icon
-                                        name={"google"}/> Sign in with Google</Form.Button>
+                                        name={"google"}/>{!userName ? "Sign in with Google" : `${userName}`}</Form.Button>
                                 </Form.Field>
                             }
                     </Form.Group>
@@ -139,6 +141,9 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                         props.setAuthKey(key);
                         if (chosenInstance) {
                             props.setChosenInstance(chosenInstance);
+                        }
+                        if (token) {
+                            props.setToken(token);
                         }
                         setIsOpen(false);
                         location.reload();

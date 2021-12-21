@@ -247,7 +247,7 @@ export class QuickHitAPI {
             // Check Redux store for existing token
             const token = store.getState().authStore.token;
 
-            // If there wasn't one, and we're not using google_auth, get a new one and set it.
+            // If there wasn't one, and we're not using Google Auth, get a new one and set it.
             if (!token && !chosenInstance.google_auth) {
                 return axios({
                     method: HttpMethod.POST,
