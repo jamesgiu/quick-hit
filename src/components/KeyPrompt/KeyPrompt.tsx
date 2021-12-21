@@ -3,6 +3,7 @@ import { Button, DropdownItemProps, Form, Icon, Menu, Modal } from "semantic-ui-
 import { makeErrorToast } from "../Toast/Toast";
 import { DbInstance } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
+import "./KeyPrompt.css";
 
 export interface KeyPromptProps {
     chosenInstance?: DbInstance;
@@ -61,6 +62,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                 <Form warning>
                     <Form.Group widths={"equal"}>
                         <Form.Select
+                            className={"instance-select"}
                             fluid
                             label={
                                 <b>
@@ -103,7 +105,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                         location.reload();
                     }}
                 >
-                    Proceed
+                    Save
                 </Button>
             </Modal.Content>
         </Modal>
