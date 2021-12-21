@@ -47,7 +47,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
 
     return (
         <Modal
-            open={props.authKey === undefined || isOpen}
+            open={props.authKey === undefined || props.chosenInstance === undefined || isOpen}
             onClose={(): void => setIsOpen(false)}
             onOpen={(): void => setIsOpen(true)}
             trigger={<Menu.Item as={"a"} icon={"key"} />}
