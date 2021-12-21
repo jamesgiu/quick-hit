@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, DropdownItemProps, Form, Icon, Menu, Modal } from "semantic-ui-react";
+import {Button, DropdownItemProps, Form, Icon, Menu, Modal} from "semantic-ui-react";
 import {makeErrorToast, makeSuccessToast} from "../Toast/Toast";
 import { DbInstance } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
@@ -114,10 +114,6 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                             value={chosenInstance ? renderInstanceOption(chosenInstance).value : ""}
                         />
                         <Form.Field>
-                            { //TODO ensure users need to supply a secret _and_ login via google
-                                chosenInstance?.google_auth ?
-                                <Button className="button" onClick={signInWithGoogle} color={"google plus"}><Icon name={"google"}/> Sign in with Google</Button>
-                             :
                             <Form.Input
                                 fluid
                                 label="Key required to proceed"
@@ -125,8 +121,16 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                 placeholder="Key to access this instance"
                                 type="password"
                                 onChange={(event, data): void => setKey(data.value)}
-                            /> }
+                            />
                         </Form.Field>
+                            {
+                                //TODO ensure users need to supply a secret _and_ login via google???
+                                chosenInstance?.google_auth &&
+                                <Form.Field>
+                                    <Form.Button className="button" onClick={signInWithGoogle} color={"google plus"}><Icon
+                                        name={"google"}/> Sign in with Google</Form.Button>
+                                </Form.Field>
+                            }
                     </Form.Group>
                 </Form>
                 <Button
