@@ -1,0 +1,12 @@
+{
+  "instances" : {
+    "dbb0a47d-9a2a-40ef-900f-4e11b8dc5fd3 " : {
+      "fb_api_key" : "AIzaSyC-lBTbcM2aYfD5p7AgAoXJA30UwvpLnL4",
+      "fb_srv_acc_name" : "table-tennis@svc.acc",
+      "fb_url" : "https://table-tennis-testing-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      "name" : "Demo Instance",
+      "restricted_happy_hour" : true,
+      "tournaments" : true
+    }
+  }
+}

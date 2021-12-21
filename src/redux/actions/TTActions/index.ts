@@ -1,5 +1,5 @@
 import * as constants from "../../constants/TTConstants";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament } from "../../../types/database/models";
+import { DbBadge, DbHappyHour, DbInstance, DbMatch, DbPlayer, DbTournament } from "../../../types/database/models";
 
 export interface SetMatchesAction {
     type: constants.SET_MATCHES_TYPE;

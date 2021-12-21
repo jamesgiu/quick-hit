@@ -58,34 +58,68 @@ The following is an example file:
 
 ```aidl
 REACT_APP_FB_URL=https://<YOUR-DB>.<YOUR-REGION>.firebasedatabase.app/
-REACT_APP_FB_API_KEY=<WEB-API-KEY>
-REACT_APP_FB_SRV_ACC_NAME="<YOUR-SVC-ACC-USERNAME>"
 ```
 
-### Creating the database
+### Creating the catalogue database
+The catalogue will store references to all instances of QuickHit available. 
 
 1. Visit https://console.firebase.google.com/u/1/ and select "Add Project"
 2. Then select 'Realtime Database'
 3. Create your new database, keep all settings default
 4. Once complete, the URL provided here will be the value to use as the `REACT_APP_FB_URL` in `.env`
 5. Import some dummy data to get the schema going, use the menu and select "Import JSON"
-6. Upload the committed file `db-example.json` to get the schema initialised
+6. Upload the committed file `db-example-catalogue.json` to get the schema initialised
 
-### Getting the service account and API key
+### Catalogue database entries
+The below is an example of a catalogue entry for a QuickHit instance.
 
+```aidl
+{
+  "instances" : {
+    "dbb0a47d-9a2a-40ef-900f-4e11b8dc5fd3 " : {
+      "fb_api_key" : "AIzaSyC-lBTbcM2aYfD5p7AgAoXJA30UwvpLnL4",
+      "fb_srv_acc_name" : "table-tennis@svc.acc",
+      "fb_url" : "https://table-tennis-testing-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      "name" : "Demo Instance",
+      "restricted_happy_hour" : true,
+      "tournaments" : true
+    }
+  }
+}
+
+```
+#### fb_api_key
+Retrieved via Firebase using the following steps:
 1. On the console view (https://console.firebase.google.com/u/1/), click on the Settings cog next to "Project Overview"
 2. Click on "general"
-3. Take note of the "Web API Key", this will be used for `REACT_APP_FB_API_KEY` in `.env`.
-
-### Setting up basic auth with the Service account user
-
+3. Take note of the "Web API Key", this will be used for `fb_api_key` in the catalogue database.
+#### fb_srv_acc_name
+Retrieved via Firebase using the following steps:
 1. On the console view (https://console.firebase.google.com/u/1/), select "Authentication" and then "Get started"
 2. Enable the Email/Password Sign-in method
 3. Go to "Users" then click "Add user"
 4. Add a service account and a password for it, this password will be prompted for when a user first uses the application.
-5. The service account user name will be used for `REACT_APP_FB_SRV_ACC_NAME` in `.env`.
+5. The service account user name will be used for `fb_srv_acc_name` in the catalogue database.
+#### fb_url
+Retrieved via Firebase using the following steps:
+1. On the console view (https://console.firebase.google.com/u/1/), select "Realtime Database"
+2. The URL will be displayed on the page (under "Data")
+#### restricted_happy_hour
+If true, Happy Hour can only occur at 12:00PM or 4:00PM (better for a workplace!)
+#### tournaments
+If true, tournaments will be enabled.
 
-### Protecting the database
+### Creating an instance database
+An instance database will store all the matches, players, and other data relevant to a particular instance of QuickHit.
+
+1. Visit https://console.firebase.google.com/u/1/ and select "Add Project"
+2. Then select 'Realtime Database'
+3. Create your new database, keep all settings default
+4. Once complete, the URL provided here will be the value to use as the `fb_url` in the catalogue database.
+5. Import some dummy data to get the schema going, use the menu and select "Import JSON"
+6. Upload the committed file `db-example.json` to get the schema initialised
+
+### Protecting the instance database
 
 1. On the console view (https://console.firebase.google.com/u/1/), select "Authentication" and then "Users"
 2. Copy the UUID of your newly added firebase service account (e.g. gSid15y7XJMC8E273OIjLjgaYig2)

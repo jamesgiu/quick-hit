@@ -1,6 +1,15 @@
 import { SemanticICONS } from "semantic-ui-react";
 import { TournamentParticipantsType, TournamentType } from "../types";
 
+export interface DbInstance {
+    fb_api_key: string;
+    fb_srv_acc_name: string;
+    fb_url: string;
+    name: string;
+    restricted_happy_hour: boolean;
+    tournaments: boolean;
+}
+
 export interface DbMatch {
     id: string;
     date: string;
