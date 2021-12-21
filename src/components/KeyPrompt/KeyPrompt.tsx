@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, DropdownItemProps, Form, Icon, Menu, Modal } from "semantic-ui-react";
-import { makeErrorToast } from "../Toast/Toast";
+import {makeErrorToast, makeSuccessToast} from "../Toast/Toast";
 import { DbInstance } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import "./KeyPrompt.css";
-
+import firebase from "firebase/compat";
+import 'firebase/auth';
 export interface KeyPromptProps {
     chosenInstance?: DbInstance;
     authKey?: string;
     setAuthKey: (newKey: string) => void;
     setChosenInstance: (newInstance: DbInstance) => void;
+    setToken: (newToken: string) => void;
 }
 
 /**
@@ -36,6 +38,36 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     useEffect(() => {
         getInstances();
     }, []);
+
+    const signInWithGoogle = (): void => {
+        const firebaseConfig = {
+            apiKey: chosenInstance?.fb_api_key,
+            authDomain: chosenInstance?.fb_project_id + ".firebaseapp.com",
+            databaseURL: chosenInstance?.fb_project_id + ".firebaseio.com",
+            projectId:  chosenInstance?.fb_project_id,
+        };
+
+        if (!firebase.apps.length) {
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
+        auth.signInWithPopup(provider)
+        .then((result) => {
+          makeSuccessToast("Authenticated", "Signed in as " + result.user?.displayName);
+          result.user?.getIdToken().then((token) => {
+              props.setToken(token);
+              location.reload();
+          });
+        }).catch((error) => {
+           makeErrorToast("Unable to authenticate", "Could not sign in via Google! " + error.message);
+        });
+    }
 
     const renderInstanceOption = (instance: DbInstance): DropdownItemProps => {
         return {
@@ -82,6 +114,10 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                             value={chosenInstance ? renderInstanceOption(chosenInstance).value : ""}
                         />
                         <Form.Field>
+                            { //TODO ensure users need to supply a secret _and_ login via google
+                                chosenInstance?.google_auth ?
+                                <Button className="button" onClick={signInWithGoogle} color={"google plus"}><Icon name={"google"}/> Sign in with Google</Button>
+                             :
                             <Form.Input
                                 fluid
                                 label="Key required to proceed"
@@ -89,7 +125,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                 placeholder="Key to access this instance"
                                 type="password"
                                 onChange={(event, data): void => setKey(data.value)}
-                            />
+                            /> }
                         </Form.Field>
                     </Form.Group>
                 </Form>

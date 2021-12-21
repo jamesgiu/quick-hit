@@ -246,8 +246,9 @@ export class QuickHitAPI {
         const getToken = (): Promise<string> => {
             // Check Redux store for existing token
             const token = store.getState().authStore.token;
-            // If there wasn't one, get a new one and set it.
-            if (!token) {
+
+            // If there wasn't one, and we're not using google_auth, get a new one and set it.
+            if (!token && !chosenInstance.google_auth) {
                 return axios({
                     method: HttpMethod.POST,
                     baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${chosenInstance.fb_api_key}`,
@@ -265,6 +266,7 @@ export class QuickHitAPI {
                     });
                 });
             }
+
             return new Promise<string>((resolve) => {
                 resolve(token);
             });
