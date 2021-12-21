@@ -7,12 +7,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { makeErrorToast, makeRefreshToast } from "../Toast/Toast";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { Loader, Transition } from "semantic-ui-react";
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament, getTodaysDate } from "../../types/database/models";
+import {
+    DbBadge,
+    DbHappyHour,
+    DbInstance,
+    DbMatch,
+    DbPlayer,
+    DbTournament,
+    getTodaysDate,
+} from "../../types/database/models";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DataLoaderDispatchType } from "../../containers/QHDataLoader/QHDataLoader";
 import { ELOGraphStats, ExtraPlayerStats, WinLoss } from "../../types/types";
 
-type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType;
+type QHDataLoaderProps = TTDataPropsTypeCombined & DataLoaderDispatchType & { chosenInstance?: DbInstance };
 
 // How frequently to poll the Firebase DB for new data.
 const POLL_TIME_MS = 30000;
@@ -34,8 +42,12 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
                 // No happy hour generated for today, generate one
                 const newHappyHour: DbHappyHour = {
                     date: getTodaysDate(),
-                    // Force set the happy hour to either be 12 or 16 (lunch time or 4pm).
-                    hourStart: randomIntFromInterval(0, 1) === 0 ? 12 : 16,
+                    // If happy hour is restricted, force set the happy hour to either be 12 or 16 (lunch time or 4pm).
+                    hourStart: props.chosenInstance?.restricted_happy_hour
+                        ? randomIntFromInterval(0, 1) === 0
+                            ? 12
+                            : 16
+                        : randomIntFromInterval(9, 19),
                     multiplier: randomIntFromInterval(2, 6),
                 };
 

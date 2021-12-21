@@ -1,5 +1,6 @@
 .tt-navbar .item {
   height: 100%;
+  margin: auto;
 }
 
 .tt-navbar i {
@@ -16,10 +17,13 @@
   width: 20px;
 }
 
-.tt-navbar .chat-icon {
-  margin: auto;
-}
-
 .tt-navbar .new-game-icon-navbar i {
   display: inline;
+}
+
+.tt-navbar .right.menu i,
+.tt-navbar .right.menu .chat-icon,
+.tt-navbar .right.menu span i {
+  margin: auto;
+  width: 100%;
 }

@@ -6,6 +6,7 @@ export enum HttpMethod {
 }
 
 export enum ApiActions {
+    INSTANCES = "instances.json",
     PLAYERS = "player.json",
     MATCHES = "match.json",
     HAPPY_HOUR = "happyhour.json",
