@@ -17,13 +17,13 @@
   width: 20px;
 }
 
+.tt-navbar .new-game-icon-navbar i {
+  display: inline;
+}
+
 .tt-navbar .right.menu i,
 .tt-navbar .right.menu .chat-icon,
 .tt-navbar .right.menu span i {
   margin: auto;
   width: 100%;
-}
-
-.tt-navbar .new-game-icon-navbar i {
-  display: inline;
 }
