@@ -259,6 +259,7 @@ export class QuickHitAPI {
             const authDetail = store.getState().authStore.authDetail;
 
             // If there wasn't one, and we're not using Google Auth, get a new one and set it.
+            // TODO clear the token after a certain amount of time or figure out how to refresh it
             if (!authDetail && !chosenInstance.google_auth) {
                 return axios({
                     method: HttpMethod.POST,
