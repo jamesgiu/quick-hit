@@ -1,3 +1,19 @@
 .ui.modal .instance-select {
   padding-top: 3px;
 }
+
+.tt-navbar .icon.item.required-sign-in {
+  background: rgba(224, 19, 19, 0.45);
+}
+
+.required-sign-in i {
+  color: #f32424;
+  font-size: 1.8rem;
+  transform: scale(1);
+  animation: pulse 1.5s infinite;
+}
+
+.ui.modal .google-button {
+  margin: auto;
+  padding-top: 22px;
+}

@@ -11,8 +11,10 @@ import {
 import { ApiActions, HttpMethod } from "./ApiTypes";
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 import store from "../redux/types/store";
-import { setToken } from "../redux/actions/AuthActions";
+import { setAuthDetail } from "../redux/actions/AuthActions";
+import ReactGA from "react-ga";
 const FB_CATALOGUE_URL = process.env.REACT_APP_FB_URL;
+
 export class QuickHitAPI {
     public static getInstances(
         onSuccess: (instances: DbInstance[]) => void,
@@ -228,6 +230,15 @@ export class QuickHitAPI {
         }
 
         return this.authenticateToFirebase(chosenInstance).then((token: string) => {
+            const authDetail = store.getState().authStore.authDetail;
+
+            ReactGA.event({
+                category: "Request",
+                action: `Authenticated user ${authDetail.userName ?? "svc-account"} (${
+                    authDetail.email
+                }) has made ${method} request to ${uri} with data: ${data ?? "no data"}`,
+            });
+
             return axios({
                 method: method,
                 baseURL: chosenInstance.fb_url,
@@ -245,10 +256,10 @@ export class QuickHitAPI {
     private static async authenticateToFirebase(chosenInstance: DbInstance): Promise<string> {
         const getToken = (): Promise<string> => {
             // Check Redux store for existing token
-            const token = store.getState().authStore.token;
+            const authDetail = store.getState().authStore.authDetail;
 
             // If there wasn't one, and we're not using Google Auth, get a new one and set it.
-            if (!token && !chosenInstance.google_auth) {
+            if (!authDetail && !chosenInstance.google_auth) {
                 return axios({
                     method: HttpMethod.POST,
                     baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${chosenInstance.fb_api_key}`,
@@ -260,7 +271,7 @@ export class QuickHitAPI {
                     headers: { "Content-Type": "application/json" },
                 }).then((response) => {
                     const token = response.data.idToken;
-                    store.dispatch(setToken(token));
+                    store.dispatch(setAuthDetail({ idToken: token }));
                     return new Promise<string>((resolve) => {
                         resolve(token);
                     });
@@ -268,7 +279,7 @@ export class QuickHitAPI {
             }
 
             return new Promise<string>((resolve) => {
-                resolve(token);
+                resolve(authDetail.idToken);
             });
         };
 
