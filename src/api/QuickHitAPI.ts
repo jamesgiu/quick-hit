@@ -234,8 +234,8 @@ export class QuickHitAPI {
 
             ReactGA.event({
                 category: "Request",
-                action: `Authenticated user ${authDetail.userName ?? "svc-account"} (${
-                    authDetail.email
+                action: `Authenticated user ${authDetail.userName ?? "unknown"} (${
+                    authDetail.email ?? "unknown"
                 }) has made ${method} request to ${uri} with data: ${data ?? "no data"}`,
             });
 
@@ -258,26 +258,65 @@ export class QuickHitAPI {
             // Check Redux store for existing token
             const authDetail = store.getState().authStore.authDetail;
 
-            // If there wasn't one, and we're not using Google Auth, get a new one and set it.
-            // TODO clear the token after a certain amount of time or figure out how to refresh it
-            if (!authDetail && !chosenInstance.google_auth) {
-                return axios({
-                    method: HttpMethod.POST,
-                    baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${chosenInstance.fb_api_key}`,
-                    data: {
-                        email: chosenInstance.fb_srv_acc_name,
-                        password: store.getState().authStore.authKey,
-                        returnSecureToken: true,
-                    },
-                    headers: { "Content-Type": "application/json" },
-                }).then((response) => {
-                    const token = response.data.idToken;
-                    store.dispatch(setAuthDetail({ idToken: token }));
-                    return new Promise<string>((resolve) => {
-                        resolve(token);
+            if (!chosenInstance.google_auth) {
+                // If there is an auth and it has expired...
+                if (authDetail && Date.now() >= new Date(authDetail.expiryTime).getTime()) {
+                    console.log("Updating token...");
+                    return axios({
+                        method: HttpMethod.POST,
+                        baseURL: `https://securetoken.googleapis.com/v1/token?key=${chosenInstance.fb_api_key}`,
+                        data: {
+                            grant_type: "refresh_token",
+                            refresh_token: authDetail.refreshToken,
+                        },
+                        headers: { "Content-Type": "application/json" },
+                    }).then((response) => {
+                        const token = response.data.id_token;
+                        const refreshToken = response.data.refresh_token;
+                        const uid = response.data.user_id;
+                        const expiryDate = new Date(Date.now() + response.data.expires_in * 1000).toUTCString();
+                        store.dispatch(
+                            setAuthDetail({ idToken: token, userName: uid, refreshToken, expiryTime: expiryDate })
+                        );
+                        return new Promise<string>((resolve) => {
+                            resolve(token);
+                        });
                     });
-                });
+                }
+                // If there wasn't one, and we're not using Google Auth, get a new one and set it.
+                else {
+                    return axios({
+                        method: HttpMethod.POST,
+                        baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${chosenInstance.fb_api_key}`,
+                        data: {
+                            email: chosenInstance.fb_srv_acc_name,
+                            password: store.getState().authStore.authKey,
+                            returnSecureToken: true,
+                        },
+                        headers: { "Content-Type": "application/json" },
+                    }).then((response) => {
+                        const token = response.data.idToken;
+                        const refreshToken = response.data.refreshToken;
+                        const uid = response.data.localId;
+                        const email = response.data.email;
+                        const expiryDate = new Date(Date.now() + response.data.expiresIn * 1000).toUTCString();
+                        store.dispatch(
+                            setAuthDetail({
+                                idToken: token,
+                                userName: uid,
+                                email,
+                                refreshToken,
+                                expiryTime: expiryDate,
+                            })
+                        );
+                        return new Promise<string>((resolve) => {
+                            resolve(token);
+                        });
+                    });
+                }
             }
+
+            // TODO refresh Google auth?
 
             return new Promise<string>((resolve) => {
                 resolve(authDetail.idToken);

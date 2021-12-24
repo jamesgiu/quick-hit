@@ -8,6 +8,7 @@ import firebase from "firebase/compat";
 import "firebase/auth";
 import { AuthUserDetail } from "../../redux/types/AuthTypes";
 import ReactGA from "react-ga";
+
 export interface KeyPromptProps {
     chosenInstance?: DbInstance;
     authKey?: string;
@@ -25,9 +26,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     const [chosenInstance, setChosenInstance] = useState<DbInstance>(props.chosenInstance as DbInstance);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [instances, setInstances] = useState<DbInstance[]>([]);
-    const [token, setToken] = useState<string>();
-    const [userName, setUserName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
+    const [authDetail, setAuthDetail] = useState<AuthUserDetail>();
 
     const getInstances = (): void => {
         const onFailure = (error: string): void => {
@@ -59,16 +58,33 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         }
 
         const auth = firebase.auth();
-
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        auth.onIdTokenChanged((newUser) => {
+            if (newUser) {
+                newUser.getIdTokenResult().then((token) => {
+                    props.setAuthDetail({
+                        idToken: token.token,
+                        expiryTime: token.expirationTime,
+                        userName: newUser.displayName as string,
+                        email: newUser.email as string,
+                        userCredential: newUser,
+                    });
+                });
+            }
+        });
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: "select_account" });
 
         auth.signInWithPopup(provider)
             .then((result) => {
-                result.user?.getIdToken().then((token) => {
-                    setToken(token);
-                    setUserName(result.user?.displayName as string);
-                    setEmail(result.user?.email as string);
+                result.user?.getIdTokenResult().then((token) => {
+                    setAuthDetail({
+                        idToken: token.token,
+                        expiryTime: token.expirationTime,
+                        userName: result.user?.displayName as string,
+                        email: result.user?.email as string,
+                        userCredential: result.user ?? undefined,
+                    });
 
                     ReactGA.event({
                         category: "Request",
@@ -142,11 +158,11 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                         color={"google plus"}
                                     >
                                         <Icon name={"google"} />
-                                        {!userName
-                                            ? props.authDetail?.userName
+                                        {!authDetail?.userName
+                                            ? props.authDetail?.userCredential
                                                 ? props.authDetail.userName
                                                 : "Select an account with Google"
-                                            : `${userName}`}
+                                            : `${authDetail.userName}`}
                                     </Form.Button>
                                 </Form.Field>
                             ) : (
@@ -165,19 +181,21 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                     </Form.Group>
                 </Form>
                 <Button
-                    disabled={userName == "" && key == ""}
+                    disabled={!authDetail && key == ""}
                     onClick={(): void => {
                         props.setAuthKey(key);
                         props.setChosenInstance(chosenInstance);
 
-                        if (token) {
-                            props.setAuthDetail({ idToken: token, userName, email });
-                            makeSuccessToast("Authenticated", "Signed in as " + userName);
+                        if (authDetail) {
+                            props.setAuthDetail(authDetail);
+                            makeSuccessToast("Authenticated", "Signed in as " + authDetail.userName);
+                            console.log(authDetail);
                         }
-                        // If no token granted here, then reset the redux token too.
+                        // If no token granted here, then reset the redux token too. This will force a refresh
+                        // in QuickHitAPI.ts
                         else {
                             props.setAuthDetail(undefined);
-                            setToken(undefined);
+                            setAuthDetail(undefined);
                         }
                         setIsOpen(false);
                         // Allow for the async Redux calls.
