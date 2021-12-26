@@ -105,9 +105,12 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         };
     };
 
+    // Only for Google Auth - non-Google auth auto-refreshes the token.
+    const tokenExpired = props.chosenInstance?.google_auth && props.authDetail && Date.now() >= new Date(props.authDetail.expiryTime).getTime();
+
     return (
         <Modal
-            open={props.authKey === undefined || props.chosenInstance === undefined || isOpen}
+            open={props.authKey === undefined || props.chosenInstance === undefined || tokenExpired || isOpen}
             onClose={(): void => setIsOpen(false)}
             onOpen={(): void => setIsOpen(true)}
             closeOnDimmerClick={false}
@@ -122,7 +125,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         >
             <Modal.Header>
                 <Icon name="key" />
-                Enter key
+                Authenticate
             </Modal.Header>
             <Modal.Content className={"key-form"}>
                 <Form warning>
@@ -159,7 +162,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                                     >
                                         <Icon name={"google"} />
                                         {!authDetail?.userName
-                                            ? props.authDetail?.userCredential
+                                            ? props.authDetail?.userCredential && !tokenExpired
                                                 ? props.authDetail.userName
                                                 : "Select an account with Google"
                                             : `${authDetail.userName}`}
