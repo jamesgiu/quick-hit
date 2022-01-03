@@ -106,7 +106,10 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     };
 
     // Only for Google Auth - non-Google auth auto-refreshes the token.
-    const tokenExpired = props.chosenInstance?.google_auth && props.authDetail && Date.now() >= new Date(props.authDetail.expiryTime).getTime();
+    const tokenExpired =
+        props.chosenInstance?.google_auth &&
+        props.authDetail &&
+        Date.now() >= new Date(props.authDetail.expiryTime).getTime();
 
     return (
         <Modal
@@ -192,7 +195,6 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                         if (authDetail) {
                             props.setAuthDetail(authDetail);
                             makeSuccessToast("Authenticated", "Signed in as " + authDetail.userName);
-                            console.log(authDetail);
                         }
                         // If no token granted here, then reset the redux token too. This will force a refresh
                         // in QuickHitAPI.ts
