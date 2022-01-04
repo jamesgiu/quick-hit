@@ -9,10 +9,14 @@ import en from "javascript-time-ago/locale/en";
 import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
 import store from "./redux/types/store";
+import ReactGA from "react-ga";
 
 TimeAgo.addDefaultLocale(en);
 
 const persistor = persistStore(store);
+
+const FB_ANALYTICS_UA = process.env.REACT_APP_FB_ANALYTICS_UA;
+ReactGA.initialize(FB_ANALYTICS_UA as string, { redactEmail: false });
 
 ReactDOM.render(
     <Provider store={store}>

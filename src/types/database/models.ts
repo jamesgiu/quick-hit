@@ -5,9 +5,11 @@ export interface DbInstance {
     fb_api_key: string;
     fb_srv_acc_name: string;
     fb_url: string;
+    fb_project_id: string;
     name: string;
     restricted_happy_hour: boolean;
     tournaments: boolean;
+    google_auth: boolean;
 }
 
 export interface DbMatch {

@@ -58,6 +58,7 @@ The following is an example file:
 
 ```aidl
 REACT_APP_FB_URL=https://<YOUR-DB>.<YOUR-REGION>.firebasedatabase.app/
+REACT_APP_FB_ANALYTICS_UA="UA-123"
 ```
 
 ### Creating the catalogue database
@@ -82,7 +83,8 @@ The below is an example of a catalogue entry for a QuickHit instance.
       "fb_url" : "https://table-tennis-testing-default-rtdb.asia-southeast1.firebasedatabase.app/",
       "name" : "Demo Instance",
       "restricted_happy_hour" : true,
-      "tournaments" : true
+      "tournaments" : true,
+      "google_auth": true
     }
   }
 }
@@ -108,6 +110,9 @@ Retrieved via Firebase using the following steps:
 If true, Happy Hour can only occur at 12:00PM or 4:00PM (better for a workplace!)
 #### tournaments
 If true, tournaments will be enabled.
+#### google_auth
+If true, Authentication via a Google Account provider will be enabled. Expects the Instance on Firebase to have
+Google as a Sign-In provider.
 
 ### Creating an instance database
 An instance database will store all the matches, players, and other data relevant to a particular instance of QuickHit.

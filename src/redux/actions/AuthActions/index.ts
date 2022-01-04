@@ -1,5 +1,6 @@
 import * as constants from "../../constants/AuthConstants";
 import { DbInstance } from "../../../types/database/models";
+import { AuthUserDetail } from "../../types/AuthTypes";
 
 export interface SetChosenInstanceAction {
     type: constants.SET_INSTANCE_TYPE;
@@ -11,9 +12,9 @@ export interface SetAuthKeyAction {
     value: string;
 }
 
-export interface SetTokenAction {
-    type: constants.SET_TOKEN_TYPE;
-    value: string;
+export interface SetAuthDetailAction {
+    type: constants.SET_AUTH_DETAIL_TYPE;
+    value: AuthUserDetail | undefined;
 }
 
 export function setChosenInstance(newChosenInstance: DbInstance): SetChosenInstanceAction {
@@ -30,9 +31,9 @@ export function setAuthKey(newKey: string): SetAuthKeyAction {
     };
 }
 
-export function setToken(newToken: string): SetTokenAction {
+export function setAuthDetail(newAuthDetail?: AuthUserDetail): SetAuthDetailAction {
     return {
-        type: constants.SET_TOKEN,
-        value: newToken,
+        type: constants.SET_AUTH_DETAIL,
+        value: newAuthDetail,
     };
 }
