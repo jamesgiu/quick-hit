@@ -45,6 +45,9 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     }, []);
 
     const signInWithGoogle = (): void => {
+        // Ensure modal stays open until sign in is complete.
+        setIsOpen(true);
+
         const firebaseConfig = {
             apiKey: chosenInstance?.fb_api_key,
             authDomain: chosenInstance?.fb_project_id + ".firebaseapp.com",
