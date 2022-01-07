@@ -249,10 +249,6 @@ export class QuickHitAPI {
         });
     }
 
-    //FIXME
-    //Because we only store a string here, we don't store the expiresIn, but currently it's an hour.
-    //It will get a new token on each refresh - so you'd have to be using QuickHit for over an hour before getting
-    //prompted to refresh.
     private static async authenticateToFirebase(chosenInstance: DbInstance): Promise<string> {
         const getToken = (): Promise<string> => {
             // Check Redux store for existing token
