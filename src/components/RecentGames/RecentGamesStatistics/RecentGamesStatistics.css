@@ -1,0 +1,8 @@
+.recent-games-statistics-wrapper {
+  width: 50%;
+  margin: auto;
+}
+
+.recent-games-statistics-wrapper svg.w-heatmap rect:active {
+  fill: white;
+}

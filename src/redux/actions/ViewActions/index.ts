@@ -20,6 +20,11 @@ export interface SetUsernameAction {
     value: string;
 }
 
+export interface SetDarkModeAction {
+    type: constants.SET_DARK_MODE_TYPE;
+    value: boolean;
+}
+
 export function setZeroGamesFilter(hideZeroGamesPlayers: boolean): SetZeroGamesFilterAction {
     return {
         type: constants.SET_HIDE_ZERO_GAME_PLAYERS,
@@ -45,5 +50,12 @@ export function setUsername(username: string): SetUsernameAction {
     return {
         type: constants.SET_USERNAME,
         value: username,
+    };
+}
+
+export function setDarkMode(isDarkMode: boolean): SetDarkModeAction {
+    return {
+        type: constants.SET_DARK_MODE,
+        value: isDarkMode,
     };
 }

@@ -9,6 +9,7 @@ import { SettingsProps } from "../../components/Settings/Settings";
 export type SettingsDispatchType = ViewDispatchType & {
     setDisableMusic: (disableMusic: boolean) => void;
     setUsername: (username: string) => void;
+    setDarkMode: (isDarkMode: boolean) => void;
 };
 
 export function mapStateToProps(store: QuickHitReduxStores): SettingsProps {
@@ -17,6 +18,7 @@ export function mapStateToProps(store: QuickHitReduxStores): SettingsProps {
         showCards: store.viewStore.showCards,
         disableMusic: store.viewStore.disableMusic,
         username: store.viewStore.username,
+        darkMode: store.viewStore.darkMode,
     };
 }
 
@@ -26,6 +28,7 @@ export function mapDispatchToProps(
         | viewActions.SetShowCardsAction
         | viewActions.SetDisableMusicAction
         | viewActions.SetUsernameAction
+        | viewActions.SetDarkModeAction
     >
 ): SettingsDispatchType {
     return {
@@ -36,6 +39,8 @@ export function mapDispatchToProps(
         setDisableMusic: (disableMusic: boolean): viewActions.SetDisableMusicAction =>
             dispatch(viewActions.setDisableMusic(disableMusic)),
         setUsername: (username: string): viewActions.SetUsernameAction => dispatch(viewActions.setUsername(username)),
+        setDarkMode: (isDarkMode: boolean): viewActions.SetDarkModeAction =>
+            dispatch(viewActions.setDarkMode(isDarkMode)),
     };
 }
 

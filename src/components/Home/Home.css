@@ -84,3 +84,31 @@
 .home .happy-hour .happy-hour-highlight {
   color: darkorange;
 }
+
+.home .feed-area-wrapper {
+  width: 30vw;
+  text-wrap: normal;
+  position: static;
+  float: left;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.home .recent-games-feed li {
+  list-style-type: none;
+}
+
+.home .instance-title {
+  opacity: 0.3;
+  position: static;
+  text-align: left;
+  font-style: italic;
+  float: left;
+  margin-top: -5px;
+}
+
+.home .svg-wave {
+  background-color: #282c34;
+  margin-bottom: -10px;
+}

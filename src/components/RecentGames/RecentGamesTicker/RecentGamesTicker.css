@@ -1,0 +1,8 @@
+.recent-games-feed .ui.divider {
+  display: none;
+}
+
+.recent-games-feed {
+  font-style: italic;
+  opacity: 0.7;
+}

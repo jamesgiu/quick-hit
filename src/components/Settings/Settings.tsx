@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button, Form, Icon, Menu, Modal } from "semantic-ui-react";
 import { SettingsDispatchType } from "../../containers/Settings/Settings";
+import { useDarkreader } from "react-darkreader";
 
 export interface SettingsProps {
     hideZeroGamePlayers: boolean;
     showCards: boolean;
     disableMusic: boolean;
     username: string;
+    darkMode: boolean;
 }
 
 /**
@@ -14,6 +16,7 @@ export interface SettingsProps {
  */
 function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isDarkMode, { toggle }] = useDarkreader(props.darkMode);
 
     return (
         <Modal
@@ -60,6 +63,17 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                             checked={props.showCards}
                             onClick={(): void => {
                                 props.setShowCards(!props.showCards);
+                            }}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Radio
+                            toggle
+                            label={"Make QuickHit even darker"}
+                            checked={isDarkMode}
+                            onClick={(): void => {
+                                props.setDarkMode(!props.darkMode);
+                                toggle();
                             }}
                         />
                     </Form.Group>
