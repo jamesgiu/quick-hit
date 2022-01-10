@@ -6,3 +6,9 @@
   font-style: italic;
   opacity: 0.7;
 }
+
+@media only screen and (max-width: 600px) {
+  .recent-games-feed {
+    font-size: 0.7rem;
+  }
+}

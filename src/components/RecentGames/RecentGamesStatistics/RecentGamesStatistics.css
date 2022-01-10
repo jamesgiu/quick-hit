@@ -1,6 +1,18 @@
 .recent-games-statistics-wrapper {
-  width: 50%;
   margin: auto;
+  width: 50%;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 600px) {
+  .recent-games-statistics-wrapper {
+    overflow: auto;
+    width: 80%;
+  }
+}
+
+.recent-games-statistics-wrapper svg.w-heatmap {
+  width: 850px;
 }
 
 .recent-games-statistics-wrapper svg.w-heatmap rect:active {

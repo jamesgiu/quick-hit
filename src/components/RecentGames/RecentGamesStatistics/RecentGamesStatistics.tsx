@@ -67,7 +67,6 @@ function RecentGamesStatistics(props: RecentGamesStatisticsProps): JSX.Element {
                     height={"100%"}
                     rectProps={{ rx: 5 }}
                     legendCellSize={20}
-                    width={850}
                     startDate={getStartDate()}
                     endDate={new Date(new Date(Date.now()))}
                     style={{ color: "darkorange" }}

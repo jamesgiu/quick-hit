@@ -22,7 +22,7 @@ function RecentGamesTicker(props: RecentGamesTickerProps): JSX.Element {
         <div className={"recent-games-feed"}>
             <NewsTicker
                 rowHeight={20}
-                maxRows={2}
+                maxRows={3}
                 direction={Directions.UP}
                 duration={4000}
                 autoStart={true}

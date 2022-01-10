@@ -92,7 +92,8 @@
   float: left;
   text-align: left;
   padding: 0;
-  margin: 0;
+  margin-top: -2%;
+  margin-left: -5%;
 }
 
 .home .recent-games-feed li {
