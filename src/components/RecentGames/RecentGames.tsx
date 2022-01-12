@@ -137,7 +137,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const offset = (currentPage - 1) * PAGE_SIZE;
         const nextPageOffset = currentPage * PAGE_SIZE;
 
-        return turnMatchIntoFeedItems(props.matches, props.players, offset, nextPageOffset);
+        return turnMatchIntoFeedItems(matches, props.players, offset, nextPageOffset);
     };
 
     return (
