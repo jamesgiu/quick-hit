@@ -279,8 +279,8 @@ export class QuickHitAPI {
                         });
                     });
                 }
-                // If there wasn't one, and we're not using Google Auth, get a new one and set it.
-                else {
+                // If there wasn't a token, and we're not using Google Auth, get a new one and set it.
+                else if (!authDetail) {
                     return axios({
                         method: HttpMethod.POST,
                         baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${chosenInstance.fb_api_key}`,
@@ -311,14 +311,12 @@ export class QuickHitAPI {
                     });
                 }
             }
-
-            // TODO refresh Google auth?
-
+            // Return the token in Redux.
             return new Promise<string>((resolve) => {
                 resolve(authDetail.idToken);
             });
         };
-
+        // TODO refresh Google auth?
         return getToken();
     }
 }
