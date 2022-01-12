@@ -1,3 +1,9 @@
+
+.home #useless3D {
+  margin: auto;
+  width: 50%;
+}
+
 .home .welcome-header i.chevron.tiny {
   font-size: 1.5rem;
   display: inline;

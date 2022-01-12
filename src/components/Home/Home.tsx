@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./Home.css";
 import { Button, ButtonGroup, Header, Icon, Segment, Transition } from "semantic-ui-react";
 import { Link } from "react-router-dom";
@@ -10,6 +10,8 @@ import { DbHappyHour, DbPlayer } from "../../types/database/models";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import RecentGamesTicker from "../RecentGames/RecentGamesTicker/RecentGamesTicker";
 import { turnMatchIntoFeedItems } from "../RecentGames/RecentGames";
+import * as THREE from "three/build/three.module";
+import TT from "./scene.json";
 
 const SVG_WAVE = (
     <svg viewBox="0 -30 500 80" width="100%" height="50" preserveAspectRatio="none" className={"svg-wave"}>
@@ -37,6 +39,33 @@ const SVG_WAVE_BOTTOM = (
  * QuickHit Home page.
  */
 function Home(props: TTDataPropsTypeCombined): JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let camera: any, scene: any, renderer : any
+
+    function init() : void {
+        camera = new THREE.PerspectiveCamera( 70, 600 / 300, 0.01, 10 );
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 5;
+        scene = new THREE.ObjectLoader().parse( TT );
+        scene.getObjectByName( "Group" ).position.x = 3.8;
+
+
+        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        renderer.setSize( 600, 300 );
+        renderer.setAnimationLoop( animation );
+        document.getElementById("useless3D")!.appendChild( renderer.domElement );
+    }
+
+    function animation( time : number ) : void {
+        scene.getObjectByName( "Group" ).rotation.y = time / 2000;
+        renderer.render( scene, camera );
+    }
+
+    useEffect(()=> {
+        init();
+    }, []);
+
     const getCurrentChampion = (): DbPlayer => {
         const players = props.players;
         players.sort((player1, player2) => {
@@ -66,6 +95,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     <div className={"quick-hit-splash"}>
                         <Icon name={"chevron right"} size={"tiny"} />
                         Quick<span className={"header-hit"}>Hit</span>
+                        <div id={"useless3D"}/>
                     </div>
                     <Header.Subheader>A table tennis ELO-tracking application</Header.Subheader>
                 </Header>
