@@ -18,7 +18,6 @@ const persistor = persistStore(store);
 const FB_ANALYTICS_UA = process.env.REACT_APP_FB_ANALYTICS_UA;
 ReactGA.initialize(FB_ANALYTICS_UA as string, { redactEmail: false });
 
-
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate persistor={persistor} loading={null}>
