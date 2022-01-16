@@ -1,10 +1,33 @@
+.home #useless3D {
+  width: 45%;
+  margin: auto;
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  .home #useless3D {
+    display: inline;
+  }
+}
+
+.home #useless3D canvas {
+  margin: auto;
+}
+
 .home .welcome-header i.chevron.tiny {
   font-size: 1.5rem;
   display: inline;
 }
 
+.home .welcome-header .welcome-to-text {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 1.5rem;
+}
+
 .home .welcome-header .quick-hit-splash {
   padding: 5vh;
+  font-size: 2.2rem;
 }
 
 .home .github-buttons a {
@@ -86,9 +109,9 @@
 }
 
 .home .feed-area-wrapper {
-  width: 30vw;
   text-wrap: normal;
   position: static;
+  display: inline;
   float: left;
   text-align: left;
   padding: 0;

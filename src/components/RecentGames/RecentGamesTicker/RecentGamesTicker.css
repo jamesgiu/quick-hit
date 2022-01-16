@@ -7,7 +7,7 @@
   opacity: 0.7;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .recent-games-feed {
     font-size: 0.7rem;
   }

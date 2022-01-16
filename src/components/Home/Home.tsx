@@ -10,6 +10,7 @@ import { DbHappyHour, DbPlayer } from "../../types/database/models";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import RecentGamesTicker from "../RecentGames/RecentGamesTicker/RecentGamesTicker";
 import { turnMatchIntoFeedItems } from "../RecentGames/RecentGames";
+import AnimatedLogo from "./AnimatedLogo/AnimatedLogo";
 
 const SVG_WAVE = (
     <svg viewBox="0 -30 500 80" width="100%" height="50" preserveAspectRatio="none" className={"svg-wave"}>
@@ -59,15 +60,15 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     <ul className={"instance-title"}>{`${props.chosenInstance?.name}`}</ul>
                 </div>
             </Transition>
+            <AnimatedLogo />
             <Transition transitionOnMount={true}>
                 <Header as={"h2"} icon inverted className={"welcome-header"}>
-                    <Icon name="table tennis" circular />
-                    <div>Welcome to</div>
+                    <span className={"welcome-to-text"}>Welcome to</span>
                     <div className={"quick-hit-splash"}>
                         <Icon name={"chevron right"} size={"tiny"} />
                         Quick<span className={"header-hit"}>Hit</span>
                     </div>
-                    <Header.Subheader>A table tennis ELO-tracking application</Header.Subheader>
+                    <span className={"welcome-to-text"}>A table tennis ELO-tracking application</span>
                 </Header>
             </Transition>
             <Transition transitionOnMount={true}>
