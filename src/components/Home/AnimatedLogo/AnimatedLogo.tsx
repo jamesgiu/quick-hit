@@ -21,10 +21,10 @@ function AnimatedLogo(): JSX.Element {
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(400, 150);
         renderer.setAnimationLoop(animation);
-		renderer.shadowMap.enabled = true;
-		renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        
-		const useless3DDiv = document.getElementById("useless3D");
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        const useless3DDiv = document.getElementById("useless3D");
         if (useless3DDiv) {
             useless3DDiv.appendChild(renderer.domElement);
         }
