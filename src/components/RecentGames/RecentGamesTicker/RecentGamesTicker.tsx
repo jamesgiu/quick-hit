@@ -1,6 +1,7 @@
 import React from "react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import "./RecentGamesTicker.css";
+import "regenerator-runtime/runtime";
 import NewsTicker, { Directions } from "react-advanced-news-ticker";
 
 interface RecentGamesTickerProps {
