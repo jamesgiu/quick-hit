@@ -62,7 +62,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(redux|redux-persist|semantic-ui-css)/)"
+      "node_modules/(?!(redux|redux-persist|semantic-ui-css|three)/)"
     ]
   },
   "browserslist": {
