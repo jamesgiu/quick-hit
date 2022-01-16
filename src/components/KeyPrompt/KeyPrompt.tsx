@@ -4,8 +4,8 @@ import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
 import { DbInstance } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import "./KeyPrompt.css";
-import firebase from "firebase/compat";
-import "firebase/auth";
+import * as firebase from "firebase/app";
+import * as firebaseAuth from "firebase/auth";
 import { AuthUserDetail } from "../../redux/types/AuthTypes";
 import ReactGA from "react-ga";
 
@@ -55,13 +55,13 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
             projectId: chosenInstance?.fb_project_id,
         };
 
-        if (!firebase.apps.length) {
+        if (!firebase.getApps().length) {
             // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
         }
 
-        const auth = firebase.auth();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        const auth = firebaseAuth.getAuth();
+
         auth.onIdTokenChanged((newUser) => {
             if (newUser) {
                 newUser.getIdTokenResult().then((token) => {
@@ -75,10 +75,11 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
                 });
             }
         });
-        const provider = new firebase.auth.GoogleAuthProvider();
+        const provider = new firebaseAuth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: "select_account" });
 
-        auth.signInWithPopup(provider)
+        firebaseAuth
+            .signInWithPopup(auth, provider)
             .then((result) => {
                 result.user?.getIdTokenResult().then((token) => {
                     setAuthDetail({

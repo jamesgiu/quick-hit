@@ -25,6 +25,7 @@ export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & View
         hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
         showCards: store.viewStore.showCards,
         disableMusic: store.viewStore.disableMusic,
+        darkMode: store.viewStore.darkMode,
         username: store.viewStore.username,
     };
 }

@@ -8,9 +8,34 @@ import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { DbHappyHour, DbPlayer } from "../../types/database/models";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
+import RecentGamesTicker from "../RecentGames/RecentGamesTicker/RecentGamesTicker";
+import { turnMatchIntoFeedItems } from "../RecentGames/RecentGames";
+import AnimatedLogo from "./AnimatedLogo/AnimatedLogo";
+
+const SVG_WAVE = (
+    <svg viewBox="0 -30 500 80" width="100%" height="50" preserveAspectRatio="none" className={"svg-wave"}>
+        <path
+            transform="translate(0, -15)"
+            d="M0,2 c30,-22 240,0 350,18 c90,17 230,7.5 350,-20 v50 h-700"
+            fill="rgba(255,69,0,0.5)"
+        />
+        <path d="M0,2 c30,-18 230,-12 350,7 c80,13 230,17 350,-5 v100 h-700z" fill="#1b1c1d" />
+    </svg>
+);
+
+const SVG_WAVE_BOTTOM = (
+    <svg viewBox="0 -30 80 500" width="100%" height="50" preserveAspectRatio="none" className={"svg-wave-bottom"}>
+        <path d="M0,5 c60,-18 230,-12 350,7 c80,13 230,17 120,-10 v100 h-700z" fill="#1b1c1d" />
+        <path
+            transform="translate(0, -30)"
+            d="M0,5 c100,-22 100,0 180,18 c90,3 80,3 180,-20 v50 h-700"
+            fill="rgba(255,69,0,0.5)"
+        />
+    </svg>
+);
 
 /**
- * QuickHit KeyPrompt page.
+ * QuickHit Home page.
  */
 function Home(props: TTDataPropsTypeCombined): JSX.Element {
     const getCurrentChampion = (): DbPlayer => {
@@ -29,15 +54,21 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
 
     return (
         <div className="home">
+            <Transition visible={props.matches.length > 1} animation={"fade up"} duration={2000} unmountOnHide={true}>
+                <div className={"feed-area-wrapper"}>
+                    <RecentGamesTicker feedItems={turnMatchIntoFeedItems(props.matches, props.players, 0, 10)} />
+                    <ul className={"instance-title"}>{`${props.chosenInstance?.name}`}</ul>
+                </div>
+            </Transition>
+            <AnimatedLogo />
             <Transition transitionOnMount={true}>
                 <Header as={"h2"} icon inverted className={"welcome-header"}>
-                    <Icon name="table tennis" circular />
-                    <div>Welcome to</div>
+                    <span className={"welcome-to-text"}>Welcome to</span>
                     <div className={"quick-hit-splash"}>
                         <Icon name={"chevron right"} size={"tiny"} />
                         Quick<span className={"header-hit"}>Hit</span>
                     </div>
-                    <Header.Subheader>A table tennis ELO-tracking application</Header.Subheader>
+                    <span className={"welcome-to-text"}>A table tennis ELO-tracking application</span>
                 </Header>
             </Transition>
             <Transition transitionOnMount={true}>
@@ -79,6 +110,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     />
                 </ButtonGroup>
             </Transition>
+            {SVG_WAVE}
             <Segment inverted className={"github-area"}>
                 <Header as={"h3"} icon circular inverted>
                     <Icon name="github" />
@@ -96,6 +128,7 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
                     </a>
                 </ButtonGroup>
             </Segment>
+            {SVG_WAVE_BOTTOM}
             <Transition visible={!props.loading} animation={"fade up"} duration={2000} unmountOnHide={true}>
                 <Segment inverted className={"champion-area"}>
                     <div>

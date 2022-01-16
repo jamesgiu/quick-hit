@@ -1,3 +1,4 @@
+import * as DarkReader from "darkreader";
 import React, { useState } from "react";
 import { Button, Form, Icon, Menu, Modal } from "semantic-ui-react";
 import { SettingsDispatchType } from "../../containers/Settings/Settings";
@@ -7,13 +8,25 @@ export interface SettingsProps {
     showCards: boolean;
     disableMusic: boolean;
     username: string;
+    darkMode: boolean;
 }
+
+const DARKMODE_THEME = {
+    brightness: 100,
+    contrast: 90,
+    sepia: 10,
+};
 
 /**
  * QuickHit Settings menu.
  */
 function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    if (props.darkMode) {
+        DarkReader.setFetchMethod(window.fetch);
+        DarkReader.enable(DARKMODE_THEME);
+    }
 
     return (
         <Modal
@@ -39,7 +52,7 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                                     }
                                 }}
                                 value={decodeURIComponent(props.username)}
-                                maxlength="128"
+                                maxLength="128"
                             />
                         </Form.Field>
                     </Form.Group>
@@ -60,6 +73,23 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                             checked={props.showCards}
                             onClick={(): void => {
                                 props.setShowCards(!props.showCards);
+                            }}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Radio
+                            toggle
+                            label={"Make QuickHit even darker"}
+                            checked={props.darkMode}
+                            onClick={(): void => {
+                                const newDarkMode = !props.darkMode;
+                                props.setDarkMode(newDarkMode);
+                                if (newDarkMode) {
+                                    DarkReader.setFetchMethod(window.fetch);
+                                    DarkReader.enable(DARKMODE_THEME);
+                                } else {
+                                    DarkReader.disable();
+                                }
                             }}
                         />
                     </Form.Group>

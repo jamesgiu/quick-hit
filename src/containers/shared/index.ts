@@ -4,7 +4,7 @@ import * as actions from "../../redux/actions/TTActions";
 import { QuickHitReduxStores } from "../../redux/types/store";
 import { DbInstance } from "../../types/database/models";
 
-export type TTDataPropsTypeCombined = TTStoreState & TTRefreshDispatchType;
+export type TTDataPropsTypeCombined = TTStoreState & TTRefreshDispatchType & { chosenInstance?: DbInstance };
 
 export interface TTRefreshDispatchType {
     setForceRefresh: (newRefresh: boolean) => void;

@@ -3,4 +3,5 @@ export interface ViewStoreState {
     showCards: boolean;
     disableMusic: boolean;
     username: string;
+    darkMode: boolean;
 }

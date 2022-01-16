@@ -6,8 +6,11 @@ import { authInitialState, authReducer } from "../../redux/reducers/AuthReducer"
 import { Provider } from "react-redux";
 import Home from "../../containers/Home";
 import { BrowserRouter } from "react-router-dom";
+require("regenerator-runtime/runtime");
 
 it("renders and runs connect without crashing", () => {
+    require("regenerator-runtime/runtime");
+
     const reducers = combineReducers({
         viewStore: viewReducer as Reducer,
         ttData: ttReducer as Reducer,

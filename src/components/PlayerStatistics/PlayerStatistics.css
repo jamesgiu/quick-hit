@@ -1,3 +1,11 @@
+.player-statistics .recent-games .recent-games-statistics-wrapper {
+  overflow-x: scroll;
+  display: block;
+  padding-top: 100px;
+  float: left;
+  width: 70%;
+}
+
 .player-statistics .recent-games .ui.icon.header {
   float: left;
   font-size: 1.2rem;

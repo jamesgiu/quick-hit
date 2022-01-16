@@ -1,5 +1,5 @@
 import { DbInstance } from "../../../types/database/models";
-import firebase from "firebase/compat";
+import firebase from "firebase/auth";
 
 export interface AuthUserDetail {
     idToken: string;
