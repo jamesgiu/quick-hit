@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { ViewDispatchType } from "../../containers/Ladder/Ladder";
 import { ViewStoreState } from "../../redux/types/ViewTypes";
 import { DbPlayer } from "../../types/database/models";
+import Podium from "./Podium/Podium";
 
 export type LadderProps = ViewStoreState & TTDataPropsTypeCombined & ViewDispatchType;
 export const NUM_OF_FORM_GUIDE_MATCHES = 5;
@@ -235,6 +236,7 @@ function Ladder(props: LadderProps): JSX.Element {
             <Transition visible={!props.loading}>
                 <span>
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
+                    <Podium players={props.players}/>
                     <div className={"new-buttons"}>
                         <NewEditPlayer onRequestMade={refreshContent} />
                         <NewGame />
