@@ -36,37 +36,37 @@ function Navbar(): JSX.Element {
                 className={mobile ? "mobile-menu" : "desktop-menu"}
             >
                 <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}>
-                    <Menu.Item as={"a"} header className={"header"} onClick={(): void =>setBurgerMenuOpen(false)}>
+                    <Menu.Item as={"a"} header className={"header"} onClick={(): void => setBurgerMenuOpen(false)}>
                         <Icon name={"table tennis"} size={"big"} />
                         <Icon name={"chevron right"} size={"tiny"} />
                         Quick<span className={"header-hit"}>Hit</span>
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"home"} />
                         Home
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"list"} />
                         Ladder
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"trophy"} />
                         Tournament
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"history"} />
                         Recent games
                     </Menu.Item>
                 </Link>
-                <Menu.Menu position={"right"}  onClick={(): void =>setBurgerMenuOpen(false)}>
+                <Menu.Menu position={"right"} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Chat />
                     <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"} />} />
                     <NewGame
@@ -98,14 +98,18 @@ function Navbar(): JSX.Element {
                         </Menu.Item>
                         <BurgerMenu
                             isOpen={burgerMenuOpen}
-                            onOpen={() : void => setBurgerMenuOpen(true)}
-                            onClose={() : void =>setBurgerMenuOpen(false)}
+                            onOpen={(): void => setBurgerMenuOpen(true)}
+                            onClose={(): void => setBurgerMenuOpen(false)}
                             overlayClassName={"burger-overlay"}
                             burgerButtonClassName={"burger-button"}
                             styles={{
                                 bmOverlay: {
                                     width: "200vw",
                                     height: "100vh",
+                                },
+                                bmBurgerBars: {
+                                    width: "20px",
+                                    height: "20px",
                                 },
                             }}
                         >
