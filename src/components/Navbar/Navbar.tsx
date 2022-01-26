@@ -21,6 +21,7 @@ interface WindowSize {
  */
 function Navbar(): JSX.Element {
     const [windowSize, setWindowSize] = useState<WindowSize>({ width: window.innerWidth, height: window.innerWidth });
+    const [burgerMenuOpen, setBurgerMenuOpen] = useState<boolean>(false);
 
     window.onresize = (): void => {
         setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -35,37 +36,37 @@ function Navbar(): JSX.Element {
                 className={mobile ? "mobile-menu" : "desktop-menu"}
             >
                 <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}>
-                    <Menu.Item as={"a"} header className={"header"}>
+                    <Menu.Item as={"a"} header className={"header"} onClick={(): void =>setBurgerMenuOpen(false)}>
                         <Icon name={"table tennis"} size={"big"} />
                         <Icon name={"chevron right"} size={"tiny"} />
                         Quick<span className={"header-hit"}>Hit</span>
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"home"} />
                         Home
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.LADDER}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"list"} />
                         Ladder
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"trophy"} />
                         Tournament
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}>
+                <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`}  onClick={(): void =>setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"history"} />
                         Recent games
                     </Menu.Item>
                 </Link>
-                <Menu.Menu position={"right"}>
+                <Menu.Menu position={"right"}  onClick={(): void =>setBurgerMenuOpen(false)}>
                     <Chat />
                     <NewEditPlayer customModalOpenElement={<Menu.Item as={"a"} icon={"user plus"} />} />
                     <NewGame
@@ -96,6 +97,9 @@ function Navbar(): JSX.Element {
                             Quick<span className={"header-hit"}>Hit</span>
                         </Menu.Item>
                         <BurgerMenu
+                            isOpen={burgerMenuOpen}
+                            onOpen={() : void => setBurgerMenuOpen(true)}
+                            onClose={() : void =>setBurgerMenuOpen(false)}
                             overlayClassName={"burger-overlay"}
                             burgerButtonClassName={"burger-button"}
                             styles={{
