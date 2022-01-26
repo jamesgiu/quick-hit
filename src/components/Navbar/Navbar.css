@@ -27,3 +27,24 @@
   margin: auto;
   width: 100%;
 }
+
+.tt-navbar .mobile-menu {
+  width: 100vw;
+  position: absolute;
+  top: 65px;
+  left: -55%;
+  right: 0;
+}
+
+/* stylelint-disable */
+/* Unfortunately, due to react-burger-menu using unexposed JS styling, !important is necessary here. */
+.tt-navbar .ui.menu .burger-button > button#react-burger-menu-btn {
+  width: 80px !important;
+  height: 80px !important;
+}
+/* stylelint-enable */
+
+.tt-navbar .ui.menu.inverted.huge div.bm-overlay.burger-overlay {
+  position: absolute;
+  left: -55%;
+}

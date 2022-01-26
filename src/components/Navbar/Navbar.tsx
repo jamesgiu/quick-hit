@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { Icon, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
@@ -9,14 +9,31 @@ import NewGame from "../../containers/NewGame";
 import Settings from "../../containers/Settings";
 import Chat from "../../containers/Chat/Chat";
 import Comparator from "../../containers/Comparator";
+import { fallDown as BurgerMenu } from "react-burger-menu";
+
+interface WindowSize {
+    width: number;
+    height: number;
+}
 
 /**
  * QuickHit's navbar.
  */
 function Navbar(): JSX.Element {
-    return (
-        <div className={"tt-navbar"}>
-            <Menu stackable inverted>
+    const [windowSize, setWindowSize] = useState<WindowSize>({ width: window.innerWidth, height: window.innerWidth });
+
+    window.onresize = (): void => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    const getLinks = (mobile: boolean): JSX.Element => {
+        return (
+            <Menu
+                stackable
+                inverted
+                size={mobile ? "massive" : undefined}
+                className={mobile ? "mobile-menu" : "desktop-menu"}
+            >
                 <Link to={`${BASE_PATH()}${QuickHitPage.HOME}`}>
                     <Menu.Item as={"a"} header className={"header"}>
                         <Icon name={"table tennis"} size={"big"} />
@@ -66,6 +83,35 @@ function Navbar(): JSX.Element {
                     <KeyPrompt />
                 </Menu.Menu>
             </Menu>
+        );
+    };
+
+    return (
+        <div className={"tt-navbar"}>
+            {windowSize.width <= 800 ? (
+                <div>
+                    <Menu inverted size={"huge"}>
+                        <Menu.Item as={"a"} header className={"header"}>
+                            <Icon name={"sidebar"} size={"big"} />
+                            Quick<span className={"header-hit"}>Hit</span>
+                        </Menu.Item>
+                        <BurgerMenu
+                            overlayClassName={"burger-overlay"}
+                            burgerButtonClassName={"burger-button"}
+                            styles={{
+                                bmOverlay: {
+                                    width: "200vw",
+                                    height: "100vh",
+                                },
+                            }}
+                        >
+                            {getLinks(true)}
+                        </BurgerMenu>
+                    </Menu>
+                </div>
+            ) : (
+                <div>{getLinks(false)}</div>
+            )}
         </div>
     );
 }
