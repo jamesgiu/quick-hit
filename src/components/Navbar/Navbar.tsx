@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import { Icon, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
