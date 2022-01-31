@@ -1,6 +1,6 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import { Grid, Header, Icon, Popup, Statistic, Transition } from "semantic-ui-react";
+import {Grid, Header, Icon, Placeholder, Popup, Statistic, Transition} from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
@@ -9,6 +9,7 @@ import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import AchievementFeed from "../../containers/AchievementFeed";
 import ELOGraph from "./ELOGraph";
+import {getELOString, isUnderPlacement} from "../../types/database/models";
 
 interface PlayerStatisticsParams {
     playerId: string;
@@ -48,7 +49,11 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
-                            <ELOGraph player={player} matches={props.matches} players={props.players} />
+                            {isUnderPlacement(extraStats.wins + extraStats.losses) ?
+                                <Placeholder inverted={true} fluid={true} className={"elo-placeholder"}>
+                                    {getELOString(extraStats.wins + extraStats.losses, player.elo)}
+                                </Placeholder> :
+                            <ELOGraph player={player} matches={props.matches} players={props.players} /> }
                             <div className={"tournament-win-count"}>
                                 <Popup
                                     content={"Tournament wins"}
@@ -69,11 +74,12 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                     position={"bottom center"}
                                 />
                             </div>
-                            <Statistic.Group className={"statistics-group"}>
-                                <Statistic label={"Min rating"} value={extraStats.minELO} className={"min-elo"} />
-                                <Statistic label={"Rating"} value={player.elo} />
-                                <Statistic label={"Max rating"} value={extraStats.maxELO} className={"max-elo"} />
-                            </Statistic.Group>
+                            {!isUnderPlacement(extraStats.wins + extraStats.losses) &&
+                                <Statistic.Group className={"statistics-group"}>
+                                    <Statistic label={"Min rating"} value={extraStats.minELO} className={"min-elo"} />
+                                    <Statistic label={"Rating"} value={player.elo} />
+                                    <Statistic label={"Max rating"} value={extraStats.maxELO} className={"max-elo"} />
+                                </Statistic.Group> }
                             <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={extraStats.wins} className={"wins"} />
                                 <Statistic label={"Losses"} value={extraStats.losses} className={"losses"} />

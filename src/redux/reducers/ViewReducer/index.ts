@@ -3,19 +3,19 @@ import {
     SetDisableMusicAction,
     SetShowCardsAction,
     SetUsernameAction,
-    SetZeroGamesFilterAction,
+    SetUnplacedFilterAction,
 } from "../../actions/ViewActions";
 import { ViewStoreState } from "../../types/ViewTypes";
 import {
     SET_DARK_MODE,
     SET_DISABLE_MUSIC,
-    SET_HIDE_ZERO_GAME_PLAYERS,
+    SET_HIDE_UNPLACED_PLAYERS,
     SET_SHOW_CARDS,
     SET_USERNAME,
 } from "../../constants/ViewConstants";
 
 export const viewInitialState: ViewStoreState = {
-    hideZeroGamePlayers: true,
+    hideUnplacedPlayers: true,
     showCards: false,
     disableMusic: false,
     username: "Anonymous",
@@ -25,15 +25,15 @@ export const viewInitialState: ViewStoreState = {
 export function viewReducer(
     state: ViewStoreState = viewInitialState,
     action:
-        | SetZeroGamesFilterAction
+        | SetUnplacedFilterAction
         | SetShowCardsAction
         | SetDisableMusicAction
         | SetUsernameAction
         | SetDarkModeAction
 ): ViewStoreState {
     switch (action.type) {
-        case SET_HIDE_ZERO_GAME_PLAYERS:
-            return { ...state, hideZeroGamePlayers: action.value };
+        case SET_HIDE_UNPLACED_PLAYERS:
+            return { ...state, hideUnplacedPlayers: action.value };
         case SET_SHOW_CARDS:
             return { ...state, showCards: action.value };
         case SET_DISABLE_MUSIC:

@@ -62,7 +62,7 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                             label={"Hide zero game players"}
                             checked={props.hideZeroGamePlayers}
                             onClick={(): void => {
-                                props.setHideZeroGamePlayers(!props.hideZeroGamePlayers);
+                                props.setHideUnplacedPlayers(!props.hideZeroGamePlayers);
                             }}
                         />
                     </Form.Group>

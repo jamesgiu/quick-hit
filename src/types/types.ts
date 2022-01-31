@@ -30,3 +30,5 @@ export enum TournamentType {
     DOUBLE = "Double Elimination",
     AFL = "AFL-style",
 }
+
+export const MINIMUM_PLACEMENT_GAMES = 5;

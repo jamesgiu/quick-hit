@@ -9,7 +9,7 @@ import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import { Link } from "react-router-dom";
 import { ViewDispatchType } from "../../containers/Ladder/Ladder";
 import { ViewStoreState } from "../../redux/types/ViewTypes";
-import { DbPlayer } from "../../types/database/models";
+import {DbPlayer, getELOString, isUnderPlacement} from "../../types/database/models";
 
 export type LadderProps = ViewStoreState & TTDataPropsTypeCombined & ViewDispatchType;
 export const NUM_OF_FORM_GUIDE_MATCHES = 5;
@@ -27,7 +27,7 @@ function Ladder(props: LadderProps): JSX.Element {
             const playerCard = <PlayerCard player={player} winLoss={winLoss} />;
 
             // If we are hiding zero game players, then only push if they have played a game
-            if (props.hideZeroGamePlayers) {
+            if (props.hideUnplacedPlayers) {
                 if (winLoss.wins + winLoss.losses > 0) {
                     playersLadder.push(playerCard);
                 }
@@ -52,39 +52,46 @@ function Ladder(props: LadderProps): JSX.Element {
             return player2.elo - player1.elo;
         });
 
+        const unplacedPlayerRows = [];
+
         for (let i = 0; i < sortedPlayers.length; i++) {
             const player = sortedPlayers[i];
             const winLoss = getWinLossForPlayer(player.id, props.matches);
             let addPlayer = true;
 
-            if (props.hideZeroGamePlayers && winLoss.losses + winLoss.wins == 0) {
+            if (props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) {
                 addPlayer = false;
             }
 
             if (addPlayer) {
                 const formStr =
                     winLoss && winLoss.formGuide.substr(0, NUM_OF_FORM_GUIDE_MATCHES).split("").reverse().join("");
-                playerTableRows.push(
-                    <Table.Row className={"player-row"}>
-                        <Table.Cell className={"player-cell"}>
-                            <Link
-                                className={"player-row-link"}
-                                to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}
-                            >
+
+                const row = <Table.Row className={"player-row"}>
+                    <Table.Cell className={"player-cell"}>
+                        <Link
+                            className={"player-row-link"}
+                            to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}
+                        >
                                 <span>
                                     {generateLadderTrendIcon(player, i, sortedPlayers)}
                                     <Icon name={player.icon} size={"small"} />
                                     {player.name}
                                 </span>
-                            </Link>
-                        </Table.Cell>
-                        <Table.Cell>{player.elo}</Table.Cell>
-                        <Table.Cell>
-                            {winLoss.wins}-{winLoss.losses}
-                        </Table.Cell>
-                        <Table.Cell>{formStr !== "" ? formStr : "N/A"}</Table.Cell>
-                    </Table.Row>
-                );
+                        </Link>
+                    </Table.Cell>
+                    <Table.Cell>{getELOString(winLoss.wins + winLoss.losses, player.elo)}</Table.Cell>
+                    <Table.Cell>
+                        {winLoss.wins}-{winLoss.losses}
+                    </Table.Cell>
+                    <Table.Cell>{formStr !== "" ? formStr : "N/A"}</Table.Cell>
+                </Table.Row>
+
+                if (isUnderPlacement(winLoss.wins + winLoss.losses)) {
+                    unplacedPlayerRows.push(row);
+                } else {
+                    playerTableRows.push(row);
+                }
             }
         }
 
@@ -98,7 +105,7 @@ function Ladder(props: LadderProps): JSX.Element {
                         <Table.HeaderCell>Form</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                <Table.Body>{playerTableRows}</Table.Body>
+                <Table.Body>{playerTableRows}{unplacedPlayerRows}</Table.Body>
             </Table>
         );
         return playersLadder;
@@ -121,7 +128,11 @@ function Ladder(props: LadderProps): JSX.Element {
             }
         }
 
-        if (mostRecentMatch) {
+        const winLoss = getWinLossForPlayer(player.id, props.matches);
+
+        if(isUnderPlacement(winLoss.wins + winLoss.losses)) {
+            iconToReturn = <Icon color={"yellow"} name={"question"}/>;
+        } else if (mostRecentMatch) {
             // If the most recent match was a loss
             if (mostRecentMatch.losing_player_id === player.id) {
                 if (positionOnLadder !== 0) {
@@ -204,16 +215,16 @@ function Ladder(props: LadderProps): JSX.Element {
             </Header>
             <div className={"toggles"}>
                 <Button
-                    onClick={(): void => props.setHideZeroGamePlayers(!props.hideZeroGamePlayers)}
-                    color={props.hideZeroGamePlayers ? "green" : "red"}
+                    onClick={(): void => props.setHideUnplacedPlayers(!props.hideUnplacedPlayers)}
+                    color={props.hideUnplacedPlayers ? "green" : "red"}
                 >
-                    {props.hideZeroGamePlayers ? (
+                    {props.hideUnplacedPlayers ? (
                         <span>
-                            <Icon name={"eye"} /> Show zero game players
+                            <Icon name={"eye"} /> Show unplaced players
                         </span>
                     ) : (
                         <span>
-                            <Icon name={"eye slash"} /> Hide zero game players
+                            <Icon name={"eye slash"} /> Hide unplaced players
                         </span>
                     )}
                 </Button>
