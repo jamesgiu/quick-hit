@@ -28,7 +28,7 @@ function Ladder(props: LadderProps): JSX.Element {
 
             // If we are hiding zero game players, then only push if they have played a game
             if (props.hideUnplacedPlayers) {
-                if (winLoss.wins + winLoss.losses > 0) {
+                if (!isUnderPlacement(winLoss.wins + winLoss.losses)) {
                     playersLadder.push(playerCard);
                 }
             } else {
