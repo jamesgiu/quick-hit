@@ -1,15 +1,20 @@
 import "./PlayerStatistics.css";
 import { RouteComponentProps } from "react-router";
-import {Grid, Header, Icon, Placeholder, Popup, Statistic, Transition} from "semantic-ui-react";
+import { Grid, Header, Icon, Placeholder, Popup, Statistic, Transition } from "semantic-ui-react";
 import { ExtraPlayerStats } from "../../types/types";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import RecentGames from "../../containers/RecentGames";
-import { getExtraPlayerStats, getPlayersMap, getRecordAgainstPlayer } from "../QHDataLoader/QHDataLoader";
+import {
+    getExtraPlayerStats,
+    getPlayersMap,
+    getRecordAgainstPlayer,
+    getWinLossForPlayer,
+} from "../QHDataLoader/QHDataLoader";
 import PlayerCard from "../Ladder/PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import AchievementFeed from "../../containers/AchievementFeed";
 import ELOGraph from "./ELOGraph";
-import {getELOString, isUnderPlacement} from "../../types/database/models";
+import { getELOString, isUnderPlacement } from "../../types/database/models";
 
 interface PlayerStatisticsParams {
     playerId: string;
@@ -49,11 +54,13 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                             </Header.Content>
                         </Header>
                         <div className={"player-stats-wrapper"}>
-                            {isUnderPlacement(extraStats.wins + extraStats.losses) ?
+                            {isUnderPlacement(extraStats.wins + extraStats.losses) ? (
                                 <Placeholder inverted={true} fluid={true} className={"elo-placeholder"}>
                                     {getELOString(extraStats.wins + extraStats.losses, player.elo)}
-                                </Placeholder> :
-                            <ELOGraph player={player} matches={props.matches} players={props.players} /> }
+                                </Placeholder>
+                            ) : (
+                                <ELOGraph player={player} matches={props.matches} players={props.players} />
+                            )}
                             <div className={"tournament-win-count"}>
                                 <Popup
                                     content={"Tournament wins"}
@@ -74,12 +81,13 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                     position={"bottom center"}
                                 />
                             </div>
-                            {!isUnderPlacement(extraStats.wins + extraStats.losses) &&
+                            {!isUnderPlacement(extraStats.wins + extraStats.losses) && (
                                 <Statistic.Group className={"statistics-group"}>
                                     <Statistic label={"Min rating"} value={extraStats.minELO} className={"min-elo"} />
                                     <Statistic label={"Rating"} value={player.elo} />
                                     <Statistic label={"Max rating"} value={extraStats.maxELO} className={"max-elo"} />
-                                </Statistic.Group> }
+                                </Statistic.Group>
+                            )}
                             <Statistic.Group className={"statistics-group"}>
                                 <Statistic label={"Wins"} value={extraStats.wins} className={"wins"} />
                                 <Statistic label={"Losses"} value={extraStats.losses} className={"losses"} />
@@ -99,6 +107,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                             <PlayerCard
                                                 player={victim}
                                                 winLoss={getRecordAgainstPlayer(player.id, victim.id, props.matches)}
+                                                matchesPlayed={getWinLossForPlayer(victim.id, props.matches).matches}
                                             />
                                         ) : (
                                             <PlayerCard
@@ -107,6 +116,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                                     wins: extraStats.wins,
                                                     losses: extraStats.losses,
                                                     formGuide: extraStats.formGuide,
+                                                    matches: extraStats.wins + extraStats.losses,
                                                 }}
                                             />
                                         )
@@ -121,6 +131,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                             <PlayerCard
                                                 player={nemesis}
                                                 winLoss={getRecordAgainstPlayer(player.id, nemesis.id, props.matches)}
+                                                matchesPlayed={getWinLossForPlayer(nemesis.id, props.matches).matches}
                                             />
                                         ) : (
                                             <PlayerCard
@@ -129,6 +140,7 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                                     wins: extraStats.wins,
                                                     losses: extraStats.losses,
                                                     formGuide: extraStats.formGuide,
+                                                    matches: extraStats.wins + extraStats.losses,
                                                 }}
                                             />
                                         )

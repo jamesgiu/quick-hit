@@ -1,6 +1,7 @@
 export interface WinLoss {
     wins: number;
     losses: number;
+    matches: number;
     formGuide: string;
 }
 

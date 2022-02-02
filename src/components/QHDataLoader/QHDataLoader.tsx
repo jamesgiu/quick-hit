@@ -184,6 +184,7 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
     const winLoss: WinLoss = {
         wins: 0,
         losses: 0,
+        matches: 0,
         formGuide: "",
     };
 
@@ -191,9 +192,11 @@ export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLo
         if (match.winning_player_id === playerId) {
             winLoss.wins++;
             winLoss.formGuide += "W";
+            winLoss.matches++;
         } else if (match.losing_player_id === playerId) {
             winLoss.losses++;
             winLoss.formGuide += "L";
+            winLoss.matches++;
         }
     });
 
@@ -204,18 +207,21 @@ export const getRecordAgainstPlayer = (playerId: string, opponentId: string, mat
     let wins = 0;
     let losses = 0;
     let formGuide = "";
+    let matchCount = 0;
 
     matches.forEach((match) => {
         if (match.winning_player_id === playerId && match.losing_player_id === opponentId) {
             ++wins;
             formGuide += "W";
+            matchCount++;
         } else if (match.losing_player_id === playerId && match.winning_player_id === opponentId) {
             ++losses;
             formGuide += "L";
+            matchCount++;
         }
     });
 
-    return { wins, losses, formGuide };
+    return { wins, losses, formGuide, matches: matchCount };
 };
 
 export const getGraphStatsForPlayer = (playerId: string, matches: DbMatch[], players: DbPlayer[]): ELOGraphStats[] => {

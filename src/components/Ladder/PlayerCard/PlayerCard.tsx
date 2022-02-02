@@ -2,7 +2,7 @@ import { Card, Icon } from "semantic-ui-react";
 import React from "react";
 import "./PlayerCard.css";
 import { Link } from "react-router-dom";
-import {DbPlayer, getELOString} from "../../../types/database/models";
+import { DbPlayer, getELOString } from "../../../types/database/models";
 import { WinLoss } from "../../../types/types";
 import { BASE_PATH, QuickHitPage } from "../../../util/QuickHitPage";
 import { NUM_OF_FORM_GUIDE_MATCHES } from "../Ladder";
@@ -10,6 +10,7 @@ import { NUM_OF_FORM_GUIDE_MATCHES } from "../Ladder";
 interface PlayerCardProps {
     player: DbPlayer;
     winLoss?: WinLoss;
+    matchesPlayed?: number;
 }
 /**
  * QuickHit PlayerCard component.
@@ -30,9 +31,9 @@ function PlayerCard(props: PlayerCardProps): JSX.Element {
                     </Card.Header>
                 </Link>
             </Card.Content>
-            {props.winLoss && (
+            {props.winLoss && props.matchesPlayed !== undefined && (
                 <Card.Content extra className="extras">
-                    <div>{getELOString(props.winLoss.wins + props.winLoss.losses, props.player.elo)}</div>
+                    <div>{getELOString(props.matchesPlayed, props.player.elo)}</div>
                     <span>
                         Wins: {props.winLoss.wins} Losses: {props.winLoss.losses}
                     </span>

@@ -1,5 +1,5 @@
 import { SemanticICONS } from "semantic-ui-react";
-import {MINIMUM_PLACEMENT_GAMES, TournamentParticipantsType, TournamentType} from "../types";
+import { MINIMUM_PLACEMENT_GAMES, TournamentParticipantsType, TournamentType } from "../types";
 
 export interface DbInstance {
     fb_api_key: string;
@@ -103,7 +103,7 @@ export function isUnderPlacement(matchesPlayed: number): boolean {
 export function getELOString(matchesPlayed: number, elo: number): string {
     const placementGamesRemaining = MINIMUM_PLACEMENT_GAMES - matchesPlayed;
     if (isUnderPlacement(matchesPlayed)) {
-        return `${placementGamesRemaining} placement game${placementGamesRemaining > 1 ? 's' : '' } remaining`
+        return `${placementGamesRemaining} placement game${placementGamesRemaining > 1 ? "s" : ""} remaining`;
     }
 
     return `${elo}`;
