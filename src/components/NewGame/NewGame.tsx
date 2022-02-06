@@ -92,11 +92,11 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
             let loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
 
             if (winningPlayerUnderPlacement) {
-                Math.ceil((winnerNewElo *= 1.05));
+                winnerNewElo = Math.ceil(winnerNewElo * 1.05);
             }
 
             if (losingPlayerUnderPlacement) {
-                Math.ceil((loserNewElo *= 1.05));
+                loserNewElo = Math.ceil(loserNewElo * 1.05);
             }
 
             const matchToAdd: DbMatch = {
