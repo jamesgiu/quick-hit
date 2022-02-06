@@ -1,10 +1,10 @@
 import { DropdownItemProps, Grid, Icon, Menu, Modal, Select } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import "./Comparator.css";
-import { DbPlayer } from "../../types/database/models";
+import { DbPlayer, getELOString } from "../../types/database/models";
 import { ComparatorStoreProps } from "../../containers/Comparator/Comparator";
 import { WinLoss } from "../../types/types";
-import { getRecordAgainstPlayer } from "../QHDataLoader/QHDataLoader";
+import { getRecordAgainstPlayer, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
 import { getChanceOfVictory } from "../../util/Predictor";
 
 /**
@@ -106,9 +106,15 @@ function Comparator(props: ComparatorStoreProps): JSX.Element {
                         <Grid.Column>{headToHead?.losses}</Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column>{playerOne?.elo}</Grid.Column>
+                        <Grid.Column>
+                            {playerOne &&
+                                getELOString(getWinLossForPlayer(playerOne.id, props.matches).matches, playerOne.elo)}
+                        </Grid.Column>
                         <Grid.Column className={"centre-column"}>ELO</Grid.Column>
-                        <Grid.Column>{playerTwo?.elo}</Grid.Column>
+                        <Grid.Column>
+                            {playerTwo &&
+                                getELOString(getWinLossForPlayer(playerTwo.id, props.matches).matches, playerTwo.elo)}
+                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row className={"prediction-row"}>
                         <Grid.Column>{vicChance ? vicChance + "%" : "N/A"}</Grid.Column>

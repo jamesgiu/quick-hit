@@ -14,7 +14,7 @@ export type SettingsDispatchType = ViewDispatchType & {
 
 export function mapStateToProps(store: QuickHitReduxStores): SettingsProps {
     return {
-        hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
+        hideZeroGamePlayers: store.viewStore.hideUnplacedPlayers,
         showCards: store.viewStore.showCards,
         disableMusic: store.viewStore.disableMusic,
         username: store.viewStore.username,
@@ -24,7 +24,7 @@ export function mapStateToProps(store: QuickHitReduxStores): SettingsProps {
 
 export function mapDispatchToProps(
     dispatch: Dispatch<
-        | viewActions.SetZeroGamesFilterAction
+        | viewActions.SetUnplacedFilterAction
         | viewActions.SetShowCardsAction
         | viewActions.SetDisableMusicAction
         | viewActions.SetUsernameAction
@@ -32,7 +32,7 @@ export function mapDispatchToProps(
     >
 ): SettingsDispatchType {
     return {
-        setHideZeroGamePlayers: (hideZeroGamePlayers: boolean): viewActions.SetZeroGamesFilterAction =>
+        setHideUnplacedPlayers: (hideZeroGamePlayers: boolean): viewActions.SetUnplacedFilterAction =>
             dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers)),
         setShowCards: (showCards: boolean): viewActions.SetShowCardsAction =>
             dispatch(viewActions.setShowCards(showCards)),

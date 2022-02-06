@@ -4,8 +4,8 @@ import { Divider, Feed, Header, Icon, Pagination, PaginationProps, Transition } 
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
-import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
-import { DbMatch, DbPlayer } from "../../types/database/models";
+import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
+import { DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import RecentGamesStatistics from "./RecentGamesStatistics/RecentGamesStatistics";
 
 export interface RecentGamesProps {
@@ -15,12 +15,13 @@ export interface RecentGamesProps {
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
 export const turnMatchIntoFeedItems = (
-    matches: DbMatch[],
+    filteredMatches: DbMatch[],
+    allMatches: DbMatch[],
     players: DbPlayer[],
     offset: number,
     nextPageOffset: number
 ): FeedEventProps[] => {
-    if (matches.length === 0 || players.length === 0) {
+    if (filteredMatches.length === 0 || players.length === 0) {
         return [];
     }
 
@@ -28,11 +29,11 @@ export const turnMatchIntoFeedItems = (
     const playersMap = getPlayersMap(players);
 
     for (let i = offset; i < nextPageOffset; i++) {
-        if (i > matches.length - 1) {
+        if (i > filteredMatches.length - 1) {
             break;
         }
 
-        const match = matches[i];
+        const match = filteredMatches[i];
 
         const winningPlayer = playersMap.get(match.winning_player_id);
         const losingPlayer = playersMap.get(match.losing_player_id);
@@ -41,17 +42,27 @@ export const turnMatchIntoFeedItems = (
             break;
         }
 
+        const winningPlayerWinLoss = getWinLossForPlayer(match.winning_player_id, allMatches);
+        const losingPlayerWinLoss = getWinLossForPlayer(match.losing_player_id, allMatches);
+
+        const winningPlayerUnranked = isUnderPlacement(winningPlayerWinLoss.matches);
+        const losingPlayerUnranked = isUnderPlacement(losingPlayerWinLoss.matches);
+
         events.push({
             key: match.id,
             meta: (
                 <div className={"event-content"}>
-                    {winningPlayer.name} ({match.winning_player_original_elo}
+                    {winningPlayer.name} ({winningPlayerUnranked ? "??" : match.winning_player_original_elo}
                     <span className={"elo-gain"}>
-                        +{match.winner_new_elo - match.winning_player_original_elo}={match.winner_new_elo}
+                        {winningPlayerUnranked
+                            ? "+??=??"
+                            : `+${match.winner_new_elo - match.winning_player_original_elo}=${match.winner_new_elo}`}
                     </span>
-                    ) defeated {losingPlayer.name} ({match.losing_player_original_elo}
+                    ) defeated {losingPlayer.name} ({losingPlayerUnranked ? "??" : match.losing_player_original_elo}
                     <span className={"elo-loss"}>
-                        -{match.losing_player_original_elo - match.loser_new_elo}={match.loser_new_elo}
+                        {losingPlayerUnranked
+                            ? "-??=??"
+                            : `-${match.losing_player_original_elo - match.loser_new_elo}=${match.loser_new_elo}`}
                     </span>
                     ) <ReactTimeAgo date={new Date(match.date)} />
                     ...
@@ -137,7 +148,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const offset = (currentPage - 1) * PAGE_SIZE;
         const nextPageOffset = currentPage * PAGE_SIZE;
 
-        return turnMatchIntoFeedItems(matches, props.players, offset, nextPageOffset);
+        return turnMatchIntoFeedItems(matches, props.matches, props.players, offset, nextPageOffset);
     };
 
     return (

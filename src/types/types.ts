@@ -1,6 +1,7 @@
 export interface WinLoss {
     wins: number;
     losses: number;
+    matches: number;
     formGuide: string;
 }
 
@@ -30,3 +31,5 @@ export enum TournamentType {
     DOUBLE = "Double Elimination",
     AFL = "AFL-style",
 }
+
+export const MINIMUM_PLACEMENT_GAMES = 5;

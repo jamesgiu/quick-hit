@@ -1,5 +1,5 @@
 export interface ViewStoreState {
-    hideZeroGamePlayers: boolean;
+    hideUnplacedPlayers: boolean;
     showCards: boolean;
     disableMusic: boolean;
     username: string;

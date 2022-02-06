@@ -56,7 +56,9 @@ function Home(props: TTDataPropsTypeCombined): JSX.Element {
         <div className="home">
             <Transition visible={props.matches.length > 1} animation={"fade up"} duration={2000} unmountOnHide={true}>
                 <div className={"feed-area-wrapper"}>
-                    <RecentGamesTicker feedItems={turnMatchIntoFeedItems(props.matches, props.players, 0, 10)} />
+                    <RecentGamesTicker
+                        feedItems={turnMatchIntoFeedItems(props.matches, props.matches, props.players, 0, 10)}
+                    />
                     <ul className={"instance-title"}>{`${props.chosenInstance?.name}`}</ul>
                 </div>
             </Transition>

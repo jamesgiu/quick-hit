@@ -9,7 +9,7 @@ import { TTRefreshDispatchType } from "../shared";
 import { QuickHitReduxStores } from "../../redux/types/store";
 
 export interface ViewDispatchType {
-    setHideZeroGamePlayers: (hideZeroGamePlayers: boolean) => void;
+    setHideUnplacedPlayers: (hideZeroGamePlayers: boolean) => void;
     setShowCards: (showCards: boolean) => void;
 }
 
@@ -22,7 +22,7 @@ export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & View
         happyHour: store.ttData.happyHour,
         badges: store.ttData.badges,
         tournaments: store.ttData.tournaments,
-        hideZeroGamePlayers: store.viewStore.hideZeroGamePlayers,
+        hideUnplacedPlayers: store.viewStore.hideUnplacedPlayers,
         showCards: store.viewStore.showCards,
         disableMusic: store.viewStore.disableMusic,
         darkMode: store.viewStore.darkMode,
@@ -33,7 +33,7 @@ export function mapStateToProps(store: QuickHitReduxStores): TTStoreState & View
 export function mapDispatchToProps(
     dispatch: Dispatch<
         | ttActions.SetForceRefreshAction
-        | viewActions.SetZeroGamesFilterAction
+        | viewActions.SetUnplacedFilterAction
         | viewActions.SetShowCardsAction
         | viewActions.SetDisableMusicAction
     >
@@ -41,7 +41,7 @@ export function mapDispatchToProps(
     return {
         setForceRefresh: (newRefresh: boolean): ttActions.SetForceRefreshAction =>
             dispatch(ttActions.setRefresh(newRefresh)),
-        setHideZeroGamePlayers: (hideZeroGamePlayers: boolean): viewActions.SetZeroGamesFilterAction =>
+        setHideUnplacedPlayers: (hideZeroGamePlayers: boolean): viewActions.SetUnplacedFilterAction =>
             dispatch(viewActions.setZeroGamesFilter(hideZeroGamePlayers)),
         setShowCards: (showCards: boolean): viewActions.SetShowCardsAction =>
             dispatch(viewActions.setShowCards(showCards)),

@@ -1,13 +1,13 @@
 import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React from "react";
 import "./NewGame.css";
-import { DbBadge, DbMatch, DbPlayer } from "../../types/database/models";
+import { DbBadge, DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { checkForAchievementTriggers } from "../Achievements/AchievementChecker";
-import { getPlayersMap } from "../QHDataLoader/QHDataLoader";
+import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
 import { NewGameStoreProps } from "../../containers/NewGame/NewGame";
 import { TTRefreshDispatchType } from "../../containers/shared";
 
@@ -76,13 +76,28 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                 return;
             }
 
+            const winningPlayerUnderPlacement = isUnderPlacement(
+                getWinLossForPlayer(winningPlayer.id, props.matches).matches
+            );
+            const losingPlayerUnderPlacement = isUnderPlacement(
+                getWinLossForPlayer(losingPlayer.id, props.matches).matches
+            );
+
             // Gets expected score for first parameter
             const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
             const losingPlayerExpectedScore = elo.getExpected(loserElo, winnerElo);
 
             // update score, 1 if won 0 if lost
-            const winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
-            const loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
+            let winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
+            let loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
+
+            if (winningPlayerUnderPlacement) {
+                Math.ceil((winnerNewElo *= 1.05));
+            }
+
+            if (losingPlayerUnderPlacement) {
+                Math.ceil((loserNewElo *= 1.05));
+            }
 
             const matchToAdd: DbMatch = {
                 id: uuidv4(),

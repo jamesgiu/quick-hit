@@ -11,7 +11,8 @@ interface RecentGamesStatisticsProps {
 function RecentGamesStatistics(props: RecentGamesStatisticsProps): JSX.Element {
     // Returns as yyyy/mm/dd
     const formatDate = (date: Date): string => {
-        return date.toISOString().replaceAll("-", "/").split("T")[0];
+        const splitDate = date.toLocaleString().split(",")[0].split("/");
+        return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
     };
 
     // Time from now minus 1 year

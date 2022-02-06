@@ -6,6 +6,11 @@
   width: 70%;
 }
 
+.player-statistics .elo-placeholder {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
 .player-statistics .recent-games .ui.icon.header {
   float: left;
   font-size: 1.2rem;
