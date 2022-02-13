@@ -60,6 +60,12 @@ function Navbar(): JSX.Element {
                         Tournament
                     </Menu.Item>
                 </Link>
+                <Link to={`${BASE_PATH()}${QuickHitPage.HALL_OF_FALLEN}`} onClick={(): void => setBurgerMenuOpen(false)}>
+                    <Menu.Item as={"a"}>
+                        <Icon name={"users"} />
+                        Hall of the fallen
+                    </Menu.Item>
+                </Link>
                 <Link to={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`} onClick={(): void => setBurgerMenuOpen(false)}>
                     <Menu.Item as={"a"}>
                         <Icon name={"history"} />
