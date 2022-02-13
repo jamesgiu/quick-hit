@@ -5,3 +5,7 @@
 .new-player-form {
   width: 60%;
 }
+
+.action-btns {
+  justify-content: flex-end;
+}

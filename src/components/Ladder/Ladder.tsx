@@ -22,17 +22,19 @@ function Ladder(props: LadderProps): JSX.Element {
         const playersLadder: JSX.Element[] = [];
 
         props.players.forEach((player) => {
-            const winLoss = getWinLossForPlayer(player.id, props.matches);
+            if (!player.retired) {
+                const winLoss = getWinLossForPlayer(player.id, props.matches);
 
-            const playerCard = <PlayerCard player={player} winLoss={winLoss} matchesPlayed={winLoss.matches} />;
+                const playerCard = <PlayerCard player={player} winLoss={winLoss} matchesPlayed={winLoss.matches} />;
 
-            // If we are hiding zero game players, then only push if they have played a game
-            if (props.hideUnplacedPlayers) {
-                if (!isUnderPlacement(winLoss.wins + winLoss.losses)) {
+                // If we are hiding zero game players, then only push if they have played a game
+                if (props.hideUnplacedPlayers) {
+                    if (!isUnderPlacement(winLoss.wins + winLoss.losses)) {
+                        playersLadder.push(playerCard);
+                    }
+                } else {
                     playersLadder.push(playerCard);
                 }
-            } else {
-                playersLadder.push(playerCard);
             }
         });
 
@@ -59,7 +61,7 @@ function Ladder(props: LadderProps): JSX.Element {
             const winLoss = getWinLossForPlayer(player.id, props.matches);
             let addPlayer = true;
 
-            if (props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) {
+            if ((props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) || player.retired === true) {
                 addPlayer = false;
             }
 
