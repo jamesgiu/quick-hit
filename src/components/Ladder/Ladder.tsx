@@ -61,7 +61,10 @@ function Ladder(props: LadderProps): JSX.Element {
             const winLoss = getWinLossForPlayer(player.id, props.matches);
             let addPlayer = true;
 
-            if ((props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) || player.retired === true) {
+            if (
+                (props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) ||
+                player.retired === true
+            ) {
                 addPlayer = false;
             }
 

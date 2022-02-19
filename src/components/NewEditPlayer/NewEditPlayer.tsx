@@ -66,16 +66,16 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
             const onSuccess = (): void => {
                 makeSuccessToast("Player retired!", `Sorry to see you go, ${player.name}.`);
                 setModalOpen(false);
-    
+
                 if (props.onRequestMade) {
                     props.onRequestMade();
                 }
             };
-    
+
             const onError = (errorMsg: string): void => {
                 makeErrorToast("Player not retired!", errorMsg);
             };
-    
+
             const player: DbPlayer = {
                 id: props.editingPlayer.id,
                 name,
@@ -83,7 +83,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                 elo: props.editingPlayer.elo,
                 retired: true,
             };
-    
+
             QuickHitAPI.addOrUpdatePlayer(player, onSuccess, onError);
         }
     };
@@ -94,16 +94,16 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
             const onSuccess = (): void => {
                 makeSuccessToast("Player unretired!", `Glad you could join us again, ${player.name}.`);
                 setModalOpen(false);
-    
+
                 if (props.onRequestMade) {
                     props.onRequestMade();
                 }
             };
-    
+
             const onError = (errorMsg: string): void => {
                 makeErrorToast("Player not unretired!", errorMsg);
             };
-    
+
             const player: DbPlayer = {
                 id: props.editingPlayer.id,
                 name,
@@ -111,10 +111,10 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                 elo: props.editingPlayer.elo,
                 retired: false,
             };
-    
+
             QuickHitAPI.addOrUpdatePlayer(player, onSuccess, onError);
         }
-    }
+    };
 
     return (
         <Modal
@@ -187,12 +187,16 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                         </a>
                     </Form.Group>
                     <Form.Group className={"action-btns"}>
-                        {props.editingPlayer && !props.editingPlayer.retired &&
-                        <Form.Button negative onClick={retirePlayer}>Mark as retired</Form.Button>
-                        }
-                        {props.editingPlayer && props.editingPlayer.retired &&
-                        <Form.Button primary onClick={unretirePlayer}>Mark as unretired</Form.Button>
-                        }
+                        {props.editingPlayer && !props.editingPlayer.retired && (
+                            <Form.Button negative onClick={retirePlayer}>
+                                Mark as retired
+                            </Form.Button>
+                        )}
+                        {props.editingPlayer && props.editingPlayer.retired && (
+                            <Form.Button primary onClick={unretirePlayer}>
+                                Mark as unretired
+                            </Form.Button>
+                        )}
                         <Form.Button positive onClick={sendCreateRequest}>
                             {props.editingPlayer ? <span>Update</span> : <span>Create</span>}
                         </Form.Button>
