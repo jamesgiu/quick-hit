@@ -1,51 +1,51 @@
 .retiree-items-group.ui.items .item {
-    width: 25%;
-    display: block;
-    background-color: rgb(65, 70, 75);
-    padding: 15px;
-    border-radius: 10px;
-    margin: 20px auto;
-    border: 1px solid darkorange;
-    color: white;
+  width: 25%;
+  display: block;
+  background-color: rgb(65, 70, 75);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px auto;
+  border: 1px solid darkorange;
+  color: white;
 }
 
 .retiree-items-group.ui.items .item:hover {
-    border: 3px solid darkorange;
-    transition: 0.3s;
+  border: 3px solid darkorange;
+  transition: 0.3s;
 }
 
 .retiree-items-group.ui.items .item .meta {
-    color: white;
+  color: white;
 }
 
 .retiree-items-group.ui.items .ui.statistics {
-    justify-content: center;
-    margin: 10px;
+  justify-content: center;
+  margin: 10px;
 }
 
 .retiree-items-group.ui.items .ui.statistic {
-    margin: 0 15px;
+  margin: 0 15px;
 }
 
 .retiree-items-group.ui.items .ui.statistic .value {
-    color: orange;
-  }
-  
+  color: orange;
+}
+
 .retiree-items-group.ui.items .ui.statistic.losses .value,
 .retiree-items-group.ui.items .ui.statistic.min-elo .value {
-    color: grey;
+  color: grey;
 }
 
 .retiree-items-group.ui.items .ui.statistic .label,
 .retiree-items-group.ui.items .ui.statistic.max-elo .value {
-    color: darkorange;
+  color: darkorange;
 }
 
 .retiree-header.ui.header {
-    color: white;
+  color: white;
 }
 
 .retiree-items-group.ui.items .item .icon {
-    margin-left: 5px;
-    color: white;
+  margin-left: 5px;
+  color: white;
 }
