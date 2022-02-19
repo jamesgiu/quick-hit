@@ -14,8 +14,8 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
     const [newTournamentModalOpen, openNewTournamentModal] = useState<boolean>(false);
     const [enterGameModalOpen, openEnterGameModal] = useState<boolean>(false);
     const [recapModalOpen, openRecapModal] = useState<boolean>(false);
-    const [homePlayerEntering, setHomePlayerEntering] = useState<string>("");
-    const [awayPlayerEntering, setAwayPlayerEntering] = useState<string>("");
+    const [homePlayerEntering, setHomePlayerEntering] = useState<DbPlayer | undefined>(undefined);
+    const [awayPlayerEntering, setAwayPlayerEntering] = useState<DbPlayer | undefined>(undefined);
     const [matchEntering, setMatchEntering] = useState<DbTournamentMatch | undefined>(undefined);
     const [viewPastModalOpen, openViewPastModal] = useState<boolean>(false);
     // Music by Karl Casey @ White Bat Audio.
@@ -52,7 +52,7 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
     const sortedPlayers = props.players
         .sort((p1, p2) => p2.elo - p1.elo)
         .filter((player) =>
-            props.matches.some((match) => match.winning_player_id === player.id || match.losing_player_id === player.id)
+            !player.retired && props.matches.some((match) => match.winning_player_id === player.id || match.losing_player_id === player.id)
         );
     const sortedTournaments = props.tournaments.sort((t1, t2) => t2.start_date.localeCompare(t1.start_date));
     const playersMap = getPlayersMap(props.players);
@@ -173,8 +173,8 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
 
     const openGameEntryModal = (match: DbTournamentMatch): void => {
         setMatchEntering(match);
-        setHomePlayerEntering(playersMap.get(match.home_player_id)?.name as string);
-        setAwayPlayerEntering(playersMap.get(match.away_player_id)?.name as string);
+        setHomePlayerEntering(playersMap.get(match.home_player_id));
+        setAwayPlayerEntering(playersMap.get(match.away_player_id));
         openEnterGameModal(true);
     };
 
