@@ -25,6 +25,10 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
     const [awayPlayerEnteringScore, setAwayPlayerEnteringScore] = useState<number | undefined>(undefined);
     const [confirmingMatchScore, setConfirmingMatchScore] = useState<boolean>(false);
 
+    /**
+     * If either of the players scheduled to play the tournament game are retired, then the score will be pre-determined so that
+     * the remaining unretired player wins. However, if both players are retired, then the 'home' player will win by default.
+     */
     useEffect(() => {
         if (props.awayPlayerEntering?.retired) {
             setHomePlayerEnteringScore(21);

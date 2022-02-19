@@ -10,8 +10,6 @@ import "./HallOfFallen.css";
 
 /**
  * HallOfFallen component in QuickHit.
- * 
- * TODO Doco
  */
 function HallOfFallen(props: HallOfFallenReduxProps & TTRefreshDispatchType): JSX.Element {
     const [retirees, setRetirees] = useState<DbPlayer[]>([]);

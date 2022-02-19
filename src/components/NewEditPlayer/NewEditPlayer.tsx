@@ -60,6 +60,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
         QuickHitAPI.addOrUpdatePlayer(player, onSuccess, onError);
     };
 
+    // Mark the current player as retired.
     const retirePlayer = (): void => {
         if (props.editingPlayer) {
             const onSuccess = (): void => {
@@ -87,6 +88,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
         }
     };
 
+    // Mark the current player as active/unretired.
     const unretirePlayer = (): void => {
         if (props.editingPlayer) {
             const onSuccess = (): void => {
