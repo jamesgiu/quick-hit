@@ -33,6 +33,7 @@ export interface DbPlayer {
     elo: number;
     tournamentWins?: number;
     tournamentRunnerUps?: number;
+    retired?: boolean;
 }
 
 export interface DbHappyHour {

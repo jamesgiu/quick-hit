@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Form, Icon } from "semantic-ui-react";
 import { QuickHitAPI } from "../../../api/QuickHitAPI";
 import { DbPlayer, DbTournament, DbTournamentMatch } from "../../../types/database/models";
@@ -12,11 +12,11 @@ interface EnterTournamentGameProps {
     onClose: () => void;
     isOpen: boolean;
     refresh: () => void;
-    // In theory will never be undefined.
+    // In theory, the below three will never be undefined.
     matchEntering: DbTournamentMatch | undefined;
+    homePlayerEntering: DbPlayer | undefined;
+    awayPlayerEntering: DbPlayer | undefined;
     currentTournament: DbTournament;
-    homePlayerEntering: string;
-    awayPlayerEntering: string;
     playersMap: Map<string, DbPlayer>;
 }
 
@@ -24,6 +24,20 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
     const [homePlayerEnteringScore, setHomePlayerEnteringScore] = useState<number | undefined>(undefined);
     const [awayPlayerEnteringScore, setAwayPlayerEnteringScore] = useState<number | undefined>(undefined);
     const [confirmingMatchScore, setConfirmingMatchScore] = useState<boolean>(false);
+
+    /**
+     * If either of the players scheduled to play the tournament game are retired, then the score will be pre-determined so that
+     * the remaining unretired player wins. However, if both players are retired, then the 'home' player will win by default.
+     */
+    useEffect(() => {
+        if (props.awayPlayerEntering?.retired) {
+            setHomePlayerEnteringScore(21);
+            setAwayPlayerEnteringScore(0);
+        } else if (props.homePlayerEntering?.retired && !props.awayPlayerEntering?.retired) {
+            setHomePlayerEnteringScore(0);
+            setAwayPlayerEnteringScore(21);
+        }
+    }, [props.homePlayerEntering, props.awayPlayerEntering]);
 
     const endTournament = (
         matchEntering: DbTournamentMatch,
@@ -277,20 +291,22 @@ function EnterTournamentGame(props: EnterTournamentGameProps): JSX.Element {
                     <Form.Group widths="equal">
                         <Form.Input
                             className={"tournament-score-input"}
-                            label={props.homePlayerEntering + "'s score"}
+                            label={props.homePlayerEntering?.name + "'s score"}
                             type={"number"}
                             min={0}
                             value={homePlayerEnteringScore}
                             onChange={(event, data): void => setHomePlayerEnteringScore(parseInt(data.value))}
+                            disabled={props.homePlayerEntering?.retired || props.awayPlayerEntering?.retired}
                             required
                         />
                         <Form.Input
                             className={"tournament-score-input"}
-                            label={props.awayPlayerEntering + "'s score"}
+                            label={props.awayPlayerEntering?.name + "'s score"}
                             type={"number"}
                             min={0}
                             value={awayPlayerEnteringScore}
                             onChange={(event, data): void => setAwayPlayerEnteringScore(parseInt(data.value))}
+                            disabled={props.homePlayerEntering?.retired || props.awayPlayerEntering?.retired}
                             required
                         />
                     </Form.Group>

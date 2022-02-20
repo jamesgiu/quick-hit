@@ -1,5 +1,5 @@
 import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
-import React from "react";
+import React, { useEffect } from "react";
 import "./NewGame.css";
 import { DbBadge, DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
@@ -26,6 +26,9 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     const [losingPlayer, setLosingPlayer] = React.useState<DbPlayer>();
     const [winningPlayerScore, setWinningPlayerScore] = React.useState<number>();
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>();
+    const [availablePlayers, setAvailablePlayers] = React.useState<DbPlayer[]>(props.players);
+
+    useEffect(() => setAvailablePlayers(availablePlayers.filter((player) => !player.retired)), [props.players]);
 
     const sendCreateRequest = (addAnother: boolean): void => {
         const onSuccess = (): void => {
@@ -193,7 +196,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                     <Icon name={"trophy"} />
                                 </b>
                             }
-                            options={props.players.map((player) => renderPlayerOption(player))}
+                            options={availablePlayers.map((player) => renderPlayerOption(player))}
                             search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
@@ -227,7 +230,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                                     <Icon name={"close"} />
                                 </b>
                             }
-                            options={props.players.map((player) => renderPlayerOption(player))}
+                            options={availablePlayers.map((player) => renderPlayerOption(player))}
                             search={(options, value): DropdownItemProps[] => {
                                 return options.filter((option) => {
                                     const player = JSON.parse(option.value as string);
