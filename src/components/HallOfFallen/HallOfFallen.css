@@ -1,5 +1,19 @@
+.retiree-items-group.ui.items {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 1024px) {
+  .retiree-items-group.ui.items {
+    flex-direction: column;
+  }
+}
+
+.retiree-items-group.ui.items a {
+  padding: 10px;
+}
+
 .retiree-items-group.ui.items .item {
-  width: 25%;
   display: block;
   background-color: rgb(65, 70, 75);
   padding: 15px;

@@ -43,7 +43,7 @@ function HallOfFallen(props: HallOfFallenReduxProps & TTRefreshDispatchType): JS
                                 <Icon name={"trophy"} color={"grey"} /> x {retiree.tournamentRunnerUps ?? 0}
                             </span>
                         }
-                    />
+                    ></Item>
                 </Link>
             );
         });
@@ -53,10 +53,17 @@ function HallOfFallen(props: HallOfFallenReduxProps & TTRefreshDispatchType): JS
 
     return (
         <div className={"hall-container"}>
-            <Header as={"h1"} color={"orange"}>
-                Hall Of The Fallen
+            <Header as={"h2"} icon>
+                <Icon name="group" circular />
+                <Header.Content>Hall Of The Fallen</Header.Content>
             </Header>
-            <Item.Group className={"retiree-items-group"}>{renderItems()}</Item.Group>
+            {retirees.length > 0 ? (
+                <div>
+                    <Item.Group className={"retiree-items-group"}>{renderItems()}</Item.Group>
+                </div>
+            ) : (
+                <div>Players that are retired will appear on this page. Let's hope it stays empty!</div>
+            )}
         </div>
     );
 }
