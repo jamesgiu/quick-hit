@@ -19,7 +19,6 @@ function AnimatedLogo(): JSX.Element {
         scene.getObjectByName("Group").position.z = -3.5;
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(400, 150);
         renderer.setAnimationLoop(animation);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
