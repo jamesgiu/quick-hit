@@ -1,17 +1,20 @@
 .home #useless3D {
-  width: 45%;
   margin: auto;
   display: block;
+  padding-top: 100px;
 }
 
 @media only screen and (max-width: 1024px) {
-  .home #useless3D {
-    display: inline;
+  .app-main-content .home #useless3D canvas {
+    width: 300px;
+    height: 125px;
   }
 }
 
 .home #useless3D canvas {
   margin: auto;
+  width: 400px;
+  height: 150px;
 }
 
 .home .welcome-header i.chevron.tiny {
