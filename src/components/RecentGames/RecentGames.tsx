@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./RecentGames.css";
-import { Divider, Feed, Header, Icon, Pagination, PaginationProps, Transition } from "semantic-ui-react";
+import { Button, Divider, DropdownItemProps, Feed, Header, Icon, Modal, Pagination, PaginationProps, Popup, Select, Transition } from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
-import { DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
+import { DbMatch, DbMatchReaction, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import RecentGamesStatistics from "./RecentGamesStatistics/RecentGamesStatistics";
+import EmojiPicker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
+import { QuickHitAPI } from "../../api/QuickHitAPI";
+import { v4 } from "uuid";
+import { makeErrorToast } from "../Toast/Toast";
+import { renderPlayerOption } from "../NewGame/NewGame";
 
 export interface RecentGamesProps {
     focusedPlayerId?: string;
@@ -14,12 +19,40 @@ export interface RecentGamesProps {
 
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
+// TODOS
+// - Add count to emoji button
+// - Allow reactions to be removed
+// - Allow existing reactions by other users to be added to
+
+const sendReactRequest = (
+    matchId: string,
+    emoji: string,
+    setReactingTo: (matchId: string | undefined) => void,
+    currentUser: string,
+): void => {
+    const matchReaction: DbMatchReaction = {
+        id: v4(),
+        matchId,
+        reactorId: currentUser,
+        reaction: emoji
+    }
+    QuickHitAPI.addMatchReation(
+        matchReaction,
+        () => setReactingTo(undefined),
+        (errorMsg) => makeErrorToast("Could not react!", errorMsg)
+    );
+};
+
 export const turnMatchIntoFeedItems = (
     filteredMatches: DbMatch[],
     allMatches: DbMatch[],
     players: DbPlayer[],
     offset: number,
-    nextPageOffset: number
+    nextPageOffset: number,
+    matchReactions: DbMatchReaction[],
+    reactingTo: string | undefined,
+    setReactingTo: ((matchId: string | undefined) => void) | undefined,
+    currentUser: string | undefined,
 ): FeedEventProps[] => {
     if (filteredMatches.length === 0 || players.length === 0) {
         return [];
@@ -48,6 +81,19 @@ export const turnMatchIntoFeedItems = (
         const winningPlayerUnranked = isUnderPlacement(winningPlayerWinLoss.matches);
         const losingPlayerUnranked = isUnderPlacement(losingPlayerWinLoss.matches);
 
+        const relevantMatchReactions = matchReactions.filter((reaction) => reaction.matchId === match.id);
+        const previousReactions: JSX.Element[] = [];
+        relevantMatchReactions.forEach((reaction) => {
+            previousReactions.push(
+                <Popup content={playersMap.get(reaction.reactorId)?.name} trigger={
+                    <Button className={"reaction"}
+                                           content={reaction.reaction}
+                                           size={"mini"}
+                                           color={reaction.reactorId === currentUser ? "orange" : "grey"} />
+                }/>
+            );
+        });
+
         events.push({
             key: match.id,
             meta: (
@@ -66,6 +112,15 @@ export const turnMatchIntoFeedItems = (
                     </span>
                     ) <ReactTimeAgo date={new Date(match.date)} />
                     ...
+                    <br/>
+                    {previousReactions}
+                    {setReactingTo &&
+                        <Button className={"reaction"} icon={"plus"} color={"grey"} size={"mini"} onClick={(): void => setReactingTo(match.id)} />
+                    }
+                    {reactingTo === match.id && setReactingTo && currentUser &&
+                        <EmojiPicker 
+                            onEmojiClick={(_, emojiObject): void => sendReactRequest(match.id, emojiObject.emoji, setReactingTo, currentUser)}
+                            skinTone={SKIN_TONE_NEUTRAL} />}
                     <Divider />
                 </div>
             ),
@@ -101,6 +156,9 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     // Track this in state, as we may potentially filter the matches to only be focused ones.
     const [matches, setMatches] = React.useState<DbMatch[]>(props.matches);
     const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [reactingTo, setReactingTo] = useState<string | undefined>(undefined);
+    const [matchReactions, setMatchReactions] = useState<DbMatchReaction[]>([]);
+    const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
 
     // Runs on mount.
     useEffect(() => {
@@ -111,6 +169,10 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     useEffect(() => {
         sortAndFilterMatches();
     }, [props.matches]);
+
+    useEffect(() => {
+        QuickHitAPI.getMatchReactions(setMatchReactions, (errorStr) => makeErrorToast("Could not get reactions!", errorStr));
+    }, [props.matches, reactingTo]);
 
     const sortAndFilterMatches = (): void => {
         let sortedAndFilteredMatches: DbMatch[] = props.matches;
@@ -148,7 +210,9 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const offset = (currentPage - 1) * PAGE_SIZE;
         const nextPageOffset = currentPage * PAGE_SIZE;
 
-        return turnMatchIntoFeedItems(matches, props.matches, props.players, offset, nextPageOffset);
+        return turnMatchIntoFeedItems(
+            matches, props.matches, props.players, offset, nextPageOffset, matchReactions, reactingTo, setReactingTo, currentUser
+        );
     };
 
     return (
@@ -176,6 +240,23 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                     }
                 </span>
             </Transition>
+            <Modal
+                open={reactingTo !== undefined && !currentUser}
+                header={"Wait a sec, who are you?"}
+                content={<Select
+                    fluid
+                    label={"Player"}
+                    options={props.players.map((player) => renderPlayerOption(player))}
+                    search={(options, value): DropdownItemProps[] => {
+                        return options.filter((option) => {
+                            const player = JSON.parse(option.value as string);
+                            return player.name.toLowerCase().includes(value.toLowerCase());
+                        });
+                    }}
+                    placeholder="Average Commenter"
+                    onChange={(_, data): void => setCurrentUser(JSON.parse(data.value as string).id)}
+                />}
+            />
         </div>
     );
 }

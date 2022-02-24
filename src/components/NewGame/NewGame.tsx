@@ -11,6 +11,19 @@ import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader
 import { NewGameStoreProps } from "../../containers/NewGame/NewGame";
 import { TTRefreshDispatchType } from "../../containers/shared";
 
+export const renderPlayerOption = (player: DbPlayer): DropdownItemProps => {
+    return {
+        key: player.id,
+        text: (
+            <span>
+                <Icon name={player.icon} size={"small"} />
+                {player.name}
+            </span>
+        ),
+        value: JSON.stringify(player),
+    };
+};
+
 export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;
     // Callback for when a new game is added.
@@ -151,19 +164,6 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                 props.setForceRefresh(true);
             }, onError);
         }, onError);
-    };
-
-    const renderPlayerOption = (player: DbPlayer): DropdownItemProps => {
-        return {
-            key: player.id,
-            text: (
-                <span>
-                    <Icon name={player.icon} size={"small"} />
-                    {player.name}
-                </span>
-            ),
-            value: JSON.stringify(player),
-        };
     };
 
     return (

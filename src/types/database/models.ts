@@ -92,6 +92,13 @@ export interface DbTournamentMatch {
     away_score?: number;
 }
 
+export interface DbMatchReaction {
+    id: string;
+    matchId: string;
+    reactorId: string;
+    reaction: string;
+}
+
 export function getTodaysDate(): string {
     // yyyy-mm-dd
     return new Date().toLocaleDateString().replace(/\//g, "-");

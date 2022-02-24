@@ -18,6 +18,7 @@
     "darkreader": "4.9.40",
     "dotenv": "^8.6.0",
     "elo-rank": "^1.0.4",
+    "emoji-picker-react": "^3.5.1",
     "firebase": "^9.6.2",
     "react": "^17.0.2",
     "react-advanced-news-ticker": "^1.0.1",
