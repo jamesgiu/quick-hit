@@ -243,12 +243,9 @@ export class QuickHitAPI {
         onFailure: (errorStr: string) => void
     ): void {
         // Can't use ApiActions here because we need to delete a specific key from the match reactions.
-        QuickHitAPI.makeAxiosRequest(
-            `matchreaction/${reactionId}.json`,
-            HttpMethod.DELETE
-        )
+        QuickHitAPI.makeAxiosRequest(`matchreaction/${reactionId}.json`, HttpMethod.DELETE)
             .then(onSuccess)
-            .catch((error: AxiosError) => onFailure(error.message))
+            .catch((error: AxiosError) => onFailure(error.message));
     }
 
     public static getMatchReactions(

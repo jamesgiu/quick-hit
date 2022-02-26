@@ -4,7 +4,7 @@ export enum HttpMethod {
     PUT = "put",
     PATCH = "patch",
     // Use the below with care, you can delete a whole JSON if you're not careful.
-    DELETE = "delete"
+    DELETE = "delete",
 }
 
 export enum ApiActions {

@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./RecentGames.css";
-import { Button, Divider, DropdownItemProps, Feed, Header, Icon, Modal, Pagination, PaginationProps, Popup, Select, Transition } from "semantic-ui-react";
+import {
+    Button,
+    Divider,
+    DropdownItemProps,
+    Feed,
+    Header,
+    Icon,
+    Modal,
+    Pagination,
+    PaginationProps,
+    Popup,
+    Select,
+    Transition,
+} from "semantic-ui-react";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
@@ -21,8 +34,8 @@ export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombine
 
 // A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
-    matchId: string,
-    emoji: string,
+    matchId: string;
+    emoji: string;
 }
 
 /**
@@ -41,10 +54,13 @@ const sendReactRequest = (
     currentUser: string,
     matchReactions?: DbMatchReaction[]
 ): void => {
-    if (matchReactions && 
-        matchReactions.filter(reaction => 
-            reaction.matchId === matchId && reaction.reaction === emoji && reaction.reactorId === currentUser
-        ).length !== 0) {
+    if (
+        matchReactions &&
+        matchReactions.filter(
+            (reaction) =>
+                reaction.matchId === matchId && reaction.reaction === emoji && reaction.reactorId === currentUser
+        ).length !== 0
+    ) {
         makeErrorToast("You can't do that!", "No double reacts allowed.");
         return;
     }
@@ -52,8 +68,8 @@ const sendReactRequest = (
         id: v4(),
         matchId,
         reactorId: currentUser,
-        reaction: emoji
-    }
+        reaction: emoji,
+    };
     QuickHitAPI.addMatchReation(
         matchReaction,
         () => setReactingTo(undefined),
@@ -87,7 +103,7 @@ const handleReactionClick = (
         if (currentUser) {
             if (reactors.includes(currentUser)) {
                 const reactionToRemove = allMatchReactions.filter(
-                    reaction => reaction.reaction === emoji && reaction.reactorId === currentUser
+                    (reaction) => reaction.reaction === emoji && reaction.reactorId === currentUser
                 )[0].id;
                 QuickHitAPI.removeMatchReaction(
                     reactionToRemove,
@@ -98,7 +114,7 @@ const handleReactionClick = (
                 sendReactRequest(matchId, emoji, setReactingTo, currentUser);
             }
         } else {
-            setPendingReaction({matchId, emoji});
+            setPendingReaction({ matchId, emoji });
         }
     }
 };
@@ -119,7 +135,7 @@ const getReactionTooltip = (reactors: string[], playersMap: Map<string, DbPlayer
         }
     });
     // All this complicated localeCompare() call does is compare case-insensitively.
-    reactorNames.sort((name1, name2) => name1.localeCompare(name2, undefined, {sensitivity: "base"}));
+    reactorNames.sort((name1, name2) => name1.localeCompare(name2, undefined, { sensitivity: "base" }));
     return reactorNames.join(", ");
 };
 
@@ -175,22 +191,39 @@ export const turnMatchIntoFeedItems = (
                 }
             });
             // Sort the reactions by emoji name so that we don't have reactions moving all over the place when new ones are added.
-            new Map([...collectedReactions.entries()].sort((r1, r2) => r1[0].localeCompare(r2[0]))).forEach((reactors, reaction) => {
-                previousReactions.push(
-                    <Popup content={getReactionTooltip(reactors, playersMap)} trigger={
-                        <Button className={"reaction"}
-                                content={<div>
-                                    {reaction}
-                                    <span className={"reactions-count"}>{reactors.length}</span>
-                                </div>}
-                                size={"mini"}
-                                color={currentUser && reactors.includes(currentUser) ? "orange" : "grey"}
-                                onClick={(): void => handleReactionClick(
-                                    reaction, reactors, currentUser, match.id, setReactingTo, setPendingReaction, relevantMatchReactions
-                                )} />
-                    }/>
-                );
-            });
+            new Map([...collectedReactions.entries()].sort((r1, r2) => r1[0].localeCompare(r2[0]))).forEach(
+                (reactors, reaction) => {
+                    previousReactions.push(
+                        <Popup
+                            content={getReactionTooltip(reactors, playersMap)}
+                            trigger={
+                                <Button
+                                    className={"reaction"}
+                                    content={
+                                        <div>
+                                            {reaction}
+                                            <span className={"reactions-count"}>{reactors.length}</span>
+                                        </div>
+                                    }
+                                    size={"mini"}
+                                    color={currentUser && reactors.includes(currentUser) ? "orange" : "grey"}
+                                    onClick={(): void =>
+                                        handleReactionClick(
+                                            reaction,
+                                            reactors,
+                                            currentUser,
+                                            match.id,
+                                            setReactingTo,
+                                            setPendingReaction,
+                                            relevantMatchReactions
+                                        )
+                                    }
+                                />
+                            }
+                        />
+                    );
+                }
+            );
         }
 
         events.push({
@@ -211,23 +244,34 @@ export const turnMatchIntoFeedItems = (
                     </span>
                     ) <ReactTimeAgo date={new Date(match.date)} />
                     ...
-                    <br/>
+                    <br />
                     {previousReactions}
-                    {setReactingTo &&
-                        <Button className={"reaction"}
-                                icon={reactingTo === match.id ? "chevron up" : "plus"}
-                                color={"grey"}
-                                size={"mini"}
-                                onClick={(): void => setReactingTo(reactingTo === match.id ? undefined : match.id)} />
-                    }
-                    {reactingTo === match.id && setReactingTo && currentUser &&
+                    {setReactingTo && (
+                        <Button
+                            className={"reaction"}
+                            icon={reactingTo === match.id ? "chevron up" : "plus"}
+                            color={"grey"}
+                            size={"mini"}
+                            onClick={(): void => setReactingTo(reactingTo === match.id ? undefined : match.id)}
+                        />
+                    )}
+                    {reactingTo === match.id && setReactingTo && currentUser && (
                         <div>
                             <EmojiPicker
-                                onEmojiClick={(_, emojiObject): void => sendReactRequest(match.id, emojiObject.emoji, setReactingTo, currentUser, matchReactions)}
+                                onEmojiClick={(_, emojiObject): void =>
+                                    sendReactRequest(
+                                        match.id,
+                                        emojiObject.emoji,
+                                        setReactingTo,
+                                        currentUser,
+                                        matchReactions
+                                    )
+                                }
                                 skinTone={SKIN_TONE_NEUTRAL}
-                                disableSkinTonePicker />
+                                disableSkinTonePicker
+                            />
                         </div>
-                    }
+                    )}
                     <Divider />
                 </div>
             ),
@@ -281,14 +325,22 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     // When the matches change or the post the user is reacting to changes (e.g. a new reaction has been added), retrieve all reactions
     // again.
     useEffect(() => {
-        QuickHitAPI.getMatchReactions(setMatchReactions, (errorStr) => makeErrorToast("Could not get reactions!", errorStr));
+        QuickHitAPI.getMatchReactions(setMatchReactions, (errorStr) =>
+            makeErrorToast("Could not get reactions!", errorStr)
+        );
     }, [props.matches, reactingTo]);
 
     // If the user has just identified themselves, check if they just clicked to add another reaction immediately beforehand, and if so,
     // add that reaction to the identified user.
     useEffect(() => {
         if (pendingReaction && currentUser) {
-            sendReactRequest(pendingReaction.matchId, pendingReaction.emoji, setReactingTo, currentUser, matchReactions);
+            sendReactRequest(
+                pendingReaction.matchId,
+                pendingReaction.emoji,
+                setReactingTo,
+                currentUser,
+                matchReactions
+            );
             setPendingReaction(undefined);
         }
     }, [currentUser]);
@@ -330,8 +382,16 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const nextPageOffset = currentPage * PAGE_SIZE;
 
         return turnMatchIntoFeedItems(
-            matches, props.matches, props.players, offset, nextPageOffset,
-            matchReactions, reactingTo, setReactingTo, currentUser, setPendingReaction
+            matches,
+            props.matches,
+            props.players,
+            offset,
+            nextPageOffset,
+            matchReactions,
+            reactingTo,
+            setReactingTo,
+            currentUser,
+            setPendingReaction
         );
     };
 
@@ -363,19 +423,21 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             <Modal
                 open={reactingTo !== undefined && !currentUser}
                 header={"Wait a sec, who are you?"}
-                content={<Select
-                    fluid
-                    label={"Player"}
-                    options={props.players.map((player) => renderPlayerOption(player))}
-                    search={(options, value): DropdownItemProps[] => {
-                        return options.filter((option) => {
-                            const player = JSON.parse(option.value as string);
-                            return player.name.toLowerCase().includes(value.toLowerCase());
-                        });
-                    }}
-                    placeholder={"Average Commenter"}
-                    onChange={(_, data): void => setCurrentUser(JSON.parse(data.value as string).id)}
-                />}
+                content={
+                    <Select
+                        fluid
+                        label={"Player"}
+                        options={props.players.map((player) => renderPlayerOption(player))}
+                        search={(options, value): DropdownItemProps[] => {
+                            return options.filter((option) => {
+                                const player = JSON.parse(option.value as string);
+                                return player.name.toLowerCase().includes(value.toLowerCase());
+                            });
+                        }}
+                        placeholder={"Average Commenter"}
+                        onChange={(_, data): void => setCurrentUser(JSON.parse(data.value as string).id)}
+                    />
+                }
             />
         </div>
     );
