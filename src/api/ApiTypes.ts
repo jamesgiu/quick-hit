@@ -3,6 +3,7 @@ export enum HttpMethod {
     POST = "post",
     PUT = "put",
     PATCH = "patch",
+    // Use the below with care, you can delete a whole JSON if you're not careful.
     DELETE = "delete"
 }
 

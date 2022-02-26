@@ -19,14 +19,21 @@ export interface RecentGamesProps {
 
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
+// A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
     matchId: string,
     emoji: string,
 }
 
-// TODOs
-// - Add doco
-
+/**
+ * Add a reaction for the match with the supplied ID with the supplied emoji by the supplied user.
+ * @param matchId The ID of the match being reacted to.
+ * @param emoji The emoji being reacted with.
+ * @param setReactingTo The useState setter to call on success, resetting the match being reacted to.
+ * @param currentUser The user being currently identified as.
+ * @param matchReactions All previous match reactions, used to ensure the same user isn't using the same emoji against the same
+ * post more than once.
+ */
 const sendReactRequest = (
     matchId: string,
     emoji: string,
@@ -54,6 +61,16 @@ const sendReactRequest = (
     );
 };
 
+/**
+ * Handle the click on an existing match reaction.
+ * @param emoji The emoji of the existing reaction.
+ * @param reactors The list of user IDs for the users that previously reacted with this emoji for this match.
+ * @param currentUser The ID of the user being currently identified as.
+ * @param matchId The ID of the match that the clicked-on reaction is for.
+ * @param setReactingTo The useState setter to call on success, resetting the match being reacted to.
+ * @param setPendingReaction The useState setter to call if the user has not yet identified themselves.
+ * @param allMatchReactions All previous reactions for the relevant match, used when a user is removing their reaction.
+ */
 const handleReactionClick = (
     emoji: string,
     reactors: string[],
@@ -86,13 +103,22 @@ const handleReactionClick = (
     }
 };
 
+/**
+ * Generate the tooltip content for a reaction.
+ * @param reactors The list of IDs of those that have used this reaction on this match.
+ * @param playersMap The map of IDs to player objects.
+ * @returns A comma-separated string of player names that have reacted.
+ */
 const getReactionTooltip = (reactors: string[], playersMap: Map<string, DbPlayer>): string => {
     const reactorNames: string[] = [];
     reactors.forEach((reactor) => {
         if (playersMap.has(reactor)) {
+            // We need the 'as string' here because TypeScript isn't smart enough to realise that the previous .has() call means
+            // that this .get() call will never be undefined.
             reactorNames.push(playersMap.get(reactor)?.name as string);
         }
     });
+    // All this complicated localeCompare() call does is compare case-insensitively.
     reactorNames.sort((name1, name2) => name1.localeCompare(name2, undefined, {sensitivity: "base"}));
     return reactorNames.join(", ");
 };
@@ -139,6 +165,7 @@ export const turnMatchIntoFeedItems = (
         const previousReactions: JSX.Element[] = [];
         if (matchReactions && setPendingReaction) {
             const relevantMatchReactions = matchReactions.filter((reaction) => reaction.matchId === match.id);
+            // Collect the reactions by emoji so we can have counts.
             const collectedReactions = new Map<string, string[]>();
             relevantMatchReactions.forEach((reaction) => {
                 if (collectedReactions.has(reaction.reaction)) {
@@ -147,6 +174,7 @@ export const turnMatchIntoFeedItems = (
                     collectedReactions.set(reaction.reaction, [reaction.reactorId]);
                 }
             });
+            // Sort the reactions by emoji name so that we don't have reactions moving all over the place when new ones are added.
             new Map([...collectedReactions.entries()].sort((r1, r2) => r1[0].localeCompare(r2[0]))).forEach((reactors, reaction) => {
                 previousReactions.push(
                     <Popup content={getReactionTooltip(reactors, playersMap)} trigger={
@@ -250,10 +278,14 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         sortAndFilterMatches();
     }, [props.matches]);
 
+    // When the matches change or the post the user is reacting to changes (e.g. a new reaction has been added), retrieve all reactions
+    // again.
     useEffect(() => {
         QuickHitAPI.getMatchReactions(setMatchReactions, (errorStr) => makeErrorToast("Could not get reactions!", errorStr));
     }, [props.matches, reactingTo]);
 
+    // If the user has just identified themselves, check if they just clicked to add another reaction immediately beforehand, and if so,
+    // add that reaction to the identified user.
     useEffect(() => {
         if (pendingReaction && currentUser) {
             sendReactRequest(pendingReaction.matchId, pendingReaction.emoji, setReactingTo, currentUser, matchReactions);
@@ -341,7 +373,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                             return player.name.toLowerCase().includes(value.toLowerCase());
                         });
                     }}
-                    placeholder="Average Commenter"
+                    placeholder={"Average Commenter"}
                     onChange={(_, data): void => setCurrentUser(JSON.parse(data.value as string).id)}
                 />}
             />
