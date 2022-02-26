@@ -237,6 +237,19 @@ export class QuickHitAPI {
             .catch((error: AxiosError) => onFailure(error.message));
     }
 
+    public static removeMatchReaction(
+        reactionId: string,
+        onSuccess: () => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            `matchreaction/${reactionId}.json`,
+            HttpMethod.DELETE
+        )
+            .then(onSuccess)
+            .catch((error: AxiosError) => onFailure(error.message))
+    }
+
     public static getMatchReactions(
         onSuccess: (matchReactions: DbMatchReaction[]) => void,
         onFailure: (errorStr: string) => void

@@ -49,3 +49,8 @@
   padding: 6px;
   height: auto;
 }
+
+.reactions-count {
+  font-size: medium;
+  margin-left: 5px;
+}

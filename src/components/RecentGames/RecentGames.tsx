@@ -19,17 +19,28 @@ export interface RecentGamesProps {
 
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
-// TODOS
-// - Add count to emoji button
-// - Allow reactions to be removed
-// - Allow existing reactions by other users to be added to
+interface PendingReaction {
+    matchId: string,
+    emoji: string,
+}
+
+// TODOs
+// - Add doco
 
 const sendReactRequest = (
     matchId: string,
     emoji: string,
     setReactingTo: (matchId: string | undefined) => void,
     currentUser: string,
+    matchReactions?: DbMatchReaction[]
 ): void => {
+    if (matchReactions && 
+        matchReactions.filter(reaction => 
+            reaction.matchId === matchId && reaction.reaction === emoji && reaction.reactorId === currentUser
+        ).length !== 0) {
+        makeErrorToast("You can't do that!", "No double reacts allowed.");
+        return;
+    }
     const matchReaction: DbMatchReaction = {
         id: v4(),
         matchId,
@@ -43,16 +54,60 @@ const sendReactRequest = (
     );
 };
 
+const handleReactionClick = (
+    emoji: string,
+    reactors: string[],
+    currentUser: string | undefined,
+    matchId: string,
+    setReactingTo: ((matchId: string | undefined) => void) | undefined,
+    setPendingReaction: (reaction: PendingReaction) => void,
+    allMatchReactions: DbMatchReaction[]
+): void => {
+    if (setReactingTo) {
+        // We need the below so that the updated reactions will be retrieved without showing the selector, which it would if we
+        // set reactingTo to the match's ID.
+        setReactingTo("");
+        if (currentUser) {
+            if (reactors.includes(currentUser)) {
+                const reactionToRemove = allMatchReactions.filter(
+                    reaction => reaction.reaction === emoji && reaction.reactorId === currentUser
+                )[0].id;
+                QuickHitAPI.removeMatchReaction(
+                    reactionToRemove,
+                    () => setReactingTo(undefined),
+                    (errorStr) => makeErrorToast("Could not remove reaction!", errorStr)
+                );
+            } else {
+                sendReactRequest(matchId, emoji, setReactingTo, currentUser);
+            }
+        } else {
+            setPendingReaction({matchId, emoji});
+        }
+    }
+};
+
+const getReactionTooltip = (reactors: string[], playersMap: Map<string, DbPlayer>): string => {
+    const reactorNames: string[] = [];
+    reactors.forEach((reactor) => {
+        if (playersMap.has(reactor)) {
+            reactorNames.push(playersMap.get(reactor)?.name as string);
+        }
+    });
+    reactorNames.sort((name1, name2) => name1.localeCompare(name2, undefined, {sensitivity: "base"}));
+    return reactorNames.join(", ");
+};
+
 export const turnMatchIntoFeedItems = (
     filteredMatches: DbMatch[],
     allMatches: DbMatch[],
     players: DbPlayer[],
     offset: number,
     nextPageOffset: number,
-    matchReactions: DbMatchReaction[],
-    reactingTo: string | undefined,
-    setReactingTo: ((matchId: string | undefined) => void) | undefined,
-    currentUser: string | undefined,
+    matchReactions?: DbMatchReaction[],
+    reactingTo?: string,
+    setReactingTo?: (matchId: string | undefined) => void,
+    currentUser?: string,
+    setPendingReaction?: (reaction: PendingReaction) => void
 ): FeedEventProps[] => {
     if (filteredMatches.length === 0 || players.length === 0) {
         return [];
@@ -81,18 +136,34 @@ export const turnMatchIntoFeedItems = (
         const winningPlayerUnranked = isUnderPlacement(winningPlayerWinLoss.matches);
         const losingPlayerUnranked = isUnderPlacement(losingPlayerWinLoss.matches);
 
-        const relevantMatchReactions = matchReactions.filter((reaction) => reaction.matchId === match.id);
         const previousReactions: JSX.Element[] = [];
-        relevantMatchReactions.forEach((reaction) => {
-            previousReactions.push(
-                <Popup content={playersMap.get(reaction.reactorId)?.name} trigger={
-                    <Button className={"reaction"}
-                                           content={reaction.reaction}
-                                           size={"mini"}
-                                           color={reaction.reactorId === currentUser ? "orange" : "grey"} />
-                }/>
-            );
-        });
+        if (matchReactions && setPendingReaction) {
+            const relevantMatchReactions = matchReactions.filter((reaction) => reaction.matchId === match.id);
+            const collectedReactions = new Map<string, string[]>();
+            relevantMatchReactions.forEach((reaction) => {
+                if (collectedReactions.has(reaction.reaction)) {
+                    collectedReactions.get(reaction.reaction)?.push(reaction.reactorId);
+                } else {
+                    collectedReactions.set(reaction.reaction, [reaction.reactorId]);
+                }
+            });
+            new Map([...collectedReactions.entries()].sort((r1, r2) => r1[0].localeCompare(r2[0]))).forEach((reactors, reaction) => {
+                previousReactions.push(
+                    <Popup content={getReactionTooltip(reactors, playersMap)} trigger={
+                        <Button className={"reaction"}
+                                content={<div>
+                                    {reaction}
+                                    <span className={"reactions-count"}>{reactors.length}</span>
+                                </div>}
+                                size={"mini"}
+                                color={currentUser && reactors.includes(currentUser) ? "orange" : "grey"}
+                                onClick={(): void => handleReactionClick(
+                                    reaction, reactors, currentUser, match.id, setReactingTo, setPendingReaction, relevantMatchReactions
+                                )} />
+                    }/>
+                );
+            });
+        }
 
         events.push({
             key: match.id,
@@ -115,12 +186,20 @@ export const turnMatchIntoFeedItems = (
                     <br/>
                     {previousReactions}
                     {setReactingTo &&
-                        <Button className={"reaction"} icon={"plus"} color={"grey"} size={"mini"} onClick={(): void => setReactingTo(match.id)} />
+                        <Button className={"reaction"}
+                                icon={reactingTo === match.id ? "chevron up" : "plus"}
+                                color={"grey"}
+                                size={"mini"}
+                                onClick={(): void => setReactingTo(reactingTo === match.id ? undefined : match.id)} />
                     }
                     {reactingTo === match.id && setReactingTo && currentUser &&
-                        <EmojiPicker 
-                            onEmojiClick={(_, emojiObject): void => sendReactRequest(match.id, emojiObject.emoji, setReactingTo, currentUser)}
-                            skinTone={SKIN_TONE_NEUTRAL} />}
+                        <div>
+                            <EmojiPicker
+                                onEmojiClick={(_, emojiObject): void => sendReactRequest(match.id, emojiObject.emoji, setReactingTo, currentUser, matchReactions)}
+                                skinTone={SKIN_TONE_NEUTRAL}
+                                disableSkinTonePicker />
+                        </div>
+                    }
                     <Divider />
                 </div>
             ),
@@ -159,6 +238,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     const [reactingTo, setReactingTo] = useState<string | undefined>(undefined);
     const [matchReactions, setMatchReactions] = useState<DbMatchReaction[]>([]);
     const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
+    const [pendingReaction, setPendingReaction] = useState<PendingReaction | undefined>(undefined);
 
     // Runs on mount.
     useEffect(() => {
@@ -173,6 +253,13 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     useEffect(() => {
         QuickHitAPI.getMatchReactions(setMatchReactions, (errorStr) => makeErrorToast("Could not get reactions!", errorStr));
     }, [props.matches, reactingTo]);
+
+    useEffect(() => {
+        if (pendingReaction && currentUser) {
+            sendReactRequest(pendingReaction.matchId, pendingReaction.emoji, setReactingTo, currentUser, matchReactions);
+            setPendingReaction(undefined);
+        }
+    }, [currentUser]);
 
     const sortAndFilterMatches = (): void => {
         let sortedAndFilteredMatches: DbMatch[] = props.matches;
@@ -211,7 +298,8 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         const nextPageOffset = currentPage * PAGE_SIZE;
 
         return turnMatchIntoFeedItems(
-            matches, props.matches, props.players, offset, nextPageOffset, matchReactions, reactingTo, setReactingTo, currentUser
+            matches, props.matches, props.players, offset, nextPageOffset,
+            matchReactions, reactingTo, setReactingTo, currentUser, setPendingReaction
         );
     };
 

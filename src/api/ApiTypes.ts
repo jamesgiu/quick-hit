@@ -3,6 +3,7 @@ export enum HttpMethod {
     POST = "post",
     PUT = "put",
     PATCH = "patch",
+    DELETE = "delete"
 }
 
 export enum ApiActions {
