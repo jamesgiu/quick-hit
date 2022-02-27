@@ -99,6 +99,14 @@ export interface DbMatchReaction {
     reaction: string;
 }
 
+export interface DbMatchComment {
+    id: string;
+    matchId: string;
+    commenterId: string;
+    comment: string;
+    timestamp: string;
+}
+
 export function getTodaysDate(): string {
     // yyyy-mm-dd
     return new Date().toLocaleDateString().replace(/\//g, "-");

@@ -16,4 +16,5 @@ export enum ApiActions {
     TOURNAMENT = "tournament.json",
     CHAT = "chat.json",
     MATCH_REACTION = "matchreaction.json",
+    MATCH_COMMENT = "matchcomment.json",
 }

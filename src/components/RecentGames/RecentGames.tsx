@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./RecentGames.css";
 import {
     Button,
+    Comment,
+    CommentGroup,
     Divider,
     DropdownItemProps,
     Feed,
+    Form,
     Header,
     Icon,
     Modal,
@@ -18,7 +21,7 @@ import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedE
 import ReactTimeAgo from "react-time-ago";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
-import { DbMatch, DbMatchReaction, DbPlayer, isUnderPlacement } from "../../types/database/models";
+import { DbMatch, DbMatchComment, DbMatchReaction, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import RecentGamesStatistics from "./RecentGamesStatistics/RecentGamesStatistics";
 import EmojiPicker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
@@ -31,6 +34,10 @@ export interface RecentGamesProps {
 }
 
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
+
+// TODOs:
+// - Comment text should erase on comment.
+// - Comments should update in modal on comment.
 
 // A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
@@ -74,6 +81,26 @@ const sendReactRequest = (
         matchReaction,
         () => setReactingTo(undefined),
         (errorMsg) => makeErrorToast("Could not react!", errorMsg)
+    );
+};
+
+const sendCommentRequest = (
+    matchId: string,
+    comment: string,
+    setCommentText: (comment: string) => void,
+    currentUser: string
+): void => {
+    const matchComment: DbMatchComment = {
+        id: v4(),
+        matchId,
+        commenterId: currentUser,
+        comment,
+        timestamp: new Date().toISOString()
+    };
+    QuickHitAPI.addMatchComment(
+        matchComment,
+        () => setCommentText(""),
+        (errorMsg) => makeErrorToast("Could not comment!", errorMsg)
     );
 };
 
@@ -149,7 +176,10 @@ export const turnMatchIntoFeedItems = (
     reactingTo?: string,
     setReactingTo?: (matchId: string | undefined) => void,
     currentUser?: string,
-    setPendingReaction?: (reaction: PendingReaction) => void
+    setPendingReaction?: (reaction: PendingReaction) => void,
+    matchComments?: DbMatchComment[],
+    commentingOn?: string,
+    setCommentingOn?: (matchId: string | undefined) => void,
 ): FeedEventProps[] => {
     if (filteredMatches.length === 0 || players.length === 0) {
         return [];
@@ -255,6 +285,22 @@ export const turnMatchIntoFeedItems = (
                             onClick={(): void => setReactingTo(reactingTo === match.id ? undefined : match.id)}
                         />
                     )}
+                    {setCommentingOn && matchComments && (
+                        <Button
+                            className={"reaction"}
+                            content={
+                                <div>
+                                    <Icon name={"comment"} />
+                                    <span className={"reactions-count"}>
+                                        {matchComments.filter(comment => comment.matchId === match.id).length}
+                                    </span>
+                                </div>
+                            }
+                            color={"grey"}
+                            size={"mini"}
+                            onClick={(): void => setCommentingOn(match.id)}
+                    />
+                    )}
                     {reactingTo === match.id && setReactingTo && currentUser && (
                         <div>
                             <EmojiPicker
@@ -302,15 +348,34 @@ export const turnMatchIntoFeedItems = (
     return events;
 };
 
+const getCommentObjects = (comments: DbMatchComment[], playersMap: Map<string, DbPlayer>): JSX.Element[] => {
+    const commentObjects: JSX.Element[] = [];
+    comments.forEach((comment) => {
+        const commenterName = playersMap.get(comment.commenterId)?.name;
+        commentObjects.push(
+            <Comment>
+                <Comment.Content>
+                    <Comment.Author>{commenterName}</Comment.Author>
+                    <Comment.Text>{comment.comment}</Comment.Text>
+                </Comment.Content>
+            </Comment>
+        );
+    });
+    return commentObjects;
+};
+
 function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     const PAGE_SIZE = 5;
     // Track this in state, as we may potentially filter the matches to only be focused ones.
     const [matches, setMatches] = React.useState<DbMatch[]>(props.matches);
     const [currentPage, setCurrentPage] = React.useState<number>(1);
     const [reactingTo, setReactingTo] = useState<string | undefined>(undefined);
+    const [commentingOn, setCommentingOn] = useState<string | undefined>(undefined);
     const [matchReactions, setMatchReactions] = useState<DbMatchReaction[]>([]);
+    const [matchComments, setMatchComments] = useState<DbMatchComment[]>([]);
     const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
     const [pendingReaction, setPendingReaction] = useState<PendingReaction | undefined>(undefined);
+    const [commentText, setCommentText] = useState<string>("");
 
     // Runs on mount.
     useEffect(() => {
@@ -329,6 +394,12 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             makeErrorToast("Could not get reactions!", errorStr)
         );
     }, [props.matches, reactingTo]);
+
+    useEffect(() => {
+        QuickHitAPI.getMatchComments(setMatchComments, (errorStr) => 
+            makeErrorToast("Could not get comments!", errorStr)
+        );
+    }, [props.matches, commentingOn]);
 
     // If the user has just identified themselves, check if they just clicked to add another reaction immediately beforehand, and if so,
     // add that reaction to the identified user.
@@ -391,7 +462,10 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             reactingTo,
             setReactingTo,
             currentUser,
-            setPendingReaction
+            setPendingReaction,
+            matchComments,
+            commentingOn,
+            setCommentingOn
         );
     };
 
@@ -421,7 +495,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                 </span>
             </Transition>
             <Modal
-                open={reactingTo !== undefined && !currentUser}
+                open={(reactingTo !== undefined || commentingOn !== undefined) && !currentUser}
                 header={"Wait a sec, who are you?"}
                 content={
                     <Select
@@ -439,6 +513,27 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                     />
                 }
             />
+            {commentingOn !== undefined && currentUser !== undefined && 
+            <Modal open={commentingOn !== undefined && currentUser !== undefined}
+                   closeIcon
+                   onClose={(): void => setCommentingOn(undefined)}>
+                   <Modal.Header>Comments</Modal.Header>
+                   <Modal.Content>
+                       <CommentGroup>
+                           {getCommentObjects(matchComments.filter(comment => comment.matchId === commentingOn),
+                                              getPlayersMap(props.players))}
+                           <Form reply>
+                               <Form.TextArea onChange={(_, {value}): void => {
+                                                   setCommentText(value as string ?? "");
+                                               }}
+                                               value={commentText} />
+                               <Button content={"Add Comment"}
+                                       color={"blue"}
+                                       onClick={(): void => sendCommentRequest(commentingOn, commentText, setCommentingOn, currentUser)} />
+                           </Form>
+                       </CommentGroup>
+                   </Modal.Content>
+               </Modal>}
         </div>
     );
 }

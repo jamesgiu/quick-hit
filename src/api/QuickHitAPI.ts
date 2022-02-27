@@ -4,6 +4,7 @@ import {
     DbHappyHour,
     DbInstance,
     DbMatch,
+    DbMatchComment,
     DbMatchReaction,
     DbPlayer,
     DbTournament,
@@ -253,6 +254,33 @@ export class QuickHitAPI {
         onFailure: (errorStr: string) => void
     ): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_REACTION, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data ? Object.values(response.data) : []);
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static addMatchComment(
+        matchComment: DbMatchComment,
+        onSuccess: () => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.MATCH_COMMENT,
+            HttpMethod.PATCH,
+            `{"${matchComment.id}" : ${JSON.stringify(matchComment)}}`
+        )
+            .then(onSuccess)
+            .catch((error: AxiosError) => onFailure(error.message));
+    }
+
+    public static getMatchComments(
+        onSuccess: (matchComments: DbMatchComment[]) => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_COMMENT, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(response.data ? Object.values(response.data) : []);
             })
