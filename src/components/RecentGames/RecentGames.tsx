@@ -566,6 +566,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                                 <Button
                                     content={"Add Comment"}
                                     color={"blue"}
+                                    disabled={commentText === ""}
                                     onClick={(): void =>
                                         sendCommentRequest(
                                             commentingOn,
