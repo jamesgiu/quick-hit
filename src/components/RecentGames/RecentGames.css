@@ -54,3 +54,14 @@
   font-size: medium;
   margin-left: 5px;
 }
+
+.comment-time {
+  font-style: italic;
+  font-weight: lighter;
+  margin-left: 5px;
+  font-size: smaller;
+}
+
+.add-react i {
+  display: inline;
+}

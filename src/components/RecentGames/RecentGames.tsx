@@ -36,8 +36,7 @@ export interface RecentGamesProps {
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
 // TODOs:
-// - Comment text should erase on comment.
-// - Comments should update in modal on comment.
+// - Add message when no comments exist yet.
 
 // A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
@@ -88,8 +87,14 @@ const sendCommentRequest = (
     matchId: string,
     comment: string,
     setCommentText: (comment: string) => void,
+    setCurrentlyCommenting: (commenting: boolean) => void,
     currentUser: string
 ): void => {
+    const onSuccess = (): void => {
+        setCommentText("");
+        setCurrentlyCommenting(false);
+    };
+
     const matchComment: DbMatchComment = {
         id: v4(),
         matchId,
@@ -99,7 +104,7 @@ const sendCommentRequest = (
     };
     QuickHitAPI.addMatchComment(
         matchComment,
-        () => setCommentText(""),
+        onSuccess,
         (errorMsg) => makeErrorToast("Could not comment!", errorMsg)
     );
 };
@@ -279,7 +284,11 @@ export const turnMatchIntoFeedItems = (
                     {setReactingTo && (
                         <Button
                             className={"reaction"}
-                            icon={reactingTo === match.id ? "chevron up" : "plus"}
+                            icon={reactingTo === match.id ? "chevron up" : 
+                                <span className={"add-react"}>
+                                    <Icon name={"smile outline"} /><Icon name={"plus"} size={"tiny"} />
+                                </span>
+                            }
                             color={"grey"}
                             size={"mini"}
                             onClick={(): void => setReactingTo(reactingTo === match.id ? undefined : match.id)}
@@ -349,19 +358,27 @@ export const turnMatchIntoFeedItems = (
 };
 
 const getCommentObjects = (comments: DbMatchComment[], playersMap: Map<string, DbPlayer>): JSX.Element[] => {
+    const sortedComments = comments.sort((c1, c2) => c1.timestamp.localeCompare(c2.timestamp));
+
     const commentObjects: JSX.Element[] = [];
-    comments.forEach((comment) => {
+    sortedComments.forEach((comment) => {
         const commenterName = playersMap.get(comment.commenterId)?.name;
+        const formattedTimestamp = new Date(Date.parse(comment.timestamp)).toLocaleString();
         commentObjects.push(
             <Comment>
                 <Comment.Content>
-                    <Comment.Author>{commenterName}</Comment.Author>
+                    <Comment.Author>
+                        {commenterName}
+                        <span className={"comment-time"}>
+                            {formattedTimestamp}
+                        </span>
+                    </Comment.Author>
                     <Comment.Text>{comment.comment}</Comment.Text>
                 </Comment.Content>
             </Comment>
         );
     });
-    return commentObjects;
+    return commentObjects.length > 0 ? commentObjects : [<div>No comments yet.</div>];
 };
 
 function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
@@ -376,6 +393,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
     const [pendingReaction, setPendingReaction] = useState<PendingReaction | undefined>(undefined);
     const [commentText, setCommentText] = useState<string>("");
+    const [currentlyCommenting, setCurrentlyCommenting] = useState<boolean>(false);
 
     // Runs on mount.
     useEffect(() => {
@@ -399,7 +417,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         QuickHitAPI.getMatchComments(setMatchComments, (errorStr) => 
             makeErrorToast("Could not get comments!", errorStr)
         );
-    }, [props.matches, commentingOn]);
+    }, [props.matches, currentlyCommenting]);
 
     // If the user has just identified themselves, check if they just clicked to add another reaction immediately beforehand, and if so,
     // add that reaction to the identified user.
@@ -525,11 +543,12 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                            <Form reply>
                                <Form.TextArea onChange={(_, {value}): void => {
                                                    setCommentText(value as string ?? "");
+                                                   setCurrentlyCommenting(true);
                                                }}
                                                value={commentText} />
                                <Button content={"Add Comment"}
                                        color={"blue"}
-                                       onClick={(): void => sendCommentRequest(commentingOn, commentText, setCommentingOn, currentUser)} />
+                                       onClick={(): void => sendCommentRequest(commentingOn, commentText, setCommentText, setCurrentlyCommenting, currentUser)} />
                            </Form>
                        </CommentGroup>
                    </Modal.Content>
