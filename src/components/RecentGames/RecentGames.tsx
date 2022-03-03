@@ -73,7 +73,7 @@ const sendReactRequest = (
         reactorId: currentUser,
         reaction: emoji,
     };
-    QuickHitAPI.addMatchReation(
+    QuickHitAPI.addMatchReaction(
         matchReaction,
         () => setReactingTo(undefined),
         (errorMsg) => makeErrorToast("Could not react!", errorMsg)
