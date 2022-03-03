@@ -105,13 +105,9 @@ const sendCommentRequest = (
         matchId,
         commenterId: currentUser,
         comment,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
     };
-    QuickHitAPI.addMatchComment(
-        matchComment,
-        onSuccess,
-        (errorMsg) => makeErrorToast("Could not comment!", errorMsg)
-    );
+    QuickHitAPI.addMatchComment(matchComment, onSuccess, (errorMsg) => makeErrorToast("Could not comment!", errorMsg));
 };
 
 /**
@@ -188,7 +184,7 @@ export const turnMatchIntoFeedItems = (
     currentUser?: string,
     setPendingReaction?: (reaction: PendingReaction) => void,
     matchComments?: DbMatchComment[],
-    setCommentingOn?: (matchId: string | undefined) => void,
+    setCommentingOn?: (matchId: string | undefined) => void
 ): FeedEventProps[] => {
     if (filteredMatches.length === 0 || players.length === 0) {
         return [];
@@ -288,10 +284,15 @@ export const turnMatchIntoFeedItems = (
                     {setReactingTo && (
                         <Button
                             className={"reaction"}
-                            icon={reactingTo === match.id ? "chevron up" : 
-                                <span className={"add-react"}>
-                                    <Icon name={"smile outline"} /><Icon name={"plus"} size={"tiny"} />
-                                </span>
+                            icon={
+                                reactingTo === match.id ? (
+                                    "chevron up"
+                                ) : (
+                                    <span className={"add-react"}>
+                                        <Icon name={"smile outline"} />
+                                        <Icon name={"plus"} size={"tiny"} />
+                                    </span>
+                                )
                             }
                             color={"grey"}
                             size={"mini"}
@@ -305,14 +306,14 @@ export const turnMatchIntoFeedItems = (
                                 <div>
                                     <Icon name={"comment"} />
                                     <span className={"reactions-count"}>
-                                        {matchComments.filter(comment => comment.matchId === match.id).length}
+                                        {matchComments.filter((comment) => comment.matchId === match.id).length}
                                     </span>
                                 </div>
                             }
                             color={"grey"}
                             size={"mini"}
                             onClick={(): void => setCommentingOn(match.id)}
-                    />
+                        />
                     )}
                     {reactingTo === match.id && setReactingTo && currentUser && (
                         <div>
@@ -379,9 +380,7 @@ const getCommentObjects = (comments: DbMatchComment[], playersMap: Map<string, D
                 <Comment.Content>
                     <Comment.Author>
                         {commenterName}
-                        <span className={"comment-time"}>
-                            {formattedTimestamp}
-                        </span>
+                        <span className={"comment-time"}>{formattedTimestamp}</span>
                     </Comment.Author>
                     <Comment.Text>{comment.comment}</Comment.Text>
                 </Comment.Content>
@@ -427,7 +426,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
 
     // When the matches change or the user starts/stops commenting (e.g. a new comment has been added), retrieve all comments again.
     useEffect(() => {
-        QuickHitAPI.getMatchComments(setMatchComments, (errorStr) => 
+        QuickHitAPI.getMatchComments(setMatchComments, (errorStr) =>
             makeErrorToast("Could not get comments!", errorStr)
         );
     }, [props.matches, currentlyCommenting]);
@@ -543,28 +542,45 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                     />
                 }
             />
-            {commentingOn !== undefined && currentUser !== undefined && 
-            <Modal open={commentingOn !== undefined && currentUser !== undefined}
-                   closeIcon
-                   onClose={(): void => setCommentingOn(undefined)}>
-                   <Modal.Header>Comments</Modal.Header>
-                   <Modal.Content>
-                       <CommentGroup>
-                           {getCommentObjects(matchComments.filter(comment => comment.matchId === commentingOn),
-                                              getPlayersMap(props.players))}
-                           <Form reply>
-                               <Form.TextArea onChange={(_, {value}): void => {
-                                                   setCommentText(value as string ?? "");
-                                                   setCurrentlyCommenting(true);
-                                               }}
-                                               value={commentText} />
-                               <Button content={"Add Comment"}
-                                       color={"blue"}
-                                       onClick={(): void => sendCommentRequest(commentingOn, commentText, setCommentText, setCurrentlyCommenting, currentUser)} />
-                           </Form>
-                       </CommentGroup>
-                   </Modal.Content>
-               </Modal>}
+            {commentingOn !== undefined && currentUser !== undefined && (
+                <Modal
+                    open={commentingOn !== undefined && currentUser !== undefined}
+                    closeIcon
+                    onClose={(): void => setCommentingOn(undefined)}
+                >
+                    <Modal.Header>Comments</Modal.Header>
+                    <Modal.Content>
+                        <CommentGroup>
+                            {getCommentObjects(
+                                matchComments.filter((comment) => comment.matchId === commentingOn),
+                                getPlayersMap(props.players)
+                            )}
+                            <Form reply>
+                                <Form.TextArea
+                                    onChange={(_, { value }): void => {
+                                        setCommentText((value as string) ?? "");
+                                        setCurrentlyCommenting(true);
+                                    }}
+                                    value={commentText}
+                                />
+                                <Button
+                                    content={"Add Comment"}
+                                    color={"blue"}
+                                    onClick={(): void =>
+                                        sendCommentRequest(
+                                            commentingOn,
+                                            commentText,
+                                            setCommentText,
+                                            setCurrentlyCommenting,
+                                            currentUser
+                                        )
+                                    }
+                                />
+                            </Form>
+                        </CommentGroup>
+                    </Modal.Content>
+                </Modal>
+            )}
         </div>
     );
 }
