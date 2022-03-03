@@ -35,9 +35,6 @@ export interface RecentGamesProps {
 
 export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
 
-// TODOs:
-// - Add message when no comments exist yet.
-
 // A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
     matchId: string;
@@ -83,6 +80,14 @@ const sendReactRequest = (
     );
 };
 
+/**
+ * Add a comment to the supplied match with the supplied text by the supplied user.
+ * @param matchId The ID of the match to add the comment on.
+ * @param comment The text of the comment to be added.
+ * @param setCommentText The useState setter to be called on success, resetting the comment input field to be empty.
+ * @param setCurrentlyCommenting The useState setter to be called on success, effectively refreshing the comments displayed.
+ * @param currentUser The user being currently identified as.
+ */
 const sendCommentRequest = (
     matchId: string,
     comment: string,
@@ -183,7 +188,6 @@ export const turnMatchIntoFeedItems = (
     currentUser?: string,
     setPendingReaction?: (reaction: PendingReaction) => void,
     matchComments?: DbMatchComment[],
-    commentingOn?: string,
     setCommentingOn?: (matchId: string | undefined) => void,
 ): FeedEventProps[] => {
     if (filteredMatches.length === 0 || players.length === 0) {
@@ -357,6 +361,12 @@ export const turnMatchIntoFeedItems = (
     return events;
 };
 
+/**
+ * Get the array of <Comment> objects for the supplied DbMatchComment objects.
+ * @param comments The comments for a particular match.
+ * @param playersMap The map mapping player IDs to objects.
+ * @returns An array of <Comment> objects for these comments.
+ */
 const getCommentObjects = (comments: DbMatchComment[], playersMap: Map<string, DbPlayer>): JSX.Element[] => {
     const sortedComments = comments.sort((c1, c2) => c1.timestamp.localeCompare(c2.timestamp));
 
@@ -378,6 +388,7 @@ const getCommentObjects = (comments: DbMatchComment[], playersMap: Map<string, D
             </Comment>
         );
     });
+    // If there haven't been any comments yet, just return that instead.
     return commentObjects.length > 0 ? commentObjects : [<div>No comments yet.</div>];
 };
 
@@ -393,6 +404,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
     const [pendingReaction, setPendingReaction] = useState<PendingReaction | undefined>(undefined);
     const [commentText, setCommentText] = useState<string>("");
+    // Track this so that we can refresh the comments being currently displayed on submit.
     const [currentlyCommenting, setCurrentlyCommenting] = useState<boolean>(false);
 
     // Runs on mount.
@@ -413,6 +425,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
         );
     }, [props.matches, reactingTo]);
 
+    // When the matches change or the user starts/stops commenting (e.g. a new comment has been added), retrieve all comments again.
     useEffect(() => {
         QuickHitAPI.getMatchComments(setMatchComments, (errorStr) => 
             makeErrorToast("Could not get comments!", errorStr)
@@ -482,7 +495,6 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             currentUser,
             setPendingReaction,
             matchComments,
-            commentingOn,
             setCommentingOn
         );
     };
