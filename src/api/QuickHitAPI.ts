@@ -4,6 +4,8 @@ import {
     DbHappyHour,
     DbInstance,
     DbMatch,
+    DbMatchComment,
+    DbMatchReaction,
     DbPlayer,
     DbTournament,
     getTodaysDate,
@@ -220,6 +222,71 @@ export class QuickHitAPI {
         )
             .then(() => onSuccess())
             .catch((error: AxiosError) => onFailure(error.message));
+    }
+
+    public static addMatchReaction(
+        matchReaction: DbMatchReaction,
+        onSuccess: () => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.MATCH_REACTION,
+            HttpMethod.PATCH,
+            `{"${matchReaction.id}" : ${JSON.stringify(matchReaction)}}`
+        )
+            .then(onSuccess)
+            .catch((error: AxiosError) => onFailure(error.message));
+    }
+
+    public static removeMatchReaction(
+        reactionId: string,
+        onSuccess: () => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        // Can't use ApiActions here because we need to delete a specific key from the match reactions.
+        QuickHitAPI.makeAxiosRequest(`matchreaction/${reactionId}.json`, HttpMethod.DELETE)
+            .then(onSuccess)
+            .catch((error: AxiosError) => onFailure(error.message));
+    }
+
+    public static getMatchReactions(
+        onSuccess: (matchReactions: DbMatchReaction[]) => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_REACTION, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data ? Object.values(response.data) : []);
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static addMatchComment(
+        matchComment: DbMatchComment,
+        onSuccess: () => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.MATCH_COMMENT,
+            HttpMethod.PATCH,
+            `{"${matchComment.id}" : ${JSON.stringify(matchComment)}}`
+        )
+            .then(onSuccess)
+            .catch((error: AxiosError) => onFailure(error.message));
+    }
+
+    public static getMatchComments(
+        onSuccess: (matchComments: DbMatchComment[]) => void,
+        onFailure: (errorStr: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.MATCH_COMMENT, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(response.data ? Object.values(response.data) : []);
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
     }
 
     private static makeAxiosRequest(uri: string, method: HttpMethod, data?: string): AxiosPromise {

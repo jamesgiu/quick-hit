@@ -3,6 +3,8 @@ export enum HttpMethod {
     POST = "post",
     PUT = "put",
     PATCH = "patch",
+    // Use the below with care, you can delete a whole JSON if you're not careful.
+    DELETE = "delete",
 }
 
 export enum ApiActions {
@@ -13,4 +15,6 @@ export enum ApiActions {
     BADGE = "badge.json",
     TOURNAMENT = "tournament.json",
     CHAT = "chat.json",
+    MATCH_REACTION = "matchreaction.json",
+    MATCH_COMMENT = "matchcomment.json",
 }

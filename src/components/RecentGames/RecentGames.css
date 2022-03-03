@@ -43,3 +43,25 @@
 .ui.pagination.menu a:hover {
   background-color: rgb(196, 186, 183);
 }
+
+.reaction.ui.button {
+  font-size: larger;
+  padding: 6px;
+  height: auto;
+}
+
+.reactions-count {
+  font-size: medium;
+  margin-left: 5px;
+}
+
+.comment-time {
+  font-style: italic;
+  font-weight: lighter;
+  margin-left: 5px;
+  font-size: smaller;
+}
+
+.add-react i {
+  display: inline;
+}
