@@ -41,7 +41,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>();
     const [availablePlayers, setAvailablePlayers] = React.useState<DbPlayer[]>(props.players);
 
-    useEffect(() => setAvailablePlayers(availablePlayers.filter((player) => !player.retired)), [props.players]);
+    useEffect(() => setAvailablePlayers(props.players.filter((player) => !player.retired)), [props.players]);
 
     const sendCreateRequest = (addAnother: boolean): void => {
         const onSuccess = (): void => {
