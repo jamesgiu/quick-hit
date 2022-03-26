@@ -49,7 +49,7 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                         <Form.Field>
                             <Form.Select
                                 label={"Player"}
-                                options={props.players.map((player) => renderPlayerOption(player))}
+                                options={props.players && props.players.map((player) => renderPlayerOption(player))}
                                 search={(options, value): DropdownItemProps[] => {
                                     return options.filter((option) => {
                                         const player = JSON.parse(option.value as string);
