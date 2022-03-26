@@ -13,6 +13,7 @@ import PlayerStatistics from "./containers/PlayerStatistics";
 import QHDataLoader from "./containers/QHDataLoader";
 import Tournament from "./containers/Tournament/Tournament";
 import HallOfFallen from "./containers/HallOfFallen/HallOfFallen";
+import KeyPrompt from "./containers/KeyPrompt";
 
 function App(): JSX.Element {
     return (
@@ -22,6 +23,7 @@ function App(): JSX.Element {
                 <Navbar />
                 <div className={"app-main-content"}>
                     <Switch>
+                        <Route exact path={`${BASE_PATH()}/:instance/:authKey`} component={KeyPrompt} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.HOME}`} component={Home} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.LADDER}`} component={Ladder} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`} component={Tournament} />

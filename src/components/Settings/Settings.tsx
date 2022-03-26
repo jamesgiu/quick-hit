@@ -1,6 +1,6 @@
 import * as DarkReader from "darkreader";
 import React, { useState } from "react";
-import {Button, DropdownItemProps, Form, Icon, Menu, Modal, Select} from "semantic-ui-react";
+import {Button, DropdownItemProps, Form, Icon, Menu, Modal} from "semantic-ui-react";
 import { SettingsDispatchType } from "../../containers/Settings/Settings";
 import {renderPlayerOption} from "../NewGame/NewGame";
 import {DbPlayer} from "../../types/database/models";
