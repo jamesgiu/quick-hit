@@ -224,7 +224,7 @@ export class QuickHitAPI {
             .catch((error: AxiosError) => onFailure(error.message));
     }
 
-    public static addMatchReation(
+    public static addMatchReaction(
         matchReaction: DbMatchReaction,
         onSuccess: () => void,
         onFailure: (errorStr: string) => void
