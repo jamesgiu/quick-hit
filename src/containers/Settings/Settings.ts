@@ -5,7 +5,7 @@ import { QuickHitReduxStores } from "../../redux/types/store";
 import * as viewActions from "../../redux/actions/ViewActions";
 import { ViewDispatchType } from "../Ladder/Ladder";
 import { SettingsProps } from "../../components/Settings/Settings";
-import {DbPlayer} from "../../types/database/models";
+import { DbPlayer } from "../../types/database/models";
 
 export type SettingsDispatchType = ViewDispatchType & {
     setDisableMusic: (disableMusic: boolean) => void;
@@ -40,7 +40,8 @@ export function mapDispatchToProps(
             dispatch(viewActions.setShowCards(showCards)),
         setDisableMusic: (disableMusic: boolean): viewActions.SetDisableMusicAction =>
             dispatch(viewActions.setDisableMusic(disableMusic)),
-        setCurrentUser: (newUser: DbPlayer): viewActions.SetCurrentUserAction => dispatch(viewActions.setCurrentUser(newUser)),
+        setCurrentUser: (newUser: DbPlayer): viewActions.SetCurrentUserAction =>
+            dispatch(viewActions.setCurrentUser(newUser)),
         setDarkMode: (isDarkMode: boolean): viewActions.SetDarkModeAction =>
             dispatch(viewActions.setDarkMode(isDarkMode)),
     };

@@ -7,13 +7,16 @@ import {
     Divider,
     DropdownItemProps,
     Feed,
-    Form, FormCheckbox, FormField,
+    Form,
+    FormCheckbox,
+    FormField,
     Header,
     Icon,
     Modal,
     Pagination,
     PaginationProps,
-    Popup, Segment,
+    Popup,
+    Segment,
     Select,
     Transition,
 } from "semantic-ui-react";
@@ -534,43 +537,43 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                 open={(reactingTo !== undefined || commentingOn !== undefined) && !currentUserId}
                 header={"Wait a sec, who are you?"}
                 content={
-                <Form>
-                    <FormField>
-                        <Select
-                            fluid
-                            label={"Player"}
-                            options={props.players.map((player) => renderPlayerOption(player))}
-                            search={(options, value): DropdownItemProps[] => {
-                                return options.filter((option) => {
-                                    const player = JSON.parse(option.value as string);
-                                    return player.name.toLowerCase().includes(value.toLowerCase());
-                                });
-                            }}
-                            placeholder={"Average commenter"}
-                            onChange={(_, data): void => {
-                                const user = JSON.parse(data.value as string) as DbPlayer
-                                setCurrentUserId(user.id)
+                    <Form>
+                        <FormField>
+                            <Select
+                                fluid
+                                label={"Player"}
+                                options={props.players.map((player) => renderPlayerOption(player))}
+                                search={(options, value): DropdownItemProps[] => {
+                                    return options.filter((option) => {
+                                        const player = JSON.parse(option.value as string);
+                                        return player.name.toLowerCase().includes(value.toLowerCase());
+                                    });
+                                }}
+                                placeholder={"Average commenter"}
+                                onChange={(_, data): void => {
+                                    const user = JSON.parse(data.value as string) as DbPlayer;
+                                    setCurrentUserId(user.id);
 
-                                if (rememberMe) {
-                                   props.setCurrentUser(user);
-                                }
-                            }}
-                        />
-                    </FormField>
-                    <FormField>
-                        <Segment>
-                            <FormCheckbox defaultChecked={true} label={"Remember me"} onChange={() : void =>setRememberMe(!rememberMe)}/>
-                        </Segment>
-                    </FormField>
-                </Form>
+                                    if (rememberMe) {
+                                        props.setCurrentUser(user);
+                                    }
+                                }}
+                            />
+                        </FormField>
+                        <FormField>
+                            <Segment>
+                                <FormCheckbox
+                                    defaultChecked={true}
+                                    label={"Remember me"}
+                                    onChange={(): void => setRememberMe(!rememberMe)}
+                                />
+                            </Segment>
+                        </FormField>
+                    </Form>
                 }
             />
             {commentingOn !== undefined && currentUserId !== undefined && (
-                <Modal
-                    open={true}
-                    closeIcon
-                    onClose={(): void => setCommentingOn(undefined)}
-                >
+                <Modal open={true} closeIcon onClose={(): void => setCommentingOn(undefined)}>
                     <Modal.Header>Comments</Modal.Header>
                     <Modal.Content>
                         <CommentGroup>

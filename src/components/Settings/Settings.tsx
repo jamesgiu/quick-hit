@@ -1,9 +1,9 @@
 import * as DarkReader from "darkreader";
 import React, { useState } from "react";
-import {Button, DropdownItemProps, Form, Icon, Menu, Modal} from "semantic-ui-react";
+import { Button, DropdownItemProps, Form, Icon, Menu, Modal } from "semantic-ui-react";
 import { SettingsDispatchType } from "../../containers/Settings/Settings";
-import {renderPlayerOption} from "../NewGame/NewGame";
-import {DbPlayer} from "../../types/database/models";
+import { renderPlayerOption } from "../NewGame/NewGame";
+import { DbPlayer } from "../../types/database/models";
 
 export interface SettingsProps {
     hideZeroGamePlayers: boolean;
@@ -59,7 +59,7 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                                 defaultValue={JSON.stringify(props.currentUser)}
                                 placeholder={"Average QuickHit user"}
                                 onChange={(_, data): void => {
-                                    const user = JSON.parse(data.value as string)
+                                    const user = JSON.parse(data.value as string);
                                     props.setCurrentUser(user);
                                 }}
                             />

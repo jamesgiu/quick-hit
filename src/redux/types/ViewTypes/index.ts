@@ -1,4 +1,4 @@
-import {DbPlayer} from "../../../types/database/models";
+import { DbPlayer } from "../../../types/database/models";
 
 export interface ViewStoreState {
     hideUnplacedPlayers: boolean;

@@ -1,5 +1,5 @@
 import * as constants from "../../constants/ViewConstants";
-import {DbPlayer} from "../../../types/database/models";
+import { DbPlayer } from "../../../types/database/models";
 
 export interface SetUnplacedFilterAction {
     type: constants.SET_HIDE_UNPLACED_PLAYERS_TYPE;

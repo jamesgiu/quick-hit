@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
-import RecentGames, {RecentGamesOwnProps} from "../../components/RecentGames/RecentGames";
+import RecentGames, { RecentGamesOwnProps } from "../../components/RecentGames/RecentGames";
 import { TTStoreState } from "../../redux/types/TTTypes";
 import { QuickHitReduxStores } from "../../redux/types/store";
-import {Dispatch} from "redux";
+import { Dispatch } from "redux";
 import * as viewActions from "../../redux/actions/ViewActions";
 import * as actions from "../../redux/actions/TTActions";
-import {DbPlayer} from "../../types/database/models";
+import { DbPlayer } from "../../types/database/models";
 
 export type RecentGamesDispatchType = {
     setCurrentUser: (newUser: DbPlayer) => void;
@@ -15,7 +15,7 @@ export type RecentGamesDispatchType = {
 export function mapStateToProps(
     store: QuickHitReduxStores,
     ownProps: RecentGamesOwnProps
-): TTStoreState & RecentGamesOwnProps & {currentUser?: DbPlayer} {
+): TTStoreState & RecentGamesOwnProps & { currentUser?: DbPlayer } {
     return {
         loading: store.ttData.loading,
         players: store.ttData.players,
@@ -29,10 +29,14 @@ export function mapStateToProps(
     };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<viewActions.SetCurrentUserAction | actions.SetForceRefreshAction>): RecentGamesDispatchType {
+export function mapDispatchToProps(
+    dispatch: Dispatch<viewActions.SetCurrentUserAction | actions.SetForceRefreshAction>
+): RecentGamesDispatchType {
     return {
-        setCurrentUser: (newUser: DbPlayer): viewActions.SetCurrentUserAction => dispatch(viewActions.setCurrentUser(newUser)),
-        setForceRefresh: (newRefresh: boolean): actions.SetForceRefreshAction => dispatch(actions.setRefresh(newRefresh)),
+        setCurrentUser: (newUser: DbPlayer): viewActions.SetCurrentUserAction =>
+            dispatch(viewActions.setCurrentUser(newUser)),
+        setForceRefresh: (newRefresh: boolean): actions.SetForceRefreshAction =>
+            dispatch(actions.setRefresh(newRefresh)),
     };
 }
 

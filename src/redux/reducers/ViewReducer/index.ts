@@ -24,7 +24,12 @@ export const viewInitialState: ViewStoreState = {
 
 export function viewReducer(
     state: ViewStoreState = viewInitialState,
-    action: SetUnplacedFilterAction | SetShowCardsAction | SetDisableMusicAction | SetCurrentUserAction | SetDarkModeAction
+    action:
+        | SetUnplacedFilterAction
+        | SetShowCardsAction
+        | SetDisableMusicAction
+        | SetCurrentUserAction
+        | SetDarkModeAction
 ): ViewStoreState {
     switch (action.type) {
         case SET_HIDE_UNPLACED_PLAYERS:

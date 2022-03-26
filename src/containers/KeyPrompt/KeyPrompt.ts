@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import KeyPrompt, {KeyPromptProps} from "../../components/KeyPrompt/KeyPrompt";
+import KeyPrompt, { KeyPromptProps } from "../../components/KeyPrompt/KeyPrompt";
 import { Dispatch } from "redux";
 import * as authActions from "../../redux/actions/AuthActions";
 import { SetAuthKeyAction, SetChosenInstanceAction, SetAuthDetailAction } from "../../redux/actions/AuthActions";
@@ -11,7 +11,7 @@ export function mapStateToProps(store: QuickHitReduxStores): AuthStoreState {
     return {
         authKey: store.authStore.authKey,
         chosenInstance: store.authStore.chosenInstance,
-        authDetail: store.authStore.authDetail
+        authDetail: store.authStore.authDetail,
     };
 }
 

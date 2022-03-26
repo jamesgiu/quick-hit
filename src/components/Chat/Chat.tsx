@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "./Chat.css";
 import { Button, Divider, Feed, Form, Header, Icon, Menu, Portal, Segment } from "semantic-ui-react";
 import { makeErrorToast } from "../Toast/Toast";
-import {DbChatRoom, DbChatRoomMessage, DbPlayer, getTodaysDate} from "../../types/database/models";
+import { DbChatRoom, DbChatRoomMessage, DbPlayer, getTodaysDate } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
@@ -112,7 +112,9 @@ function Chat(props: ChatProps): JSX.Element {
                 id: uuidv4(),
                 text: messageField.length > 255 ? "<long message goes splat>" : encodeURIComponent(messageField.trim()),
                 author:
-                    !props.currentUser || props.currentUser.name.trim() === "" ? "Anonymous" : encodeURIComponent(props.currentUser.name),
+                    !props.currentUser || props.currentUser.name.trim() === ""
+                        ? "Anonymous"
+                        : encodeURIComponent(props.currentUser.name),
                 date: new Date().toISOString(),
             };
 

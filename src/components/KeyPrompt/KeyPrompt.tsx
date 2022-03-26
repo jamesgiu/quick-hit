@@ -8,8 +8,9 @@ import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import { AuthUserDetail } from "../../redux/types/AuthTypes";
 import ReactGA from "react-ga";
-import {match} from "react-router";
+import { match } from "react-router";
 import * as H from "history";
+import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 
 export interface KeyPromptMatchParams {
     instance: string;
@@ -119,36 +120,29 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         };
     };
 
-    console.log(instances);
-    console.log(props.authKey);
-
-
     if (props.match) {
-        console.log(props);
-
         const instanceId = props.match.params.instance;
         const authKey = props.match.params.authKey;
 
         let matchedInstanceWithParam = null;
 
         instances.forEach((instance) => {
-            console.log(instance.fb_project_id, instanceId);
             if (instance.fb_project_id === instanceId) {
                 matchedInstanceWithParam = instance;
             }
-        })
+        });
 
         if (!matchedInstanceWithParam) {
-           makeErrorToast("Unable to authenticate", "Given instance name was incorrect!");
+            makeErrorToast("Unable to authenticate", "Given instance name was incorrect!");
         } else {
-            props.setChosenInstance(matchedInstanceWithParam)
+            props.setChosenInstance(matchedInstanceWithParam);
             props.setAuthKey(authKey);
             props.setAuthDetail(undefined);
             // Allow for the async Redux calls.
-            setTimeout(() => location.replace("/"), 1000);
+            setTimeout(() => location.replace(`${BASE_PATH()}${QuickHitPage.HOME}`), 500);
         }
 
-        return (<span>Redirecting...</span>);
+        return <span>Redirecting...</span>;
     }
 
     // Only for Google Auth - non-Google auth auto-refreshes the token.
