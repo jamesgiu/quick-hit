@@ -5,10 +5,11 @@ import { QuickHitReduxStores } from "../../redux/types/store";
 import * as viewActions from "../../redux/actions/ViewActions";
 import { ViewDispatchType } from "../Ladder/Ladder";
 import { SettingsProps } from "../../components/Settings/Settings";
+import {DbPlayer} from "../../types/database/models";
 
 export type SettingsDispatchType = ViewDispatchType & {
     setDisableMusic: (disableMusic: boolean) => void;
-    setUsername: (username: string) => void;
+    setCurrentUser: (newUser: DbPlayer) => void;
     setDarkMode: (isDarkMode: boolean) => void;
 };
 
@@ -17,8 +18,9 @@ export function mapStateToProps(store: QuickHitReduxStores): SettingsProps {
         hideZeroGamePlayers: store.viewStore.hideUnplacedPlayers,
         showCards: store.viewStore.showCards,
         disableMusic: store.viewStore.disableMusic,
-        username: store.viewStore.username,
+        currentUser: store.viewStore.currentUser,
         darkMode: store.viewStore.darkMode,
+        players: store.ttData.players,
     };
 }
 
@@ -27,7 +29,7 @@ export function mapDispatchToProps(
         | viewActions.SetUnplacedFilterAction
         | viewActions.SetShowCardsAction
         | viewActions.SetDisableMusicAction
-        | viewActions.SetUsernameAction
+        | viewActions.SetCurrentUserAction
         | viewActions.SetDarkModeAction
     >
 ): SettingsDispatchType {
@@ -38,7 +40,7 @@ export function mapDispatchToProps(
             dispatch(viewActions.setShowCards(showCards)),
         setDisableMusic: (disableMusic: boolean): viewActions.SetDisableMusicAction =>
             dispatch(viewActions.setDisableMusic(disableMusic)),
-        setUsername: (username: string): viewActions.SetUsernameAction => dispatch(viewActions.setUsername(username)),
+        setCurrentUser: (newUser: DbPlayer): viewActions.SetCurrentUserAction => dispatch(viewActions.setCurrentUser(newUser)),
         setDarkMode: (isDarkMode: boolean): viewActions.SetDarkModeAction =>
             dispatch(viewActions.setDarkMode(isDarkMode)),
     };

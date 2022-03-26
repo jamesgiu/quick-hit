@@ -7,8 +7,8 @@ export type SET_SHOW_CARDS_TYPE = typeof SET_SHOW_CARDS;
 export const SET_DISABLE_MUSIC = "SET_DISABLE_MUSIC";
 export type SET_DISABLE_MUSIC_TYPE = typeof SET_DISABLE_MUSIC;
 
-export const SET_USERNAME = "SET_USERNAME";
-export type SET_USERNAME_TYPE = typeof SET_USERNAME;
+export const SET_CURRENT_USER = "SET_USERNAME";
+export type SET_CURRENT_USER_TYPE = typeof SET_CURRENT_USER;
 
 export const SET_DARK_MODE = "SET_DARK_MODE";
 export type SET_DARK_MODE_TYPE = typeof SET_DARK_MODE;

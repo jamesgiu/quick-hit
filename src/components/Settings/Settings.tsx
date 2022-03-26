@@ -1,14 +1,17 @@
 import * as DarkReader from "darkreader";
 import React, { useState } from "react";
-import { Button, Form, Icon, Menu, Modal } from "semantic-ui-react";
+import {Button, DropdownItemProps, Form, Icon, Menu, Modal, Select} from "semantic-ui-react";
 import { SettingsDispatchType } from "../../containers/Settings/Settings";
+import {renderPlayerOption} from "../NewGame/NewGame";
+import {DbPlayer} from "../../types/database/models";
 
 export interface SettingsProps {
     hideZeroGamePlayers: boolean;
     showCards: boolean;
     disableMusic: boolean;
-    username: string;
+    currentUser?: DbPlayer;
     darkMode: boolean;
+    players: DbPlayer[];
 }
 
 const DARKMODE_THEME = {
@@ -44,15 +47,21 @@ function Settings(props: SettingsProps & SettingsDispatchType): JSX.Element {
                 <Form>
                     <Form.Group>
                         <Form.Field>
-                            <Form.Input
-                                label={"Set username (e.g. for chat)"}
-                                onChange={(event, data): void => {
-                                    if (data.value.length <= 128) {
-                                        props.setUsername(data.value);
-                                    }
+                            <Form.Select
+                                label={"Player"}
+                                options={props.players.map((player) => renderPlayerOption(player))}
+                                search={(options, value): DropdownItemProps[] => {
+                                    return options.filter((option) => {
+                                        const player = JSON.parse(option.value as string);
+                                        return player.name.toLowerCase().includes(value.toLowerCase());
+                                    });
                                 }}
-                                value={decodeURIComponent(props.username)}
-                                maxLength="128"
+                                defaultValue={JSON.stringify(props.currentUser)}
+                                placeholder={"Average QuickHit user"}
+                                onChange={(_, data): void => {
+                                    const user = JSON.parse(data.value as string)
+                                    props.setCurrentUser(user);
+                                }}
                             />
                         </Form.Field>
                     </Form.Group>
