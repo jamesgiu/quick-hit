@@ -1,4 +1,5 @@
 import * as constants from "../../constants/ViewConstants";
+import { DbPlayer } from "../../../types/database/models";
 
 export interface SetUnplacedFilterAction {
     type: constants.SET_HIDE_UNPLACED_PLAYERS_TYPE;
@@ -15,9 +16,9 @@ export interface SetDisableMusicAction {
     value: boolean;
 }
 
-export interface SetUsernameAction {
-    type: constants.SET_USERNAME_TYPE;
-    value: string;
+export interface SetCurrentUserAction {
+    type: constants.SET_CURRENT_USER_TYPE;
+    value: DbPlayer;
 }
 
 export interface SetDarkModeAction {
@@ -46,10 +47,10 @@ export function setDisableMusic(disableMusic: boolean): SetDisableMusicAction {
     };
 }
 
-export function setUsername(username: string): SetUsernameAction {
+export function setCurrentUser(newUser: DbPlayer): SetCurrentUserAction {
     return {
-        type: constants.SET_USERNAME,
-        value: username,
+        type: constants.SET_CURRENT_USER,
+        value: newUser,
     };
 }
 

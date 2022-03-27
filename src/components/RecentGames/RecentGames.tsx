@@ -8,12 +8,15 @@ import {
     DropdownItemProps,
     Feed,
     Form,
+    FormCheckbox,
+    FormField,
     Header,
     Icon,
     Modal,
     Pagination,
     PaginationProps,
     Popup,
+    Segment,
     Select,
     Transition,
 } from "semantic-ui-react";
@@ -29,11 +32,16 @@ import { v4 } from "uuid";
 import { makeErrorToast } from "../Toast/Toast";
 import { renderPlayerOption } from "../NewGame/NewGame";
 
-export interface RecentGamesProps {
+export interface RecentGamesOwnProps {
     focusedPlayerId?: string;
 }
 
-export type RecentGamesCombinedProps = RecentGamesProps & TTDataPropsTypeCombined;
+export interface RecentGamesProps {
+    currentUser?: DbPlayer;
+    setCurrentUser: (newUser: DbPlayer) => void;
+}
+
+export type RecentGamesCombinedProps = RecentGamesProps & RecentGamesOwnProps & TTDataPropsTypeCombined;
 
 // A very simple interface representing a reaction for a user that is yet to identify themselves.
 interface PendingReaction {
@@ -400,11 +408,13 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     const [commentingOn, setCommentingOn] = useState<string | undefined>(undefined);
     const [matchReactions, setMatchReactions] = useState<DbMatchReaction[]>([]);
     const [matchComments, setMatchComments] = useState<DbMatchComment[]>([]);
-    const [currentUser, setCurrentUser] = useState<string | undefined>(undefined);
+    // If there's a non-standard username "remembered", then use that instead.
+    const [currentUserId, setCurrentUserId] = useState<string | undefined>(props.currentUser?.id);
     const [pendingReaction, setPendingReaction] = useState<PendingReaction | undefined>(undefined);
     const [commentText, setCommentText] = useState<string>("");
     // Track this so that we can refresh the comments being currently displayed on submit.
     const [currentlyCommenting, setCurrentlyCommenting] = useState<boolean>(false);
+    const [rememberMe, setRememberMe] = useState<boolean>(true);
 
     // Runs on mount.
     useEffect(() => {
@@ -434,17 +444,17 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
     // If the user has just identified themselves, check if they just clicked to add another reaction immediately beforehand, and if so,
     // add that reaction to the identified user.
     useEffect(() => {
-        if (pendingReaction && currentUser) {
+        if (pendingReaction && currentUserId) {
             sendReactRequest(
                 pendingReaction.matchId,
                 pendingReaction.emoji,
                 setReactingTo,
-                currentUser,
+                currentUserId,
                 matchReactions
             );
             setPendingReaction(undefined);
         }
-    }, [currentUser]);
+    }, [currentUserId]);
 
     const sortAndFilterMatches = (): void => {
         let sortedAndFilteredMatches: DbMatch[] = props.matches;
@@ -491,7 +501,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
             matchReactions,
             reactingTo,
             setReactingTo,
-            currentUser,
+            currentUserId,
             setPendingReaction,
             matchComments,
             setCommentingOn
@@ -524,30 +534,46 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                 </span>
             </Transition>
             <Modal
-                open={(reactingTo !== undefined || commentingOn !== undefined) && !currentUser}
+                open={(reactingTo !== undefined || commentingOn !== undefined) && !currentUserId}
                 header={"Wait a sec, who are you?"}
                 content={
-                    <Select
-                        fluid
-                        label={"Player"}
-                        options={props.players.map((player) => renderPlayerOption(player))}
-                        search={(options, value): DropdownItemProps[] => {
-                            return options.filter((option) => {
-                                const player = JSON.parse(option.value as string);
-                                return player.name.toLowerCase().includes(value.toLowerCase());
-                            });
-                        }}
-                        placeholder={"Average Commenter"}
-                        onChange={(_, data): void => setCurrentUser(JSON.parse(data.value as string).id)}
-                    />
+                    <Form>
+                        <FormField>
+                            <Select
+                                fluid
+                                label={"Player"}
+                                options={props.players.map((player) => renderPlayerOption(player))}
+                                search={(options, value): DropdownItemProps[] => {
+                                    return options.filter((option) => {
+                                        const player = JSON.parse(option.value as string);
+                                        return player.name.toLowerCase().includes(value.toLowerCase());
+                                    });
+                                }}
+                                placeholder={"Average commenter"}
+                                onChange={(_, data): void => {
+                                    const user = JSON.parse(data.value as string) as DbPlayer;
+                                    setCurrentUserId(user.id);
+
+                                    if (rememberMe) {
+                                        props.setCurrentUser(user);
+                                    }
+                                }}
+                            />
+                        </FormField>
+                        <FormField>
+                            <Segment>
+                                <FormCheckbox
+                                    defaultChecked={true}
+                                    label={"Remember me"}
+                                    onChange={(): void => setRememberMe(!rememberMe)}
+                                />
+                            </Segment>
+                        </FormField>
+                    </Form>
                 }
             />
-            {commentingOn !== undefined && currentUser !== undefined && (
-                <Modal
-                    open={commentingOn !== undefined && currentUser !== undefined}
-                    closeIcon
-                    onClose={(): void => setCommentingOn(undefined)}
-                >
+            {commentingOn !== undefined && currentUserId !== undefined && (
+                <Modal open={true} closeIcon onClose={(): void => setCommentingOn(undefined)}>
                     <Modal.Header>Comments</Modal.Header>
                     <Modal.Content>
                         <CommentGroup>
@@ -573,7 +599,7 @@ function RecentGames(props: RecentGamesCombinedProps): JSX.Element {
                                             commentText,
                                             setCommentText,
                                             setCurrentlyCommenting,
-                                            currentUser
+                                            currentUserId
                                         )
                                     }
                                 />

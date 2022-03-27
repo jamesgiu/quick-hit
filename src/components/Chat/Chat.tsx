@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "./Chat.css";
 import { Button, Divider, Feed, Form, Header, Icon, Menu, Portal, Segment } from "semantic-ui-react";
 import { makeErrorToast } from "../Toast/Toast";
-import { DbChatRoom, DbChatRoomMessage, getTodaysDate } from "../../types/database/models";
+import { DbChatRoom, DbChatRoomMessage, DbPlayer, getTodaysDate } from "../../types/database/models";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import Settings from "../../containers/Settings";
 
 export interface ChatProps {
-    username: string;
+    currentUser?: DbPlayer;
 }
 
 const POLL_RATE_MS = 1000;
@@ -102,7 +102,7 @@ function Chat(props: ChatProps): JSX.Element {
         };
 
         if (chatRoom && messageField && messageField.trim() !== "") {
-            if (props.username.length > 128) {
+            if (props.currentUser && props.currentUser.name.length > 128) {
                 makeErrorToast("Name too long!", "Gib shorter name");
                 return;
             }
@@ -112,7 +112,9 @@ function Chat(props: ChatProps): JSX.Element {
                 id: uuidv4(),
                 text: messageField.length > 255 ? "<long message goes splat>" : encodeURIComponent(messageField.trim()),
                 author:
-                    !props.username || props.username.trim() === "" ? "Anonymous" : encodeURIComponent(props.username),
+                    !props.currentUser || props.currentUser.name.trim() === ""
+                        ? "Anonymous"
+                        : encodeURIComponent(props.currentUser.name),
                 date: new Date().toISOString(),
             };
 
@@ -167,7 +169,7 @@ function Chat(props: ChatProps): JSX.Element {
                         <Header>QuickHit Daily Chat</Header>
                         <p>Chat for {chatRoom.date}</p>
                         <p>
-                            Username: {decodeURIComponent(props.username)} <Settings />{" "}
+                            Username: {decodeURIComponent(props.currentUser?.name ?? "Anonymous")} <Settings />{" "}
                         </p>
                         <Feed className={"chat-feed"} events={getMessages()} />
                         <Form className={"message-form"}>

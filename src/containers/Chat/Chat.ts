@@ -4,7 +4,7 @@ import Chat, { ChatProps } from "../../components/Chat/Chat";
 
 export function mapStateToProps(store: QuickHitReduxStores): ChatProps {
     return {
-        username: store.viewStore.username,
+        currentUser: store.viewStore.currentUser,
     };
 }
 

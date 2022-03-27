@@ -11,7 +11,7 @@ const TOAST_DEFAULT_OPTS = {
  * QuickHit Toast
  */
 function Toaster(): JSX.Element {
-    return <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"} maxToasts={2} />;
+    return <SemanticToastContainer position="bottom-center" className={"quick-hit-toasts"} maxToasts={1} />;
 }
 
 export const makeSuccessToast = (title: string, message: string): void => {
