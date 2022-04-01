@@ -120,7 +120,8 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         };
     };
 
-    if (props.match) {
+    // Todo: use quickhitpage later
+    if (props.match && !props.match.includes("players")) {
         const instanceId = props.match.params.instance;
         const authKey = props.match.params.authKey;
 
