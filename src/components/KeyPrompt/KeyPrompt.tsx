@@ -121,7 +121,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
     };
 
     // Todo: use quickhitpage later
-    if (props.match && !props.match.params.instance === "player")) {
+    if (props.match && !(props.match.params.instance === "player")) {
         const instanceId = props.match.params.instance;
         const authKey = props.match.params.authKey;
 
