@@ -23,13 +23,13 @@ function App(): JSX.Element {
                 <Navbar />
                 <div className={"app-main-content"}>
                     <Switch>
-                        <Route exact path={`${BASE_PATH()}/:instance/:authKey`} component={KeyPrompt} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.HOME}`} component={Home} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.LADDER}`} component={Ladder} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`} component={Tournament} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.HALL_OF_FALLEN}`} component={HallOfFallen} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`} component={RecentGames} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.STATISTICS}`} component={PlayerStatistics} />
+                        <Route exact path={`${BASE_PATH()}/:instance/:authKey`} component={KeyPrompt} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.NOT_FOUND}`} component={NotFound} />
                         <Route exact path={BASE_PATH()} component={Home} />
                         <Redirect to={`${BASE_PATH()}${QuickHitPage.NOT_FOUND}`} />
