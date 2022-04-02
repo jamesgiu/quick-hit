@@ -29,6 +29,7 @@ export const dataInitialState: TTStoreState = {
     },
     badges: [],
     tournaments: [],
+    doublesPairs: [],
     refresh: false,
 };
 

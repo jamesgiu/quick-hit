@@ -36,6 +36,11 @@ export interface DbPlayer {
     retired?: boolean;
 }
 
+export interface DbDoublesPair extends DbPlayer {
+    player1_id: string;
+    player2_id: string
+}
+
 export interface DbHappyHour {
     /* yyyy-mm-dd */
     date: string;

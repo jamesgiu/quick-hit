@@ -14,6 +14,7 @@ export function mapTTDataToProps(store: QuickHitReduxStores): TTStoreState & { c
     return {
         loading: store.ttData.loading,
         players: store.ttData.players,
+        doublesPairs: store.ttData.doublesPairs,
         matches: store.ttData.matches,
         happyHour: store.ttData.happyHour,
         badges: store.ttData.badges,

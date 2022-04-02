@@ -15,6 +15,7 @@ export function mapStateToProps(store: QuickHitReduxStores): TournamentReduxProp
         refresh: store.ttData.refresh,
         happyHour: store.ttData.happyHour,
         badges: store.ttData.badges,
+        doublesPairs: store.ttData.doublesPairs,
         tournaments: store.ttData.tournaments,
         disableMusic: store.viewStore.disableMusic,
         chosenInstance: store.authStore.chosenInstance,
