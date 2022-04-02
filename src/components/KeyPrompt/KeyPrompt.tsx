@@ -24,8 +24,6 @@ export interface KeyPromptProps {
     setAuthKey: (newKey: string) => void;
     setChosenInstance: (newInstance: DbInstance) => void;
     setAuthDetail: (newAuthDetail?: AuthUserDetail) => void;
-    history?: H.History;
-    location?: H.Location;
     match?: match<KeyPromptMatchParams>;
 }
 

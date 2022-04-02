@@ -7,7 +7,7 @@ import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { checkForAchievementTriggers } from "../Achievements/AchievementChecker";
-import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
+import { getPlayersMap, getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
 import { NewGameStoreProps } from "../../containers/NewGame/NewGame";
 import { TTRefreshDispatchType } from "../../containers/shared";
 
@@ -93,10 +93,10 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
             }
 
             const winningPlayerUnderPlacement = isUnderPlacement(
-                getWinLossForPlayer(winningPlayer.id, props.matches).matches
+                getWinLossForPlayerOrPair(winningPlayer.id, props.matches).matches
             );
             const losingPlayerUnderPlacement = isUnderPlacement(
-                getWinLossForPlayer(losingPlayer.id, props.matches).matches
+                getWinLossForPlayerOrPair(losingPlayer.id, props.matches).matches
             );
 
             // Gets expected score for first parameter

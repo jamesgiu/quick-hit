@@ -110,6 +110,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
 
     const getDoublesPairs = (): void => {
         const onSuccess = (doublesPairs: DbDoublesPair[]): void => {
+            console.log("setting doubles pairs", doublesPairs);
             props.setDoublesPairs(doublesPairs);
         };
 
@@ -194,7 +195,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     );
 }
 
-export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
+export const getWinLossForPlayerOrPair = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
         losses: 0,

@@ -8,6 +8,7 @@ export function BASE_PATH(): string {
 export enum QuickHitPage {
     HOME = "/",
     LADDER = "/ladder",
+    DOUBLES_LADDER = "/ladder/doubles",
     RECENT_GAMES = "/recent",
     STATISTICS = "/player/:playerId",
     TOURNAMENT = "/tournament",

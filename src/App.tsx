@@ -25,6 +25,7 @@ function App(): JSX.Element {
                     <Switch>
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.HOME}`} component={Home} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.LADDER}`} component={Ladder} />
+                        <Route exact path={`${BASE_PATH()}${QuickHitPage.DOUBLES_LADDER}`} component={Ladder} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.TOURNAMENT}`} component={Tournament} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.HALL_OF_FALLEN}`} component={HallOfFallen} />
                         <Route exact path={`${BASE_PATH()}${QuickHitPage.RECENT_GAMES}`} component={RecentGames} />

@@ -657,6 +657,9 @@ function Tournament(props: TournamentReduxProps & TTRefreshDispatchType): JSX.El
 
     return (
         <div>
+            <Header as={"h2"} icon>
+                <Icon name="trophy" circular />
+            </Header>
             {sortedTournaments.length > 0 && tournamentIsFinished(sortedTournaments[0]) ? (
                 <div>
                     <div className={"congrats-div"}>Congratulations {getWinner(sortedTournaments[0])}!</div>
