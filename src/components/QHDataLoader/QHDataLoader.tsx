@@ -111,7 +111,6 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
 
     const getDoublesPairs = (): void => {
         const onSuccess = (doublesPairs: DbDoublesPair[]): void => {
-            console.log("setting doubles pairs", doublesPairs);
             props.setDoublesPairs(doublesPairs);
         };
 

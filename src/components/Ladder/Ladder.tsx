@@ -24,7 +24,7 @@ export const NUM_OF_FORM_GUIDE_MATCHES = 5;
  * QuickHit Ladder page.
  */
 function Ladder(props: LadderProps): JSX.Element {
-    const isDoubles = props.location.pathname === QuickHitPage.DOUBLES_LADDER;
+    const isDoubles = props.location.pathname === `${BASE_PATH()}${QuickHitPage.DOUBLES_LADDER}`;
 
     const renderPlayersAsCards = (): JSX.Element[] => {
         const ladder: JSX.Element[] = [];
