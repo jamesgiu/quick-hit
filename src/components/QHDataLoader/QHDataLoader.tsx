@@ -8,7 +8,8 @@ import { makeErrorToast, makeRefreshToast } from "../Toast/Toast";
 import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { Loader, Transition } from "semantic-ui-react";
 import {
-    DbBadge, DbDoublesPair,
+    DbBadge,
+    DbDoublesPair,
     DbHappyHour,
     DbInstance,
     DbMatch,

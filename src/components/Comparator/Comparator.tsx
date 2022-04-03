@@ -108,12 +108,18 @@ function Comparator(props: ComparatorStoreProps): JSX.Element {
                     <Grid.Row>
                         <Grid.Column>
                             {playerOne &&
-                                getELOString(getWinLossForPlayerOrPair(playerOne.id, props.matches).matches, playerOne.elo)}
+                                getELOString(
+                                    getWinLossForPlayerOrPair(playerOne.id, props.matches).matches,
+                                    playerOne.elo
+                                )}
                         </Grid.Column>
                         <Grid.Column className={"centre-column"}>ELO</Grid.Column>
                         <Grid.Column>
                             {playerTwo &&
-                                getELOString(getWinLossForPlayerOrPair(playerTwo.id, props.matches).matches, playerTwo.elo)}
+                                getELOString(
+                                    getWinLossForPlayerOrPair(playerTwo.id, props.matches).matches,
+                                    playerTwo.elo
+                                )}
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row className={"prediction-row"}>

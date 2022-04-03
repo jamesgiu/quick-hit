@@ -23,7 +23,7 @@ it("renders and runs connect without crashing", () => {
     render(
         <Provider store={store}>
             <BrowserRouter>
-                <Ladder />
+                <Ladder location={{ pathname: "" }} />
             </BrowserRouter>
         </Provider>
     );

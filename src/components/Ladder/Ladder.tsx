@@ -1,20 +1,22 @@
 import "./Ladder.css";
-import {Button, Header, Icon, Table, Transition} from "semantic-ui-react";
+import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import NewGame from "../../containers/NewGame";
-import { getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
+import { getPlayersMap, getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import { Link } from "react-router-dom";
 import { ViewDispatchType } from "../../containers/Ladder/Ladder";
 import { ViewStoreState } from "../../redux/types/ViewTypes";
-import {DbDoublesPair, DbPlayer, getELOString, isUnderPlacement} from "../../types/database/models";
+import { DbDoublesPair, DbPlayer, getELOString, isUnderPlacement } from "../../types/database/models";
 import * as H from "history";
 
-export type LadderProps = ViewStoreState & TTDataPropsTypeCombined & ViewDispatchType & {
-    location: H.Location;
-};
+export type LadderProps = ViewStoreState &
+    TTDataPropsTypeCombined &
+    ViewDispatchType & {
+        location: H.Location;
+    };
 
 export const NUM_OF_FORM_GUIDE_MATCHES = 5;
 
@@ -33,7 +35,9 @@ function Ladder(props: LadderProps): JSX.Element {
             if (!playerOrDoublesPair.retired) {
                 const winLoss = getWinLossForPlayerOrPair(playerOrDoublesPair.id, props.matches);
 
-                const playerCard = <PlayerCard player={playerOrDoublesPair} winLoss={winLoss} matchesPlayed={winLoss.matches} />;
+                const playerCard = (
+                    <PlayerCard player={playerOrDoublesPair} winLoss={winLoss} matchesPlayed={winLoss.matches} />
+                );
 
                 // If we are hiding zero game players, then only push if they have played a game
                 if (props.hideUnplacedPlayers) {
@@ -79,6 +83,9 @@ function Ladder(props: LadderProps): JSX.Element {
             }
 
             if (addPlayerOrPair) {
+                const playersMap = getPlayersMap(props.players);
+                const doublesPair = playerOrPair as DbDoublesPair;
+
                 const formStr =
                     winLoss && winLoss.formGuide.substr(0, NUM_OF_FORM_GUIDE_MATCHES).split("").reverse().join("");
 
@@ -96,6 +103,12 @@ function Ladder(props: LadderProps): JSX.Element {
                                 </span>
                             </Link>
                         </Table.Cell>
+                        {isDoubles && (
+                            <Table.Cell>
+                                {playersMap.get(doublesPair.player1_id)?.name} &{" "}
+                                {playersMap.get(doublesPair.player2_id)?.name}
+                            </Table.Cell>
+                        )}
                         <Table.Cell>{getELOString(winLoss.wins + winLoss.losses, playerOrPair.elo)}</Table.Cell>
                         <Table.Cell>
                             {winLoss.wins}-{winLoss.losses}
@@ -116,7 +129,8 @@ function Ladder(props: LadderProps): JSX.Element {
             <Table unstackable celled>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Player</Table.HeaderCell>
+                        <Table.HeaderCell>{isDoubles ? "Team" : "Player"}</Table.HeaderCell>
+                        {isDoubles && <Table.HeaderCell>Members</Table.HeaderCell>}
                         <Table.HeaderCell>ELO</Table.HeaderCell>
                         <Table.HeaderCell>W-L</Table.HeaderCell>
                         <Table.HeaderCell>Form</Table.HeaderCell>
@@ -230,22 +244,25 @@ function Ladder(props: LadderProps): JSX.Element {
     return (
         <div className="players">
             <Header as={"h2"} icon>
-                {isDoubles ?
+                {isDoubles ? (
                     <span>
-                        <Icon children={
-                            <span>
-                                <Icon name={"child"} className={"first-child"}/>
-                                <Icon name={"child"} className={"second-child"}/>
-                            </span>
-                        } circular/>
+                        <Icon
+                            children={
+                                <span>
+                                    <Icon name={"child"} className={"first-child"} />
+                                    <Icon name={"child"} className={"second-child"} />
+                                </span>
+                            }
+                            circular
+                        />
                         <Header.Content>Doubles ladder</Header.Content>
                     </span>
-                    :
+                ) : (
                     <span>
                         <Icon name="list" circular />
                         <Header.Content>Singles ladder</Header.Content>
                     </span>
-                }
+                )}
             </Header>
             <div className={"toggles"}>
                 <Button
@@ -281,7 +298,7 @@ function Ladder(props: LadderProps): JSX.Element {
                 <span>
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
                     <div className={"new-buttons"}>
-                        <NewEditPlayer onRequestMade={refreshContent} />
+                        <NewEditPlayer onRequestMade={refreshContent} doublesOnly={isDoubles} players={props.players} />
                         <NewGame doublesOnly={isDoubles} />
                     </div>
                 </span>

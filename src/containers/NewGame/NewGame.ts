@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { mapTTDispatchToProps } from "../shared";
 import NewGame, { NewGameOwnProps } from "../../components/NewGame/NewGame";
 import { QuickHitReduxStores } from "../../redux/types/store";
-import {DbDoublesPair, DbHappyHour, DbMatch, DbPlayer} from "../../types/database/models";
+import { DbDoublesPair, DbHappyHour, DbMatch, DbPlayer } from "../../types/database/models";
 
 export interface NewGameStoreProps {
     players: DbPlayer[];

@@ -54,10 +54,13 @@ function Navbar(): JSX.Element {
                         Singles ladder
                     </Menu.Item>
                 </Link>
-                <Link to={`${BASE_PATH()}${QuickHitPage.DOUBLES_LADDER}`} onClick={(): void => setBurgerMenuOpen(false)}>
+                <Link
+                    to={`${BASE_PATH()}${QuickHitPage.DOUBLES_LADDER}`}
+                    onClick={(): void => setBurgerMenuOpen(false)}
+                >
                     <Menu.Item as={"a"} className={"doubles-menu-item"}>
                         <Icon name={"child"} />
-                        <Icon name={"child"} className={"second-child-icon"}/>
+                        <Icon name={"child"} className={"second-child-icon"} />
                         Doubles ladder
                     </Menu.Item>
                 </Link>

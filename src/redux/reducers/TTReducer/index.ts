@@ -1,6 +1,7 @@
 import { TTStoreState } from "../../types/TTTypes";
 import {
-    SET_BADGES, SET_DOUBLES_PAIRS,
+    SET_BADGES,
+    SET_DOUBLES_PAIRS,
     SET_FORCE_REFRESH,
     SET_HAPPY_HOUR,
     SET_LOADING,
@@ -9,7 +10,8 @@ import {
     SET_TOURNAMENTS,
 } from "../../constants/TTConstants";
 import {
-    SetBadgesAction, SetDoublesPairsAction,
+    SetBadgesAction,
+    SetDoublesPairsAction,
     SetForceRefreshAction,
     SetHappyHourAction,
     SetLoadingAction,

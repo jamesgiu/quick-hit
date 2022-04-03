@@ -45,10 +45,12 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                     {player.name}
                                     <NewEditPlayer
                                         editingPlayer={player}
+                                        doublesOnly={JSON.parse(JSON.stringify(player))["player1_id"] !== undefined}
                                         customModalOpenElement={
                                             <Icon name={"pencil"} size={"tiny"} className={"edit-icon"} />
                                         }
                                         onRequestMade={(): void => props.setForceRefresh(true)}
+                                        players={props.players}
                                     />
                                 </div>
                             </Header.Content>
@@ -107,7 +109,9 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                             <PlayerCard
                                                 player={victim}
                                                 winLoss={getRecordAgainstPlayer(player.id, victim.id, props.matches)}
-                                                matchesPlayed={getWinLossForPlayerOrPair(victim.id, props.matches).matches}
+                                                matchesPlayed={
+                                                    getWinLossForPlayerOrPair(victim.id, props.matches).matches
+                                                }
                                             />
                                         ) : (
                                             <PlayerCard
@@ -131,7 +135,9 @@ function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
                                             <PlayerCard
                                                 player={nemesis}
                                                 winLoss={getRecordAgainstPlayer(player.id, nemesis.id, props.matches)}
-                                                matchesPlayed={getWinLossForPlayerOrPair(nemesis.id, props.matches).matches}
+                                                matchesPlayed={
+                                                    getWinLossForPlayerOrPair(nemesis.id, props.matches).matches
+                                                }
                                             />
                                         ) : (
                                             <PlayerCard

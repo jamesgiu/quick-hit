@@ -1,7 +1,7 @@
 import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React, { useEffect } from "react";
 import "./NewGame.css";
-import {DbBadge, DbDoublesPair, DbMatch, DbPlayer, isUnderPlacement} from "../../types/database/models";
+import { DbBadge, DbDoublesPair, DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
@@ -49,7 +49,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
             availablePlayers.push(...props.players.filter((player) => !player.retired));
         }
 
-        availablePlayers.push(...props.doublesPairs.filter((doublesPair) => !doublesPair.retired) as DbPlayer[]);
+        availablePlayers.push(...(props.doublesPairs.filter((doublesPair) => !doublesPair.retired) as DbPlayer[]));
         setAvailablePlayers(availablePlayers);
     }, [props.players, props.doublesPairs]);
 
@@ -143,9 +143,16 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                 winningPlayer.elo = winnerNewElo;
                 losingPlayer.elo = loserNewElo;
 
-                QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
+                QuickHitAPI.addNewMatch(
+                    matchToAdd,
+                    winningPlayer,
+                    losingPlayer,
+                    props.doublesOnly ?? false,
+                    onSuccess,
+                    onError
+                );
             }, onError);
-            }, onError);
+        }, onError);
     };
 
     const calculateAchievements = (addAnother: boolean): void => {
@@ -204,7 +211,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             fluid
                             label={
                                 <b>
-                                    Winning player
+                                    Winner
                                     <Icon name={"trophy"} />
                                 </b>
                             }
@@ -221,7 +228,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             value={winningPlayer ? renderPlayerOption(winningPlayer).value : ""}
                         />
                         <Form.Field>
-                            <label>Winning player score</label>
+                            <label>Winning score</label>
                             <input
                                 type={"number"}
                                 min={0}
@@ -238,7 +245,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             fluid
                             label={
                                 <b>
-                                    Losing player
+                                    Loser
                                     <Icon name={"close"} />
                                 </b>
                             }
@@ -255,7 +262,7 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
                             value={losingPlayer ? renderPlayerOption(losingPlayer).value : ""}
                         />
                         <Form.Field>
-                            <label>Losing player score</label>
+                            <label>Losing score</label>
                             <input
                                 type={"number"}
                                 min={0}

@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 import * as actions from "../../redux/actions/TTActions";
 import { connect } from "react-redux";
 import QHDataLoader from "../../components/QHDataLoader/QHDataLoader";
-import {DbBadge, DbDoublesPair, DbHappyHour, DbMatch, DbPlayer, DbTournament} from "../../types/database/models";
+import { DbBadge, DbDoublesPair, DbHappyHour, DbMatch, DbPlayer, DbTournament } from "../../types/database/models";
 import { mapTTDataToProps, TTRefreshDispatchType } from "../shared";
 
 export interface DataLoaderDispatchType extends TTRefreshDispatchType {
@@ -38,7 +38,8 @@ export function mapDispatchToProps(
         setBadges: (newBadges: DbBadge[]): actions.SetBadgesAction => dispatch(actions.setBadges(newBadges)),
         setTournaments: (newTournaments: DbTournament[]): actions.SetTournamentsAction =>
             dispatch(actions.setTournaments(newTournaments)),
-        setDoublesPairs: (newDoublesPairs: DbDoublesPair[]): actions.SetDoublesPairsAction => dispatch(actions.setDoublesPairs(newDoublesPairs)),
+        setDoublesPairs: (newDoublesPairs: DbDoublesPair[]): actions.SetDoublesPairsAction =>
+            dispatch(actions.setDoublesPairs(newDoublesPairs)),
     };
 }
 

@@ -1,6 +1,7 @@
 import {
     DbBadge,
-    DbChatRoom, DbDoublesPair,
+    DbChatRoom,
+    DbDoublesPair,
     DbHappyHour,
     DbInstance,
     DbMatch,
@@ -46,7 +47,10 @@ export class QuickHitAPI {
             });
     }
 
-    public static getDoublesPairs(onSuccess: (doublesPairs: DbDoublesPair[]) => void, onFailure: (errorString: string) => void): void {
+    public static getDoublesPairs(
+        onSuccess: (doublesPairs: DbDoublesPair[]) => void,
+        onFailure: (errorString: string) => void
+    ): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.DOUBLES_PAIRS, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
@@ -206,8 +210,9 @@ export class QuickHitAPI {
 
     public static addNewMatch(
         matchToAdd: DbMatch,
-        winningPlayer: DbPlayer,
-        losingPlayer: DbPlayer,
+        winningPlayer: DbPlayer | DbDoublesPair,
+        losingPlayer: DbPlayer | DbDoublesPair,
+        doubles: boolean,
         onSuccess: () => void,
         onFailure: (errorString: string) => void
     ): void {
@@ -217,20 +222,37 @@ export class QuickHitAPI {
             `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`
         )
             .then(() => {
-                this.addOrUpdatePlayer(
-                    winningPlayer,
-                    () => {
-                        return;
-                    },
-                    onFailure
-                );
-                this.addOrUpdatePlayer(
-                    losingPlayer,
-                    () => {
-                        return;
-                    },
-                    onFailure
-                );
+                if (doubles) {
+                    this.addOrUpdateDoublesPair(
+                        winningPlayer as DbDoublesPair,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                    this.addOrUpdateDoublesPair(
+                        losingPlayer as DbDoublesPair,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                } else {
+                    this.addOrUpdatePlayer(
+                        winningPlayer,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                    this.addOrUpdatePlayer(
+                        losingPlayer,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                }
                 onSuccess();
             })
             .catch((error: AxiosError) => {
