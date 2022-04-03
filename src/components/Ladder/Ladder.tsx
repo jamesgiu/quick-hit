@@ -1,5 +1,5 @@
 import "./Ladder.css";
-import {Button, Header, Icon, Segment, Table, Transition} from "semantic-ui-react";
+import {Button, Header, Icon, Table, Transition} from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import NewGame from "../../containers/NewGame";
@@ -282,7 +282,7 @@ function Ladder(props: LadderProps): JSX.Element {
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
                     <div className={"new-buttons"}>
                         <NewEditPlayer onRequestMade={refreshContent} />
-                        <NewGame />
+                        <NewGame doublesOnly={isDoubles} />
                     </div>
                 </span>
             </Transition>

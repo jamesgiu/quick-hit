@@ -9,7 +9,6 @@ import * as firebaseAuth from "firebase/auth";
 import { AuthUserDetail } from "../../redux/types/AuthTypes";
 import ReactGA from "react-ga";
 import { match } from "react-router";
-import * as H from "history";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 
 export interface KeyPromptMatchParams {

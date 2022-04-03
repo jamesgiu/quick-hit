@@ -1,7 +1,7 @@
 import { Button, DropdownItemProps, Form, Icon, Modal } from "semantic-ui-react";
 import React, { useEffect } from "react";
 import "./NewGame.css";
-import { DbBadge, DbMatch, DbPlayer, isUnderPlacement } from "../../types/database/models";
+import {DbBadge, DbDoublesPair, DbMatch, DbPlayer, isUnderPlacement} from "../../types/database/models";
 import { makeErrorToast, makeSuccessToast } from "../Toast/Toast";
 import EloRank from "elo-rank";
 import { v4 as uuidv4 } from "uuid";
@@ -28,6 +28,7 @@ export interface NewGameOwnProps {
     customModalOpenElement?: JSX.Element;
     // Callback for when a new game is added.
     onNewGameAdded?: () => void;
+    doublesOnly?: boolean;
 }
 
 /**
@@ -41,7 +42,16 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
     const [losingPlayerScore, setLosingPlayerScore] = React.useState<number>();
     const [availablePlayers, setAvailablePlayers] = React.useState<DbPlayer[]>(props.players);
 
-    useEffect(() => setAvailablePlayers(props.players.filter((player) => !player.retired)), [props.players]);
+    useEffect(() => {
+        const availablePlayers: DbPlayer[] = [];
+
+        if (!props.doublesOnly) {
+            availablePlayers.push(...props.players.filter((player) => !player.retired));
+        }
+
+        availablePlayers.push(...props.doublesPairs.filter((doublesPair) => !doublesPair.retired) as DbPlayer[]);
+        setAvailablePlayers(availablePlayers);
+    }, [props.players, props.doublesPairs]);
 
     const sendCreateRequest = (addAnother: boolean): void => {
         const onSuccess = (): void => {
@@ -69,71 +79,73 @@ function NewGame(props: NewGameStoreProps & NewGameOwnProps & TTRefreshDispatchT
 
         // Getting the latest players from the DB to ensure up to date ELO.
         QuickHitAPI.getPlayers((players: DbPlayer[]) => {
-            const playersMap = getPlayersMap(players);
+            QuickHitAPI.getDoublesPairs((doublesPairs: DbDoublesPair[]) => {
+                const playersMap = getPlayersMap(players, doublesPairs);
 
-            let kFactor = 15;
-            let happyHour = false;
+                let kFactor = 15;
+                let happyHour = false;
 
-            // If it is currently a happy hour.
-            if (
-                new Date().getHours() >= props.happyHour.hourStart &&
-                new Date().getHours() <= props.happyHour.hourStart + 1
-            ) {
-                kFactor = 15 * props.happyHour.multiplier;
-                happyHour = true;
-            }
+                // If it is currently a happy hour.
+                if (
+                    new Date().getHours() >= props.happyHour.hourStart &&
+                    new Date().getHours() <= props.happyHour.hourStart + 1
+                ) {
+                    kFactor = 15 * props.happyHour.multiplier;
+                    happyHour = true;
+                }
 
-            const elo = new EloRank(kFactor);
-            const winnerElo = playersMap.get(winningPlayer.id)?.elo;
-            const loserElo = playersMap.get(losingPlayer.id)?.elo;
+                const elo = new EloRank(kFactor);
+                const winnerElo = playersMap.get(winningPlayer.id)?.elo;
+                const loserElo = playersMap.get(losingPlayer.id)?.elo;
 
-            if (!(winnerElo && loserElo)) {
-                onError("Could not get latest player data!");
-                return;
-            }
+                if (!(winnerElo && loserElo)) {
+                    onError("Could not get latest player data!");
+                    return;
+                }
 
-            const winningPlayerUnderPlacement = isUnderPlacement(
-                getWinLossForPlayerOrPair(winningPlayer.id, props.matches).matches
-            );
-            const losingPlayerUnderPlacement = isUnderPlacement(
-                getWinLossForPlayerOrPair(losingPlayer.id, props.matches).matches
-            );
+                const winningPlayerUnderPlacement = isUnderPlacement(
+                    getWinLossForPlayerOrPair(winningPlayer.id, props.matches).matches
+                );
+                const losingPlayerUnderPlacement = isUnderPlacement(
+                    getWinLossForPlayerOrPair(losingPlayer.id, props.matches).matches
+                );
 
-            // Gets expected score for first parameter
-            const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
-            const losingPlayerExpectedScore = elo.getExpected(loserElo, winnerElo);
+                // Gets expected score for first parameter
+                const winningPlayerExpectedScore = elo.getExpected(winnerElo, loserElo);
+                const losingPlayerExpectedScore = elo.getExpected(loserElo, winnerElo);
 
-            // update score, 1 if won 0 if lost
-            let winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
-            let loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
+                // update score, 1 if won 0 if lost
+                let winnerNewElo = elo.updateRating(winningPlayerExpectedScore, 1, winnerElo);
+                let loserNewElo = elo.updateRating(losingPlayerExpectedScore, 0, loserElo);
 
-            if (winningPlayerUnderPlacement) {
-                winnerNewElo = Math.ceil(winnerNewElo * 1.05);
-            }
+                if (winningPlayerUnderPlacement) {
+                    winnerNewElo = Math.ceil(winnerNewElo * 1.05);
+                }
 
-            if (losingPlayerUnderPlacement) {
-                loserNewElo = Math.ceil(loserNewElo * 1.05);
-            }
+                if (losingPlayerUnderPlacement) {
+                    loserNewElo = Math.ceil(loserNewElo * 1.05);
+                }
 
-            const matchToAdd: DbMatch = {
-                id: uuidv4(),
-                date: new Date().toISOString(),
-                winning_player_id: winningPlayer.id,
-                winning_player_score: winningPlayerScore,
-                winning_player_original_elo: winnerElo,
-                losing_player_id: losingPlayer.id,
-                losing_player_score: losingPlayerScore,
-                losing_player_original_elo: loserElo,
-                winner_new_elo: winnerNewElo,
-                loser_new_elo: loserNewElo,
-                happy_hour: happyHour,
-            };
-            // Assigning new elo values to player object, then PATCHING.
-            winningPlayer.elo = winnerNewElo;
-            losingPlayer.elo = loserNewElo;
+                const matchToAdd: DbMatch = {
+                    id: uuidv4(),
+                    date: new Date().toISOString(),
+                    winning_player_id: winningPlayer.id,
+                    winning_player_score: winningPlayerScore,
+                    winning_player_original_elo: winnerElo,
+                    losing_player_id: losingPlayer.id,
+                    losing_player_score: losingPlayerScore,
+                    losing_player_original_elo: loserElo,
+                    winner_new_elo: winnerNewElo,
+                    loser_new_elo: loserNewElo,
+                    happy_hour: happyHour,
+                };
+                // Assigning new elo values to player object, then PATCHING.
+                winningPlayer.elo = winnerNewElo;
+                losingPlayer.elo = loserNewElo;
 
-            QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
-        }, onError);
+                QuickHitAPI.addNewMatch(matchToAdd, winningPlayer, losingPlayer, onSuccess, onError);
+            }, onError);
+            }, onError);
     };
 
     const calculateAchievements = (addAnother: boolean): void => {

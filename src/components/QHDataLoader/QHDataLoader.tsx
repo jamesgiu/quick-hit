@@ -371,12 +371,18 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
     return { wins, losses, formGuide, minELO, maxELO, victim, nemesis };
 };
 
-export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
-    const playersMap: Map<string, DbPlayer> = new Map();
+export const getPlayersMap = (players: DbPlayer[], doublesPairs?: DbDoublesPair[]): Map<string, DbPlayer> => {
+    const playersMap: Map<string, DbPlayer | DbDoublesPair> = new Map();
 
     if (players) {
         players.forEach((player) => {
             playersMap.set(player.id, player);
+        });
+    }
+
+    if (doublesPairs) {
+        doublesPairs.forEach((doublesPair) => {
+            playersMap.set(doublesPair.id, doublesPair);
         });
     }
 

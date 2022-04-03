@@ -23,7 +23,7 @@ interface PlayerStatisticsParams {
 interface PlayerStatisticsProps extends RouteComponentProps<PlayerStatisticsParams>, TTDataPropsTypeCombined {}
 
 function PlayerStatistics(props: PlayerStatisticsProps): JSX.Element {
-    const playersMap = getPlayersMap(props.players);
+    const playersMap = getPlayersMap(props.players, props.doublesPairs);
     const player = playersMap.get(props.match.params.playerId);
     const extraStats: ExtraPlayerStats = player
         ? getExtraPlayerStats(player.id, props.matches)
