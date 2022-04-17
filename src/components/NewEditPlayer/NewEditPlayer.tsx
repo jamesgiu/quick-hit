@@ -202,7 +202,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                                     defaultValue={
                                         props.editingPlayer
                                             ? JSON.stringify(
-                                                  playersMap.get!((props.editingPlayer as DbDoublesPair)["player1_id"])
+                                                  playersMap.get((props.editingPlayer as DbDoublesPair)["player1_id"])
                                               )
                                             : undefined
                                     }
@@ -232,7 +232,7 @@ function NewEditPlayer(props: NewEditPlayerProps): JSX.Element {
                                     defaultValue={
                                         props.editingPlayer
                                             ? JSON.stringify(
-                                                  playersMap.get!((props.editingPlayer as DbDoublesPair)["player2_id"])
+                                                  playersMap.get((props.editingPlayer as DbDoublesPair)["player2_id"])
                                               )
                                             : undefined
                                     }
