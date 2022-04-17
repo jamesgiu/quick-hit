@@ -9,6 +9,7 @@ import { QuickHitAPI } from "../../api/QuickHitAPI";
 import { Loader, Transition } from "semantic-ui-react";
 import {
     DbBadge,
+    DbDoublesPair,
     DbHappyHour,
     DbInstance,
     DbMatch,
@@ -108,6 +109,19 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         QuickHitAPI.getPlayers(onSuccess, onFailure);
     };
 
+    const getDoublesPairs = (): void => {
+        const onSuccess = (doublesPairs: DbDoublesPair[]): void => {
+            props.setDoublesPairs(doublesPairs);
+        };
+
+        const onFailure = (error: string): void => {
+            makeErrorToast("Could not get doubles pairs", error);
+            props.setLoading(false);
+        };
+
+        QuickHitAPI.getDoublesPairs(onSuccess, onFailure);
+    };
+
     const getBadges = (): void => {
         const onSuccess = (badges: DbBadge[]): void => {
             props.setBadges(badges);
@@ -140,6 +154,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
         getMatches();
         getTournaments();
         getPlayers();
+        getDoublesPairs();
     };
 
     useEffect(() => {
@@ -180,7 +195,7 @@ function QHDataLoader(props: QHDataLoaderProps): JSX.Element {
     );
 }
 
-export const getWinLossForPlayer = (playerId: string, matches: DbMatch[]): WinLoss => {
+export const getWinLossForPlayerOrPair = (playerId: string, matches: DbMatch[]): WinLoss => {
     const winLoss: WinLoss = {
         wins: 0,
         losses: 0,
@@ -356,12 +371,18 @@ export const getExtraPlayerStats = (playerId: string, matches: DbMatch[]): Extra
     return { wins, losses, formGuide, minELO, maxELO, victim, nemesis };
 };
 
-export const getPlayersMap = (players: DbPlayer[]): Map<string, DbPlayer> => {
-    const playersMap: Map<string, DbPlayer> = new Map();
+export const getPlayersMap = (players: DbPlayer[], doublesPairs?: DbDoublesPair[]): Map<string, DbPlayer> => {
+    const playersMap: Map<string, DbPlayer | DbDoublesPair> = new Map();
 
     if (players) {
         players.forEach((player) => {
             playersMap.set(player.id, player);
+        });
+    }
+
+    if (doublesPairs) {
+        doublesPairs.forEach((doublesPair) => {
+            playersMap.set(doublesPair.id, doublesPair);
         });
     }
 

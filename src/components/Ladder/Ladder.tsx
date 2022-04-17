@@ -3,72 +3,89 @@ import { Button, Header, Icon, Table, Transition } from "semantic-ui-react";
 import PlayerCard from "./PlayerCard/PlayerCard";
 import NewEditPlayer from "../NewEditPlayer/NewEditPlayer";
 import NewGame from "../../containers/NewGame";
-import { getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
+import { getPlayersMap, getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 import { Link } from "react-router-dom";
 import { ViewDispatchType } from "../../containers/Ladder/Ladder";
 import { ViewStoreState } from "../../redux/types/ViewTypes";
-import { DbPlayer, getELOString, isUnderPlacement } from "../../types/database/models";
+import { DbDoublesPair, DbPlayer, getELOString, isUnderPlacement } from "../../types/database/models";
+import * as H from "history";
 
-export type LadderProps = ViewStoreState & TTDataPropsTypeCombined & ViewDispatchType;
+export type LadderProps = ViewStoreState &
+    TTDataPropsTypeCombined &
+    ViewDispatchType & {
+        location: H.Location;
+    };
+
 export const NUM_OF_FORM_GUIDE_MATCHES = 5;
 
 /**
  * QuickHit Ladder page.
  */
 function Ladder(props: LadderProps): JSX.Element {
+    const isDoubles = props.location.pathname === `${BASE_PATH()}${QuickHitPage.DOUBLES_LADDER}`;
+
     const renderPlayersAsCards = (): JSX.Element[] => {
-        const playersLadder: JSX.Element[] = [];
+        const ladder: JSX.Element[] = [];
 
-        props.players.forEach((player) => {
-            if (!player.retired) {
-                const winLoss = getWinLossForPlayer(player.id, props.matches);
+        const iterable = isDoubles ? props.doublesPairs : props.players;
 
-                const playerCard = <PlayerCard player={player} winLoss={winLoss} matchesPlayed={winLoss.matches} />;
+        iterable.forEach((playerOrDoublesPair) => {
+            if (!playerOrDoublesPair.retired) {
+                const winLoss = getWinLossForPlayerOrPair(playerOrDoublesPair.id, props.matches);
+
+                const playerCard = (
+                    <PlayerCard player={playerOrDoublesPair} winLoss={winLoss} matchesPlayed={winLoss.matches} />
+                );
 
                 // If we are hiding zero game players, then only push if they have played a game
                 if (props.hideUnplacedPlayers) {
                     if (!isUnderPlacement(winLoss.wins + winLoss.losses)) {
-                        playersLadder.push(playerCard);
+                        ladder.push(playerCard);
                     }
                 } else {
-                    playersLadder.push(playerCard);
+                    ladder.push(playerCard);
                 }
             }
         });
 
         // Sorting the player items by elo.
-        playersLadder.sort((player1, player2) => {
+        ladder.sort((player1, player2) => {
             return player2.props.player.elo - player1.props.player.elo;
         });
 
-        return playersLadder;
+        return ladder;
     };
 
     const renderPlayersInTable = (): JSX.Element[] => {
-        const playersLadder: JSX.Element[] = [];
-        const playerTableRows: JSX.Element[] = [];
+        const ladder: JSX.Element[] = [];
+        const tableRows: JSX.Element[] = [];
 
-        const sortedPlayers = props.players.sort((player1, player2) => {
-            return player2.elo - player1.elo;
+        const iterable = isDoubles ? props.doublesPairs : props.players;
+
+        const sortedIterable = iterable.sort((playerOrPair1, playerOrPair2) => {
+            return playerOrPair2.elo - playerOrPair1.elo;
         });
 
-        const unplacedPlayerRows = [];
+        const unplacedPairRows = [];
 
-        for (let i = 0; i < sortedPlayers.length; i++) {
-            const player = sortedPlayers[i];
-            const winLoss = getWinLossForPlayer(player.id, props.matches);
-            let addPlayer = true;
+        for (let i = 0; i < sortedIterable.length; i++) {
+            const playerOrPair = sortedIterable[i];
+            const winLoss = getWinLossForPlayerOrPair(playerOrPair.id, props.matches);
+            let addPlayerOrPair = true;
 
             if (
                 (props.hideUnplacedPlayers && isUnderPlacement(winLoss.wins + winLoss.losses)) ||
-                player.retired === true
+                playerOrPair.retired === true
             ) {
-                addPlayer = false;
+                addPlayerOrPair = false;
             }
 
-            if (addPlayer) {
+            if (addPlayerOrPair) {
+                const playersMap = getPlayersMap(props.players);
+                const doublesPair = playerOrPair as DbDoublesPair;
+
                 const formStr =
                     winLoss && winLoss.formGuide.substr(0, NUM_OF_FORM_GUIDE_MATCHES).split("").reverse().join("");
 
@@ -77,16 +94,22 @@ function Ladder(props: LadderProps): JSX.Element {
                         <Table.Cell className={"player-cell"}>
                             <Link
                                 className={"player-row-link"}
-                                to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", player.id)}`}
+                                to={`${BASE_PATH()}${QuickHitPage.STATISTICS.replace(":playerId", playerOrPair.id)}`}
                             >
                                 <span>
-                                    {generateLadderTrendIcon(player, i, sortedPlayers)}
-                                    <Icon name={player.icon} size={"small"} />
-                                    {player.name}
+                                    {generateLadderTrendIcon(playerOrPair, i, sortedIterable)}
+                                    <Icon name={playerOrPair.icon} size={"small"} />
+                                    {playerOrPair.name}
                                 </span>
                             </Link>
                         </Table.Cell>
-                        <Table.Cell>{getELOString(winLoss.wins + winLoss.losses, player.elo)}</Table.Cell>
+                        {isDoubles && (
+                            <Table.Cell>
+                                {playersMap.get(doublesPair.player1_id)?.name} &{" "}
+                                {playersMap.get(doublesPair.player2_id)?.name}
+                            </Table.Cell>
+                        )}
+                        <Table.Cell>{getELOString(winLoss.wins + winLoss.losses, playerOrPair.elo)}</Table.Cell>
                         <Table.Cell>
                             {winLoss.wins}-{winLoss.losses}
                         </Table.Cell>
@@ -95,36 +118,37 @@ function Ladder(props: LadderProps): JSX.Element {
                 );
 
                 if (isUnderPlacement(winLoss.wins + winLoss.losses)) {
-                    unplacedPlayerRows.push(row);
+                    unplacedPairRows.push(row);
                 } else {
-                    playerTableRows.push(row);
+                    tableRows.push(row);
                 }
             }
         }
 
-        playersLadder.push(
+        ladder.push(
             <Table unstackable celled>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Player</Table.HeaderCell>
+                        <Table.HeaderCell>{isDoubles ? "Team" : "Player"}</Table.HeaderCell>
+                        {isDoubles && <Table.HeaderCell>Members</Table.HeaderCell>}
                         <Table.HeaderCell>ELO</Table.HeaderCell>
                         <Table.HeaderCell>W-L</Table.HeaderCell>
                         <Table.HeaderCell>Form</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {playerTableRows}
-                    {unplacedPlayerRows}
+                    {tableRows}
+                    {unplacedPairRows}
                 </Table.Body>
             </Table>
         );
-        return playersLadder;
+        return ladder;
     };
 
     const generateLadderTrendIcon = (
-        player: DbPlayer,
+        playerOrPair: DbPlayer | DbDoublesPair,
         positionOnLadder: number,
-        sortedPlayers: DbPlayer[]
+        sortedPlayersOrPairs: DbPlayer[] | DbDoublesPair[]
     ): JSX.Element => {
         let mostRecentMatch;
         let iconToReturn: JSX.Element = <Icon color={"orange"} name={"minus"} />;
@@ -132,23 +156,23 @@ function Ladder(props: LadderProps): JSX.Element {
         // Find player's most recent match (assumes matches already sorted by newest)
         for (let i = 0; i < props.matches.length; i++) {
             const match = props.matches[i];
-            if (match.winning_player_id === player.id || match.losing_player_id === player.id) {
+            if (match.winning_player_id === playerOrPair.id || match.losing_player_id === playerOrPair.id) {
                 mostRecentMatch = match;
                 break;
             }
         }
 
-        const winLoss = getWinLossForPlayer(player.id, props.matches);
+        const winLoss = getWinLossForPlayerOrPair(playerOrPair.id, props.matches);
 
         if (isUnderPlacement(winLoss.wins + winLoss.losses)) {
             iconToReturn = <Icon color={"yellow"} name={"question"} />;
         } else if (mostRecentMatch) {
             // If the most recent match was a loss
-            if (mostRecentMatch.losing_player_id === player.id) {
+            if (mostRecentMatch.losing_player_id === playerOrPair.id) {
                 if (positionOnLadder !== 0) {
                     let wentDown = false;
                     // Get the player above them
-                    const playerAboveOnLadder = sortedPlayers[positionOnLadder - 1];
+                    const playerAboveOnLadder = sortedPlayersOrPairs[positionOnLadder - 1];
 
                     // If the player above them was the player they versed, then use that player's original elo.
                     if (
@@ -176,7 +200,7 @@ function Ladder(props: LadderProps): JSX.Element {
             // Otherwise, match was a win
             else {
                 // Get the player below them
-                const playerBelowOnLadder = sortedPlayers[positionOnLadder + 1];
+                const playerBelowOnLadder = sortedPlayersOrPairs[positionOnLadder + 1];
                 let wentUp = false;
 
                 // If the player below them was the player they versed, then use that player's original elo.
@@ -220,8 +244,25 @@ function Ladder(props: LadderProps): JSX.Element {
     return (
         <div className="players">
             <Header as={"h2"} icon>
-                <Icon name="trophy" circular />
-                <Header.Content>Ladder</Header.Content>
+                {isDoubles ? (
+                    <span>
+                        <Icon
+                            children={
+                                <span>
+                                    <Icon name={"child"} className={"first-child"} />
+                                    <Icon name={"child"} className={"second-child"} />
+                                </span>
+                            }
+                            circular
+                        />
+                        <Header.Content>Doubles ladder</Header.Content>
+                    </span>
+                ) : (
+                    <span>
+                        <Icon name="list" circular />
+                        <Header.Content>Singles ladder</Header.Content>
+                    </span>
+                )}
             </Header>
             <div className={"toggles"}>
                 <Button
@@ -257,8 +298,8 @@ function Ladder(props: LadderProps): JSX.Element {
                 <span>
                     <span className={`players-area horizontal`}>{renderPlayers()}</span>
                     <div className={"new-buttons"}>
-                        <NewEditPlayer onRequestMade={refreshContent} />
-                        <NewGame />
+                        <NewEditPlayer onRequestMade={refreshContent} doublesOnly={isDoubles} players={props.players} />
+                        <NewGame doublesOnly={isDoubles} />
                     </div>
                 </span>
             </Transition>

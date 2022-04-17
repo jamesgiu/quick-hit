@@ -1,6 +1,7 @@
 import {
     DbBadge,
     DbChatRoom,
+    DbDoublesPair,
     DbHappyHour,
     DbInstance,
     DbMatch,
@@ -38,6 +39,19 @@ export class QuickHitAPI {
 
     public static getPlayers(onSuccess: (players: DbPlayer[]) => void, onFailure: (errorString: string) => void): void {
         QuickHitAPI.makeAxiosRequest(ApiActions.PLAYERS, HttpMethod.GET)
+            .then((response: AxiosResponse) => {
+                onSuccess(Object.values(response.data));
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static getDoublesPairs(
+        onSuccess: (doublesPairs: DbDoublesPair[]) => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(ApiActions.DOUBLES_PAIRS, HttpMethod.GET)
             .then((response: AxiosResponse) => {
                 onSuccess(Object.values(response.data));
             })
@@ -102,6 +116,24 @@ export class QuickHitAPI {
             ApiActions.PLAYERS,
             HttpMethod.PATCH,
             `{"${playerToAdd.id}" : ${JSON.stringify(playerToAdd)}}`
+        )
+            .then(() => {
+                onSuccess();
+            })
+            .catch((error: AxiosError) => {
+                onFailure(error.message);
+            });
+    }
+
+    public static addOrUpdateDoublesPair(
+        pairToAdd: DbDoublesPair,
+        onSuccess: () => void,
+        onFailure: (errorString: string) => void
+    ): void {
+        QuickHitAPI.makeAxiosRequest(
+            ApiActions.DOUBLES_PAIRS,
+            HttpMethod.PATCH,
+            `{"${pairToAdd.id}" : ${JSON.stringify(pairToAdd)}}`
         )
             .then(() => {
                 onSuccess();
@@ -178,8 +210,9 @@ export class QuickHitAPI {
 
     public static addNewMatch(
         matchToAdd: DbMatch,
-        winningPlayer: DbPlayer,
-        losingPlayer: DbPlayer,
+        winningPlayer: DbPlayer | DbDoublesPair,
+        losingPlayer: DbPlayer | DbDoublesPair,
+        doubles: boolean,
         onSuccess: () => void,
         onFailure: (errorString: string) => void
     ): void {
@@ -189,20 +222,37 @@ export class QuickHitAPI {
             `{"${matchToAdd.id}" : ${JSON.stringify(matchToAdd)}}`
         )
             .then(() => {
-                this.addOrUpdatePlayer(
-                    winningPlayer,
-                    () => {
-                        return;
-                    },
-                    onFailure
-                );
-                this.addOrUpdatePlayer(
-                    losingPlayer,
-                    () => {
-                        return;
-                    },
-                    onFailure
-                );
+                if (doubles) {
+                    this.addOrUpdateDoublesPair(
+                        winningPlayer as DbDoublesPair,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                    this.addOrUpdateDoublesPair(
+                        losingPlayer as DbDoublesPair,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                } else {
+                    this.addOrUpdatePlayer(
+                        winningPlayer,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                    this.addOrUpdatePlayer(
+                        losingPlayer,
+                        () => {
+                            return;
+                        },
+                        onFailure
+                    );
+                }
                 onSuccess();
             })
             .catch((error: AxiosError) => {

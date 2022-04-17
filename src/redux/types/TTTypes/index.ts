@@ -1,4 +1,4 @@
-import { DbBadge, DbHappyHour, DbMatch, DbPlayer, DbTournament } from "../../../types/database/models";
+import { DbBadge, DbDoublesPair, DbHappyHour, DbMatch, DbPlayer, DbTournament } from "../../../types/database/models";
 
 export interface TTStoreState {
     matches: DbMatch[];
@@ -6,6 +6,7 @@ export interface TTStoreState {
     happyHour: DbHappyHour;
     badges: DbBadge[];
     tournaments: DbTournament[];
+    doublesPairs: DbDoublesPair[];
     refresh: boolean;
     loading: boolean;
 }

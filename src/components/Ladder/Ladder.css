@@ -10,6 +10,17 @@
   display: block;
 }
 
+.players .header .child.icon.first-child {
+  margin-left: -40px;
+  font-size: 3.6rem;
+}
+
+.players .header .child.icon.second-child {
+  font-size: 3.6rem;
+  margin-left: 40px;
+  margin-top: -58px;
+}
+
 .horizontal .card {
   display: inline-flex;
   margin-left: 5px;

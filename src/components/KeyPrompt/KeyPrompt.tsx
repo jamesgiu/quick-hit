@@ -9,7 +9,6 @@ import * as firebaseAuth from "firebase/auth";
 import { AuthUserDetail } from "../../redux/types/AuthTypes";
 import ReactGA from "react-ga";
 import { match } from "react-router";
-import * as H from "history";
 import { BASE_PATH, QuickHitPage } from "../../util/QuickHitPage";
 
 export interface KeyPromptMatchParams {
@@ -24,8 +23,6 @@ export interface KeyPromptProps {
     setAuthKey: (newKey: string) => void;
     setChosenInstance: (newInstance: DbInstance) => void;
     setAuthDetail: (newAuthDetail?: AuthUserDetail) => void;
-    history?: H.History;
-    location?: H.Location;
     match?: match<KeyPromptMatchParams>;
 }
 
@@ -120,8 +117,7 @@ function KeyPrompt(props: KeyPromptProps): JSX.Element {
         };
     };
 
-    // Todo: use quickhitpage later
-    if (props.match && !(props.match.params.instance === "player")) {
+    if (props.match) {
         const instanceId = props.match.params.instance;
         const authKey = props.match.params.authKey;
 

@@ -21,6 +21,10 @@
   display: inline;
 }
 
+.tt-navbar .item.doubles-menu-item i.second-child-icon {
+  margin-left: -10px;
+}
+
 .tt-navbar .right.menu i,
 .tt-navbar .right.menu .chat-icon,
 .tt-navbar .right.menu span i {

@@ -14,7 +14,11 @@ import "./HallOfFallen.css";
 function HallOfFallen(props: HallOfFallenReduxProps & TTRefreshDispatchType): JSX.Element {
     const [retirees, setRetirees] = useState<DbPlayer[]>([]);
 
-    useEffect(() => setRetirees(props.players.filter((player) => player.retired === true)), [props.players]);
+    useEffect(() => {
+        const retirees = props.players.filter((player) => player.retired === true);
+        retirees.push(...(props.doublesPairs.filter((doublesPair) => doublesPair.retired === true) as DbPlayer[]));
+        setRetirees(retirees);
+    }, [props.players, props.doublesPairs]);
 
     const renderItems = (): JSX.Element[] => {
         const retireeItems: JSX.Element[] = [];

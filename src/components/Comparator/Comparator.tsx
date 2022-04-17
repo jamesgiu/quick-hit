@@ -4,7 +4,7 @@ import "./Comparator.css";
 import { DbPlayer, getELOString } from "../../types/database/models";
 import { ComparatorStoreProps } from "../../containers/Comparator/Comparator";
 import { WinLoss } from "../../types/types";
-import { getRecordAgainstPlayer, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
+import { getRecordAgainstPlayer, getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
 import { getChanceOfVictory } from "../../util/Predictor";
 
 /**
@@ -108,12 +108,18 @@ function Comparator(props: ComparatorStoreProps): JSX.Element {
                     <Grid.Row>
                         <Grid.Column>
                             {playerOne &&
-                                getELOString(getWinLossForPlayer(playerOne.id, props.matches).matches, playerOne.elo)}
+                                getELOString(
+                                    getWinLossForPlayerOrPair(playerOne.id, props.matches).matches,
+                                    playerOne.elo
+                                )}
                         </Grid.Column>
                         <Grid.Column className={"centre-column"}>ELO</Grid.Column>
                         <Grid.Column>
                             {playerTwo &&
-                                getELOString(getWinLossForPlayer(playerTwo.id, props.matches).matches, playerTwo.elo)}
+                                getELOString(
+                                    getWinLossForPlayerOrPair(playerTwo.id, props.matches).matches,
+                                    playerTwo.elo
+                                )}
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row className={"prediction-row"}>

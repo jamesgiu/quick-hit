@@ -24,6 +24,7 @@ export function mapStateToProps(
         happyHour: store.ttData.happyHour,
         badges: store.ttData.badges,
         tournaments: store.ttData.tournaments,
+        doublesPairs: store.ttData.doublesPairs,
         currentUser: store.viewStore.currentUser,
         focusedPlayerId: ownProps.focusedPlayerId,
     };

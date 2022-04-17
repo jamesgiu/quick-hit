@@ -23,7 +23,7 @@ import {
 import { FeedEventProps } from "semantic-ui-react/dist/commonjs/views/Feed/FeedEvent";
 import ReactTimeAgo from "react-time-ago";
 import { TTDataPropsTypeCombined } from "../../containers/shared";
-import { getPlayersMap, getWinLossForPlayer } from "../QHDataLoader/QHDataLoader";
+import { getPlayersMap, getWinLossForPlayerOrPair } from "../QHDataLoader/QHDataLoader";
 import { DbMatch, DbMatchComment, DbMatchReaction, DbPlayer, isUnderPlacement } from "../../types/database/models";
 import RecentGamesStatistics from "./RecentGamesStatistics/RecentGamesStatistics";
 import EmojiPicker, { SKIN_TONE_NEUTRAL } from "emoji-picker-react";
@@ -215,8 +215,8 @@ export const turnMatchIntoFeedItems = (
             break;
         }
 
-        const winningPlayerWinLoss = getWinLossForPlayer(match.winning_player_id, allMatches);
-        const losingPlayerWinLoss = getWinLossForPlayer(match.losing_player_id, allMatches);
+        const winningPlayerWinLoss = getWinLossForPlayerOrPair(match.winning_player_id, allMatches);
+        const losingPlayerWinLoss = getWinLossForPlayerOrPair(match.losing_player_id, allMatches);
 
         const winningPlayerUnranked = isUnderPlacement(winningPlayerWinLoss.matches);
         const losingPlayerUnranked = isUnderPlacement(losingPlayerWinLoss.matches);

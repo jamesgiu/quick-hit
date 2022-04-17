@@ -1,6 +1,7 @@
 import { TTStoreState } from "../../types/TTTypes";
 import {
     SET_BADGES,
+    SET_DOUBLES_PAIRS,
     SET_FORCE_REFRESH,
     SET_HAPPY_HOUR,
     SET_LOADING,
@@ -10,6 +11,7 @@ import {
 } from "../../constants/TTConstants";
 import {
     SetBadgesAction,
+    SetDoublesPairsAction,
     SetForceRefreshAction,
     SetHappyHourAction,
     SetLoadingAction,
@@ -29,6 +31,7 @@ export const dataInitialState: TTStoreState = {
     },
     badges: [],
     tournaments: [],
+    doublesPairs: [],
     refresh: false,
 };
 
@@ -42,6 +45,7 @@ export function ttReducer(
         | SetHappyHourAction
         | SetBadgesAction
         | SetTournamentsAction
+        | SetDoublesPairsAction
 ): TTStoreState {
     switch (action.type) {
         case SET_MATCHES:
@@ -58,6 +62,8 @@ export function ttReducer(
             return { ...state, badges: action.value };
         case SET_TOURNAMENTS:
             return { ...state, tournaments: action.value };
+        case SET_DOUBLES_PAIRS:
+            return { ...state, doublesPairs: action.value };
         default:
             return state;
     }
