@@ -142,5 +142,21 @@ An instance database will store all the matches, players, and other data relevan
 
 ## Screenshots
 
-![Image 1](./public/markdown_img_1.PNG)
-![Image 2](./public/markdown_img_2.PNG)
+![image](https://user-images.githubusercontent.com/13777223/194062100-1b523f3b-0489-4629-9da4-fc537c01e4cd.png)
+![image](https://user-images.githubusercontent.com/13777223/194063031-366e4014-06c0-4752-b32b-51be8c194612.png)
+![image](https://user-images.githubusercontent.com/13777223/194063062-51fc1675-cf55-47c1-b4eb-7f16adb8e1bb.png)
+![image](https://user-images.githubusercontent.com/13777223/194062177-ecc6a84b-273a-454f-a6ef-b428392bf01f.png)
+![image](https://user-images.githubusercontent.com/13777223/194062252-bb7dc3be-55e1-447d-9eee-786c8ec3830c.png)
+![image](https://user-images.githubusercontent.com/13777223/194062306-f8a06d28-012c-4fba-900f-2f712001792d.png)
+![image](https://user-images.githubusercontent.com/13777223/194062377-75e81c28-3be9-4e58-8bc9-fd21f2918631.png)
+![image](https://user-images.githubusercontent.com/13777223/194062418-f4116d65-f51b-4197-b11a-27414e5d7cd7.png)
+![image](https://user-images.githubusercontent.com/13777223/194062441-6764e263-f718-436b-a53f-137db6fc791f.png)
+![image](https://user-images.githubusercontent.com/13777223/194062500-ca9bcd6e-b128-4fba-a6e9-f84d65de356d.png)
+![image](https://user-images.githubusercontent.com/13777223/194062560-d2bf41d9-07c9-4373-a97e-accee91a6a2b.png)
+
+
+
+
+
+
+
