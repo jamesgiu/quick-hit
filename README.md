@@ -1,6 +1,8 @@
 [![Deploy to GH Pages](https://github.com/jamesgiu/quick-hit/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/jamesgiu/quick-hit/actions/workflows/deploy.yml)
 [![Node.js CI](https://github.com/jamesgiu/quick-hit/actions/workflows/node.js.yml/badge.svg?branch=QH-32)](https://github.com/jamesgiu/quick-hit/actions/workflows/node.js.yml)
 
+![image](https://user-images.githubusercontent.com/13777223/197453643-bb8ee2cb-d93f-4bb7-bb25-0ddec44cd147.png)
+
 # Quick Hit
 
 Table tennis tracking application using React and Firebase.
